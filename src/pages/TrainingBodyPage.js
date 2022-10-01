@@ -4,6 +4,13 @@ import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
 
 export default function TrainingBodyPage() {
+	useEffect(() => {
+		fetch(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/`)
+			.then((response) => response.json())
+			.then((data) => console.log(data)),
+			[];
+	});
+
 	return (
 		<div className="container">
 			<div className="item one">
