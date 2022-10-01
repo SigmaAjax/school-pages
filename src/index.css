@@ -377,3 +377,77 @@ form {
 .three {
 	flex: 3 1 250px;
 }
+
+/* Employeee form */
+
+.card {
+	background-color: white;
+	border: 1px solid #333;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	max-width: 300px;
+	margin: 0 auto;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 0.5rem;
+	gap: 0.25rem;
+}
+
+.form-group:last-child {
+	margin: 0;
+}
+
+.form-group > label {
+	font-weight: bold;
+	font-size: 0.8em;
+	color: #333;
+}
+
+.form-group > input {
+	border: 1px solid #333;
+	border-radius: 0.25em;
+	font-size: 1rem;
+	padding: 0.25em;
+}
+
+.basic-info {
+	margin: 0;
+	margin-bottom: 1rem;
+	text-align: center;
+	font-weight: normal;
+}
+
+.step-title {
+	margin: 0;
+	margin-top: 1rem;
+	text-align: center;
+}
+
+/* Admin sidebar */
+
+.sidebar {
+	background-color: #2f4050;
+}
+
+.SidebarList {
+	height: 100%;
+}
+
+.SidebarItem {
+	height: 50px;
+	width: 100%;
+	border: 1px solid black;
+	list-style-type: none;
+}
+
+.SidebarList .SidebarItem:hover {
+	cursor: pointer;
+	background-color: #293846;
+}
+
+.SidebarList #active {
+	background-color: #293846;
+}

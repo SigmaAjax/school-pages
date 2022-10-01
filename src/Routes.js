@@ -10,12 +10,12 @@ import TrainingBodyPage from './pages/TrainingBodyPage';
 export function Routes() {
 	return (
 		<RouterRoutes>
-			<Route index element={<Home />} />
+			<Route index path="/" element={<Home />} />
 			<Route path="/skolka" element={<Preschool />} />
 			<Route path="/jidelna" element={<Cantine />} />
 			<Route path="/zakladka" element={<Elementary />} />
 			<Route path="/kontakty" element={<ContactPage />} />
-			<Route path="/training" element={<TrainingBodyPage />} />
+			<Route exact path="/admin/*" element={<TrainingBodyPage />} />
 		</RouterRoutes>
 	);
 }
