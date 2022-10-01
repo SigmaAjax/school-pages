@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
@@ -7,9 +8,9 @@ export default function TrainingBodyPage() {
 	useEffect(() => {
 		fetch(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/`)
 			.then((response) => response.json())
-			.then((data) => console.log(data)),
-			[];
-	});
+			.then((data) => console.log(data))
+			.catch((error) => console.log(error));
+	}, []);
 
 	return (
 		<div className="container">

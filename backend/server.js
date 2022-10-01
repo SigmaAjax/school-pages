@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('../client/node_modules/@types/express');
 
 const port = process.env.REACT_APP_BACKEND_PORT;
 
