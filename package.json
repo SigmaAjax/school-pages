@@ -9,5 +9,11 @@
 	"workspaces": [
 		"backend",
 		"client"
-	]
+	],
+	"scripts": {
+		"start": "concurrently \"yarn workspace backend start\" \"yarn workspace client start\" "
+	},
+	"devDependencies": {
+		"concurrently": "^7.4.0"
+	}
 }

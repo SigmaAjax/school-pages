@@ -5,10 +5,10 @@ const port = 3200;
 
 const app = express();
 
-app.get('/', (req, res) => {
-	res.send('hello world');
+app.get('/test', (req, res) => {
+	res.send({data: ['dog', 'cat', 'underdog']});
 });
 
-app.listen(port, (response, request) => {
+app.listen(port, (res, req) => {
 	console.log('your port is ', port);
 });

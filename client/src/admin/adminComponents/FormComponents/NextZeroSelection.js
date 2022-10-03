@@ -1,7 +1,6 @@
 export default function NextZeroSelection(props) {
 	const {onChange, choices, layer, headLine} = props;
-	//console.log(layer);
-	//console.log('your choices going to be..', choices);
+
 	return (
 		<div className="form-group">
 			{' '}
@@ -11,7 +10,6 @@ export default function NextZeroSelection(props) {
 					Vyberte možnosti
 				</option>
 				{choices.map((key) => {
-					console.log(key);
 					return (
 						<option key={key} value={key}>
 							{key.charAt(0).toUpperCase() + key.slice(1).replaceAll('_', ' ')}

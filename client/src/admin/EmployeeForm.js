@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import clsx from 'clsx';
 
 import NextZeroSelection from './adminComponents/FormComponents/NextZeroSelection.js';
 import {staffTree} from './staffTree.js';
@@ -71,7 +70,6 @@ export default function EmployeeForm() {
 	};
 
 	const givePass = () => {
-		//console.log("Give pass func")
 		if (vedeniSub.includes(staff.layer2)) {
 			setDisabledPass(false);
 		} else if (
@@ -115,7 +113,6 @@ export default function EmployeeForm() {
 
 			if (permittedStaff.includes(checkItem) === false) {
 				// sub loop
-				console.log('Sbor subcategory must be učitel, třídní or asistent');
 				setStaff((currentStaff) => {
 					const {layer2, layer3, lastLayer, ...rest} = currentStaff;
 					return rest;
@@ -127,7 +124,6 @@ export default function EmployeeForm() {
 			}
 		}
 		if (staff.layer2 === 'třídní_učitel' && staff?.layer3) {
-			console.log('Category třídní učitel exist and has a subcategory');
 			setStaff((currentStaff) => {
 				const {layer3, lastLayer, ...rest} = currentStaff;
 
@@ -144,7 +140,7 @@ export default function EmployeeForm() {
 			////
 			if (permittedStaff.includes(checkItem) === false) {
 				// sub loop
-				console.log('Učitel musí mít podkategorii vychovatelku nebo mateřskou');
+
 				setStaff((currentStaff) => {
 					const {layer3, lastLayer, ...rest} = currentStaff;
 					return rest;
@@ -161,7 +157,6 @@ export default function EmployeeForm() {
 			const permittedStaff = asistentiSub;
 
 			if (permittedStaff.includes(checkItem) === false) {
-				console.log('Asistent must have Provozní or Poradenské as subCategory');
 				setStaff((currentStaff) => {
 					const {layer3, lastLayer, ...rest} = currentStaff;
 
@@ -176,14 +171,10 @@ export default function EmployeeForm() {
 			// checking if prvozniSub is correct... školník, účetní
 			const checkItem = staff.lastLayer;
 			const permittedStaff = provozniSub;
-			console.log(checkItem);
-			console.log(
-				`Your check item ${checkItem} vs your control array`,
-				permittedStaff
-			);
+
 			if (permittedStaff.includes(checkItem) === false) {
 				// sub loop
-				console.log('Provozní must have školník or účetní as subCategory');
+
 				setStaff((currentStaff) => {
 					const {lastLayer, ...rest} = currentStaff;
 
@@ -198,15 +189,8 @@ export default function EmployeeForm() {
 			// main loop
 			const checkItem = staff.lastLayer;
 			const permittedStaff = poradenskySub;
-			console.log(checkItem);
-			console.log(
-				`Your check item ${checkItem} vs your control array`,
-				permittedStaff
-			);
+
 			if (permittedStaff.includes(checkItem) === false) {
-				console.log(
-					'Poradenský must have logoped, metodik or vychovny or as subCategory'
-				);
 				setStaff((currentStaff) => {
 					const {lastLayer, ...rest} = currentStaff;
 
@@ -235,11 +219,9 @@ export default function EmployeeForm() {
 		const value = event.target.value;
 		const specialKey = event.target.selectedIndex;
 		if (specialKey === 0 && key === 'layer1') {
-			console.log('*******');
 			setStaff({});
 			//if layer1 vyberte možnosti nebo ignore this selection
 		} else if (specialKey === 0) {
-			console.log('^^^^^^^^');
 			setStaff((values) => {
 				const {[key]: value, lastLayer, ...rest} = values;
 				return rest;
@@ -247,17 +229,10 @@ export default function EmployeeForm() {
 		} else {
 			setStaff((values) => ({...values, [key]: value}));
 		}
-
-		console.log('current staff is .... ', staff);
 	}
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		console.log('The staff is now...', staff);
-	}
-
-	function handleActiveCard(event) {
-		console.log(event.target.name);
 	}
 
 	return (
