@@ -9,7 +9,7 @@ export const SidebarData = [
 		icon: <BadgeIcon />,
 		link: '/zamestnanci',
 	},
-	{title: 'příspěvky', icon: <PostAddIcon />, link: '/aktuality'},
+	{title: 'příspěvky', icon: <PostAddIcon />, link: '/newPost'},
 	{title: 'fotogalerie', icon: <PhotoLibraryIcon />, link: '/galerie'},
 	{title: 'dokumenty', icon: <AssignmentIcon />, link: '/dokumenty'},
 ];

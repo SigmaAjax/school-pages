@@ -4,7 +4,7 @@ import {Routes as RouterRoutes, Route} from 'react-router-dom';
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
 
-const backendData = 'http://localhost:3200/';
+//const backendData = 'http://localhost:3200/';
 
 export default function TrainingBodyPage() {
 	useEffect(() => {
@@ -29,7 +29,14 @@ export default function TrainingBodyPage() {
 						</div>
 					}
 				/>
-				<Route path="aktuality" element={<h1>Aktuality</h1>} />
+				<Route
+					path="newPost"
+					element={
+						<div className="item three">
+							<h1>Aktuality</h1>
+						</div>
+					}
+				/>
 				<Route path="galerie" element={<h1>Galerie</h1>} />
 				<Route path="dokumenty" element={<h1>dokumety</h1>} />
 			</RouterRoutes>
