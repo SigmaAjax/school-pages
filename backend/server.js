@@ -8,7 +8,7 @@ const port = 3200;
 
 app.get('/test', (req, res) => {
 	db.query(
-		"INSERT INTO posts (title, post_text, user_name) VALUES ('a title', 'There are concequences killing a god!!!', 'eva ')"
+		"INSERT INTO posts (title, post_text, user_name) VALUES ('a title', 'There are concequences killing a god!!!', 'eva')"
 	);
 });
 
