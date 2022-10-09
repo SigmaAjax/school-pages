@@ -6,9 +6,31 @@ const app = express();
 
 const port = 3200;
 
-app.get('/test', (req, res) => {
+app.use(express.json());
+
+// app.get('/test', (req, res) => {
+// 	db.query(
+// 		"INSERT INTO posts (title, post_text, user_name) VALUES ('a title', 'There are concequences killing a god!!!', 'eva')"
+// 	);
+// });
+
+app.get('/', (req, res) => {});
+
+app.post('/api/create', (req, res) => {
+	const text = req.body.text; //accessing variables from frontend
+	const title = req.body.title;
+	const userPass = req.body.userPass;
+
+	console.table({userPass, title, text});
+
 	db.query(
-		"INSERT INTO posts (title, post_text, user_name) VALUES ('a title', 'There are concequences killing a god!!!', 'eva')"
+		'INSERT INTO posts (title, post_text, user_name) VALUES ()',
+		(err, res) => {
+			if (err) {
+				console.log(err);
+			}
+			console.log(res);
+		}
 	);
 });
 

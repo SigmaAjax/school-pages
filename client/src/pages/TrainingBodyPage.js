@@ -2,17 +2,18 @@ import React, {useEffect} from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
+import CreatePost from '../admin/CreatePost.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
 
 //const backendData = 'http://localhost:3200/';
 
 export default function TrainingBodyPage() {
-	useEffect(() => {
-		fetch('/test')
-			.then((res) => res.json())
-			.then((data) => console.log(data))
-			.catch((err) => console.error(err));
-	}, []);
+	// useEffect(() => {
+	// 	fetch('/test')
+	// 		.then((res) => res.json())
+	// 		.then((data) => console.log(data))
+	// 		.catch((err) => console.error(err));
+	// }, []);
 
 	return (
 		<div className="container">
@@ -33,7 +34,7 @@ export default function TrainingBodyPage() {
 					path="newPost"
 					element={
 						<div className="item three">
-							<h1>Aktuality</h1>
+							<CreatePost />
 						</div>
 					}
 				/>

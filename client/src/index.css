@@ -451,3 +451,20 @@ form {
 .SidebarList #active {
 	background-color: #293846;
 }
+
+/* create post */
+
+textarea {
+	resize: none;
+	font-family: mon;
+	font-size: 16px;
+}
+
+.postTitle {
+	font-size: 24px;
+	font-style: bold;
+}
+
+button {
+	margin: 10px;
+}
