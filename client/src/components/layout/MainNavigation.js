@@ -1,4 +1,4 @@
-import {Link, NavLink} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 export default function MainNavigation() {
 	return (
@@ -13,6 +13,17 @@ export default function MainNavigation() {
 						to="/"
 					>
 						Home
+					</NavLink>
+				</li>
+				<li className="nav-item">
+					<NavLink
+						exact
+						style={({isActive}) => {
+							return isActive ? {color: 'green'} : {};
+						}}
+						to="/aktuality"
+					>
+						Aktuality
 					</NavLink>
 				</li>
 				<li className="nav-item">

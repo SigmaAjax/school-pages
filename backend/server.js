@@ -27,12 +27,13 @@ app.post('/api/create', (req, res) => {
 	const text = req.body.text; //accessing variables from frontend
 	const title = req.body.title;
 	const userPass = req.body.userPass;
+	const slug = req.body.slug;
 
-	//console.table({userPass, title, text});
+	console.table({userPass, title, text, slug});
 
 	db.query(
-		'INSERT INTO posts (title, post_text, user_name) VALUES (?,?,?)',
-		[title, text, userPass],
+		'INSERT INTO posts (title, post_text, user_name, slug) VALUES (?,?,?,?)',
+		[title, text, userPass, slug],
 		(err, res) => {
 			if (err) {
 				console.log(err);
