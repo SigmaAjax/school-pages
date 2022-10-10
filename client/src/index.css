@@ -351,7 +351,6 @@ form {
 }
 
 .item {
-	background: lightblue;
 	margin: 0.5em;
 }
 
@@ -368,6 +367,7 @@ form {
 }
 .two {
 	flex: 3 2 250px;
+	background-color: aliceblue;
 	/* align-self: flex-start; */
 	/* align-self:  is breaking a default of the container */
 
@@ -467,4 +467,14 @@ textarea {
 
 button {
 	margin: 10px;
+}
+
+.postContainer {
+	background-color: ivory;
+	box-shadow: 1px 1px 8px black;
+	margin: 20px;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
 }

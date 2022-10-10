@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Axios} from 'axios';
+import axios from 'axios';
 
 export default function CreatePost() {
 	const [backendData, setBackendData] = useState([{}]);
@@ -8,7 +8,7 @@ export default function CreatePost() {
 	const [userPass, setUserPass] = useState('');
 
 	const submitPost = () => {
-		Axios.post('/api/create', {
+		axios.post('/api/create', {
 			userPass: userPass,
 			title: title,
 			text: text,
@@ -16,7 +16,7 @@ export default function CreatePost() {
 	};
 
 	useEffect(() => {
-		console.table({password: userPass, content: text, headline: title});
+		return;
 	}, [userPass, text, title]);
 
 	return (

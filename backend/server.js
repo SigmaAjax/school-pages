@@ -14,17 +14,25 @@ app.use(express.json());
 // 	);
 // });
 
-app.get('/', (req, res) => {});
+app.get('/api/get', (req, res) => {
+	db.query('SELECT * FROM posts', (err, result) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(result);
+	});
+});
 
 app.post('/api/create', (req, res) => {
 	const text = req.body.text; //accessing variables from frontend
 	const title = req.body.title;
 	const userPass = req.body.userPass;
 
-	console.table({userPass, title, text});
+	//console.table({userPass, title, text});
 
 	db.query(
-		'INSERT INTO posts (title, post_text, user_name) VALUES ()',
+		'INSERT INTO posts (title, post_text, user_name) VALUES (?,?,?)',
+		[title, text, userPass],
 		(err, res) => {
 			if (err) {
 				console.log(err);
