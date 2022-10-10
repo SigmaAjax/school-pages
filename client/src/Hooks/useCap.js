@@ -1,6 +1,6 @@
-export default function useCapitalize() {
+export default function useCap() {
 	function capitalize(text) {
-		const text = text.charAt(0).toUpperCase() + text.slice(1);
+		text = text.charAt(0).toUpperCase() + text.slice(1);
 		return text;
 	}
 
