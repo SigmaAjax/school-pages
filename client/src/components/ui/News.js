@@ -9,6 +9,7 @@ export default function News() {
 			setPostList(data.data);
 		});
 	}, []);
+
 	return (
 		<div className="item two">
 			<h1>Co nového?</h1>
