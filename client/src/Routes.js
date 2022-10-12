@@ -15,7 +15,7 @@ export function Routes() {
 		<RouterRoutes>
 			<Route index path="/" element={<Home />} />
 			<Route exact path="/aktuality" element={<News />} />
-			<Route path="/aktuality/:titleSlug" element={<PostDetail />} />
+			<Route path="/aktuality/:id/:titleSlug" element={<PostDetail />} />
 			<Route path="/skolka" element={<Preschool />} />
 			<Route path="/jidelna" element={<Cantine />} />
 			<Route path="/zakladka" element={<Elementary />} />

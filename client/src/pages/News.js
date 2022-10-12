@@ -11,6 +11,8 @@ export default function News() {
 		});
 	}, []);
 
+	//console.log(postList);
+
 	return (
 		<div className="item two">
 			<h1>Co nového? aka Aktuality</h1>

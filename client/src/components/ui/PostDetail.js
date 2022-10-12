@@ -4,22 +4,22 @@ import {Link, useParams} from 'react-router-dom';
 import useCap from '../../Hooks/useCap';
 
 export default function PostDetail() {
-	const {titleSlug} = useParams();
+	const {titleSlug, id} = useParams();
 	const [post, setPost] = useState({});
 	const {capitalize} = useCap();
 
 	useEffect(() => {
 		const controller = new AbortController();
-		axios.get('/api/get', {signal: controller.signal}).then((response) => {
-			const detail = response.data.filter((key) => {
-				return key.slug === titleSlug;
+		axios
+			.get(`/api/get/${id}/${titleSlug}`, {signal: controller.signal})
+			.then((response) => {
+				setPost(...response.data);
 			});
-			setPost(...detail);
-			return () => {
-				controller.abort();
-			};
-		});
-	}, [titleSlug]);
+
+		return () => {
+			controller.abort();
+		};
+	}, [id]);
 
 	console.table(post);
 

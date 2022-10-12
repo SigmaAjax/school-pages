@@ -15,6 +15,7 @@ app.use(express.json());
 // });
 
 app.get('/api/get', (req, res) => {
+	// get all posts request
 	db.query('SELECT * FROM posts', (err, result) => {
 		if (err) {
 			console.log(err);
@@ -23,13 +24,31 @@ app.get('/api/get', (req, res) => {
 	});
 });
 
+app.get('/api/get/:id/:titleSlug', (req, res) => {
+	// get one post ...  request choose one row according to slug and id
+
+	const id = req.params.id;
+	const slug = req.params.titleSlug;
+
+	db.query(
+		'SELECT * FROM posts WHERE id=? AND slug=?',
+		[id, slug],
+		(err, result) => {
+			if (err) {
+				console.log(err);
+			}
+			res.send(result);
+		}
+	);
+});
+
 app.post('/api/create', (req, res) => {
 	const text = req.body.text; //accessing variables from frontend
 	const title = req.body.title;
 	const userPass = req.body.userPass;
 	const slug = req.body.slug;
 
-	console.table({userPass, title, text, slug});
+	//console.table({userPass, title, text, slug});
 
 	db.query(
 		'INSERT INTO posts (title, post_text, user_name, slug) VALUES (?,?,?,?)',

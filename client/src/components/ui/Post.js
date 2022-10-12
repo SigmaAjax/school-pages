@@ -4,7 +4,7 @@ export default function Post({content}) {
 	return (
 		<div className="container">
 			<div key={content.id} className="postContainer item two">
-				<Link to={`/aktuality/${content.slug}`}>
+				<Link to={`/aktuality/${content.id}/${content.slug}`}>
 					<h2>{content.title}</h2>
 				</Link>
 				<p>
