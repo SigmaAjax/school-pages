@@ -8,23 +8,24 @@ export default function PostDetail() {
 	const [post, setPost] = useState({});
 	const {capitalize} = useCap();
 
-	// setPost((values) => {
-	// 	const {[key]: value, lastLayer, ...rest} = values;
-	// 	return rest;
-	// });
-
 	useEffect(() => {
-		axios.get('/api/get').then((response) => {
+		const controller = new AbortController();
+		axios.get('/api/get', {signal: controller.signal}).then((response) => {
 			const detail = response.data.filter((key) => {
 				return key.slug === titleSlug;
 			});
 			setPost(...detail);
+			return () => {
+				controller.abort();
+			};
 		});
-	}, []);
+	}, [titleSlug]);
+
+	console.table(post);
 
 	return (
 		<>
-			<h3>{capitalize(post.title)}</h3>
+			<h3>{post.title ? capitalize(post.title) : 'title not found'}</h3>
 			<p>{post.post_text}</p>
 			<Link to="/aktuality">Go back</Link>
 		</>
