@@ -10,13 +10,13 @@ import PostDetail from './PostDetail.js';
 import usePost from '../Hooks/usePost.js';
 
 export default function TrainingBodyPage() {
-	const [deletingPost, setDeletingPost] = useState(false);
+	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [postList, setPostList] = useState([]);
 	const {updatePost, deletePost} = usePost();
 
 	return (
 		<div className="container">
-			{/* {deletingPost && <Modal deletingFncModal={setDeletingPost} />} */}
+			<Modal open={isOpenModal}>Fancy Modal</Modal>
 			<div className="item one">
 				<AdminSidebar />
 			</div>
@@ -42,19 +42,13 @@ export default function TrainingBodyPage() {
 					path="newPost/admin-posts"
 					element={
 						<div className="item three">
-							<News admin={true} deletingFnc={setDeletingPost} />
+							<News admin={true} setOpenModal={setIsOpenModal} />
 						</div>
 					}
 				/>
 				<Route
 					path="newPost/admin-posts/:id/:titleSlug"
-					element={
-						<PostDetail
-							admin={true}
-							deletingFnc={setDeletingPost}
-							onDeletePost={deletingPost}
-						/>
-					}
+					element={<PostDetail admin={true} setOpenModal={setIsOpenModal} />}
 				/>
 				<Route path="galerie" element={<h1>Galerie</h1>} />
 				<Route path="dokumenty" element={<h1>dokumety</h1>} />

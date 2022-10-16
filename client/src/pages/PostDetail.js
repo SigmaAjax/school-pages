@@ -4,7 +4,7 @@ import {Link, useParams} from 'react-router-dom';
 import Modal from '../admin/adminComponents/Modal';
 import useCap from '../Hooks/useCap';
 
-export default function PostDetail({admin}) {
+export default function PostDetail({admin, setOpenModal}) {
 	const {titleSlug, id} = useParams();
 	const [post, setPost] = useState({});
 	const {capitalize} = useCap();
@@ -41,7 +41,10 @@ export default function PostDetail({admin}) {
 					<button
 						type="button"
 						onClick={() => {
-							console.log('vymazat');
+							setOpenModal((prev) => {
+								console.log('Mažu jeden post');
+								return !prev;
+							});
 						}}
 					>
 						Vymazat
@@ -49,7 +52,10 @@ export default function PostDetail({admin}) {
 					<button
 						type="button"
 						onClick={() => {
-							console.log('upravit');
+							setOpenModal((prev) => {
+								console.log('Upravuju jeden post');
+								return !prev;
+							});
 						}}
 					>
 						Upravit

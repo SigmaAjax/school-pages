@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 
-export default function Post({content, admin}) {
+export default function Post({content, admin, setOpenModal}) {
 	return (
 		<div className="container">
 			<div key={content.id} className="postContainer item two">
@@ -24,7 +24,10 @@ export default function Post({content, admin}) {
 					<>
 						<button
 							onClick={() => {
-								console.log('Mažu ze seznamu');
+								setOpenModal((prev) => {
+									console.log('Mažu ze seznamu');
+									return !prev;
+								});
 							}}
 						>
 							Vymazat příspěvek
