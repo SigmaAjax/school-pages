@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import useSlugify from '../Hooks/useSlugify';
+import CreatePostNav from './adminComponents/CreatePostNav';
 
 export default function CreatePost() {
 	const [backendData, setBackendData] = useState([{}]);
@@ -25,6 +26,8 @@ export default function CreatePost() {
 	return (
 		<>
 			<h1>Aktuality</h1>
+			{/*Navigation for the create post*/}
+			<CreatePostNav />
 			<div className="item one">
 				<label htmlFor="user">Heslo pro admina</label>
 				<input
