@@ -1,10 +1,9 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
-import Modal from '../admin/adminComponents/Modal';
 import useCap from '../Hooks/useCap';
 
-export default function PostDetail({admin, setOpenModal}) {
+export default function PostDetail({admin, onOpen}) {
 	const {titleSlug, id} = useParams();
 	const [post, setPost] = useState({});
 	const {capitalize} = useCap();
@@ -20,7 +19,7 @@ export default function PostDetail({admin, setOpenModal}) {
 		return () => {
 			controller.abort();
 		};
-	}, [id]);
+	}, [id, titleSlug]);
 
 	return (
 		<>
@@ -38,26 +37,10 @@ export default function PostDetail({admin, setOpenModal}) {
 							<p>nic tu není</p>
 						</>
 					)}
-					<button
-						type="button"
-						onClick={() => {
-							setOpenModal((prev) => {
-								console.log('Mažu jeden post');
-								return !prev;
-							});
-						}}
-					>
+					<button type="button" onClick={onOpen}>
 						Vymazat
 					</button>
-					<button
-						type="button"
-						onClick={() => {
-							setOpenModal((prev) => {
-								console.log('Upravuju jeden post');
-								return !prev;
-							});
-						}}
-					>
+					<button type="button" onClick={onOpen}>
 						Upravit
 					</button>
 					<Link to="/admin/newPost/admin-posts">Go back</Link>

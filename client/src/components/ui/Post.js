@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 
-export default function Post({content, admin, setOpenModal}) {
+export default function Post({content, admin, onCloseModal}) {
 	return (
 		<div className="container">
 			<div key={content.id} className="postContainer item two">
@@ -22,21 +22,12 @@ export default function Post({content, admin, setOpenModal}) {
 				<strong>{content.user_name}</strong>
 				{admin && (
 					<>
-						<button
-							onClick={() => {
-								setOpenModal((prev) => {
-									console.log('Mažu ze seznamu');
-									return !prev;
-								});
-							}}
-						>
-							Vymazat příspěvek
-						</button>
+						<button onClick={onCloseModal}>Vymazat příspěvek</button>
 						<a
 							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
 							rel="noreferrer"
 						>
-							<button>Upravit příspěvek</button>
+							<button onClick={onCloseModal}>Upravit příspěvek</button>
 						</a>
 					</>
 				)}

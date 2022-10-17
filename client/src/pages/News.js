@@ -2,7 +2,7 @@ import axios from 'axios';
 import {useState, useEffect} from 'react';
 import Post from '../components/ui/Post';
 
-export default function News({admin, setOpenModal}) {
+export default function News({admin, onOpen}) {
 	const [postList, setPostList] = useState([]);
 
 	useEffect(() => {
@@ -26,7 +26,7 @@ export default function News({admin, setOpenModal}) {
 						key={val.id}
 						content={val}
 						admin={admin}
-						setOpenModal={setOpenModal}
+						onCloseModal={onOpen}
 					/>
 				);
 			})}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
@@ -7,16 +7,22 @@ import CreatePost from '../admin/CreatePost.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
 import News from './News.js';
 import PostDetail from './PostDetail.js';
-import usePost from '../Hooks/usePost.js';
 
 export default function TrainingBodyPage() {
 	const [isOpenModal, setIsOpenModal] = useState(false);
-	const [postList, setPostList] = useState([]);
-	const {updatePost, deletePost} = usePost();
 
 	return (
 		<div className="container">
-			<Modal open={isOpenModal}>Fancy Modal</Modal>
+			<Modal
+				open={isOpenModal}
+				onClose={() =>
+					setIsOpenModal((prev) => {
+						return !prev;
+					})
+				}
+			>
+				Fancy modal
+			</Modal>
 			<div className="item one">
 				<AdminSidebar />
 			</div>
@@ -42,13 +48,21 @@ export default function TrainingBodyPage() {
 					path="newPost/admin-posts"
 					element={
 						<div className="item three">
-							<News admin={true} setOpenModal={setIsOpenModal} />
+							<News
+								admin={true}
+								onOpen={() => setIsOpenModal((prev) => !prev)}
+							/>
 						</div>
 					}
 				/>
 				<Route
 					path="newPost/admin-posts/:id/:titleSlug"
-					element={<PostDetail admin={true} setOpenModal={setIsOpenModal} />}
+					element={
+						<PostDetail
+							admin={true}
+							onOpen={() => setIsOpenModal((prev) => !prev)}
+						/>
+					}
 				/>
 				<Route path="galerie" element={<h1>Galerie</h1>} />
 				<Route path="dokumenty" element={<h1>dokumety</h1>} />
