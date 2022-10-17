@@ -27,7 +27,9 @@ export default function Post({content, admin, onCloseModal}) {
 							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
 							rel="noreferrer"
 						>
-							<button onClick={onCloseModal}>Upravit příspěvek</button>
+							<button onClick={() => alert('Příspěvek bude upraven')}>
+								Upravit příspěvek
+							</button>
 						</a>
 					</>
 				)}
