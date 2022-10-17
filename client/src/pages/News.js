@@ -2,7 +2,7 @@ import axios from 'axios';
 import {useState, useEffect} from 'react';
 import Post from '../components/ui/Post';
 
-export default function News({admin, onOpen}) {
+export default function News({admin}) {
 	const [postList, setPostList] = useState([]);
 
 	useEffect(() => {
@@ -21,14 +21,7 @@ export default function News({admin, onOpen}) {
 		<div className="item two">
 			<h1>Co nového? aka Aktuality</h1>
 			{postList.map((val) => {
-				return (
-					<Post
-						key={val.id}
-						content={val}
-						admin={admin}
-						onCloseModal={onOpen}
-					/>
-				);
+				return <Post key={val.id} content={val} admin={admin} />;
 			})}
 		</div>
 	);

@@ -1,6 +1,10 @@
 import {Link} from 'react-router-dom';
+import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
-export default function Post({content, admin, onCloseModal}) {
+export default function Post({content, admin}) {
+	const isOpenModal = useAdmin();
+	const setIsOpenModal = useAdminUpdate();
+
 	return (
 		<div className="container">
 			<div key={content.id} className="postContainer item two">
@@ -22,7 +26,16 @@ export default function Post({content, admin, onCloseModal}) {
 				<strong>{content.user_name}</strong>
 				{admin && (
 					<>
-						<button onClick={onCloseModal}>Vymazat příspěvek</button>
+						<button
+							onClick={() => {
+								setIsOpenModal((prev) => {
+									console.log('open modal got clicked from post');
+									return !prev;
+								});
+							}}
+						>
+							Vymazat příspěvek
+						</button>
 						<a
 							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
 							rel="noreferrer"

@@ -1,9 +1,11 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
+import {useAdminUpdate} from '../context/AdminContext';
 import useCap from '../Hooks/useCap';
 
 export default function PostDetail({admin, onOpen}) {
+	const setIsOpenModal = useAdminUpdate();
 	const {titleSlug, id} = useParams();
 	const [post, setPost] = useState({});
 	const {capitalize} = useCap();
@@ -37,10 +39,26 @@ export default function PostDetail({admin, onOpen}) {
 							<p>nic tu není</p>
 						</>
 					)}
-					<button type="button" onClick={onOpen}>
+					<button
+						type="button"
+						onClick={() =>
+							setIsOpenModal((prev) => {
+								console.log('open modal got clicked from post');
+								return !prev;
+							})
+						}
+					>
 						Vymazat
 					</button>
-					<button type="button" onClick={onOpen}>
+					<button
+						type="button"
+						onClick={() =>
+							setIsOpenModal((prev) => {
+								console.log('open modal got clicked from post');
+								return !prev;
+							})
+						}
+					>
 						Upravit
 					</button>
 					<Link to="/admin/newPost/admin-posts">Go back</Link>

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -21,15 +22,19 @@ const OVERLAY_STYLES = {
 	zIndex: 1000,
 };
 
-export default function Modal({open, onClose, children}) {
-	if (!open) return null;
+export default function Modal({children}) {
+	const isOpenModal = useAdmin();
+	const setIsOpenModal = useAdminUpdate();
+
+	if (!isOpenModal) return null;
 	return ReactDom.createPortal(
 		<div style={OVERLAY_STYLES}>
 			<div style={MODAL_STYLES}>
-				<button onClick={onClose}>X</button>
+				<h5>{isOpenModal}</h5>
+				<button onClick={() => setIsOpenModal()}>X</button>
 				{children}
-				<button onClick={onClose}>Zrušit</button>
-				<button onClick={onClose}>Pokračovat v akci</button>
+				<button onClick={() => setIsOpenModal()}>Zrušit</button>
+				<button onClick={() => setIsOpenModal()}>Pokračovat v akci</button>
 			</div>
 		</div>,
 		document.getElementById('portal')
