@@ -78,7 +78,7 @@ export default function MainNavigation() {
 						}}
 						to="/admin"
 					>
-						TrainingBodyPage
+						AdminPage
 					</NavLink>
 				</li>
 			</ul>

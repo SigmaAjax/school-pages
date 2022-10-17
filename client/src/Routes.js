@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import News from './pages/News';
 import PostDetail from './pages/PostDetail';
 import Preschool from './pages/Preschool';
-import TrainingBodyPage from './pages/TrainingBodyPage';
+import AdminPage from './pages/AdminPage';
 
 export function Routes() {
 	return (
@@ -19,7 +19,7 @@ export function Routes() {
 			<Route path="/jidelna" element={<Cantine />} />
 			<Route path="/zakladka" element={<Elementary />} />
 			<Route path="/kontakty" element={<ContactPage />} />
-			<Route exact path="/admin/*" element={<TrainingBodyPage />} />
+			<Route exact path="/admin/*" element={<AdminPage />} />
 		</RouterRoutes>
 	);
 }

@@ -8,7 +8,7 @@ import EmployeeForm from '../admin/EmployeeForm.js';
 import News from './News.js';
 import PostDetail from './PostDetail.js';
 
-export default function TrainingBodyPage() {
+export default function AdminPage() {
 	const [isOpenModal, setIsOpenModal] = useState(false);
 
 	return (
