@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDom from 'react-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
@@ -24,14 +25,26 @@ const OVERLAY_STYLES = {
 
 export default function Modal({children}) {
 	const {isOpenModal, post} = useAdmin();
-	const {setIsOpenModal} = useAdminUpdate();
+	const {setIsOpenModal, setPost} = useAdminUpdate();
 
 	if (!isOpenModal) return null;
 
-	console.table(post);
-
-	const deletePost = (e) => {
+	const updatePost = () => {
 		console.log('You are going to carry on deleting data');
+		console.table(post);
+
+		// setPost((val) => {
+		// 	return {
+		// 		...val,
+		// 		slug: slugify(post.title),
+		// 	};
+		// });
+		console.log('After slugifing the post title...');
+		console.table(post);
+
+		setIsOpenModal((prev) => {
+			return !prev;
+		});
 	};
 
 	return ReactDom.createPortal(
@@ -61,10 +74,7 @@ export default function Modal({children}) {
 				</button>
 				<button
 					onClick={() => {
-						deletePost();
-						setIsOpenModal((prev) => {
-							return !prev;
-						});
+						updatePost();
 					}}
 				>
 					Pokračovat v akci
