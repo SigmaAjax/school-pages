@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import ReactDom from 'react-dom';
+import {useNavigate} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
 const MODAL_STYLES = {
@@ -24,27 +25,39 @@ const OVERLAY_STYLES = {
 };
 
 export default function Modal({children}) {
+	const navigate = useNavigate();
 	const {isOpenModal, post} = useAdmin();
-	const {setIsOpenModal, setPost} = useAdminUpdate();
+	const {setIsOpenModal} = useAdminUpdate();
 
 	if (!isOpenModal) return null;
 
-	const updatePost = () => {
+	console.log(typeof post.id);
+
+	const updatePost = (id) => {
 		console.log('You are going to carry on deleting data');
 		console.table(post);
 
-		// setPost((val) => {
-		// 	return {
-		// 		...val,
-		// 		slug: slugify(post.title),
-		// 	};
-		// });
+		axios
+			.put('/api/updatePost', {
+				id: post.id,
+				userPass: post.user_name,
+				title: post.title,
+				text: post.post_text,
+				slug: post.slug,
+			})
+			.then((response) => {
+				alert('Updating this data...', response.data);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 		console.log('After slugifing the post title...');
 		console.table(post);
 
 		setIsOpenModal((prev) => {
 			return !prev;
 		});
+		navigate('/admin/newPost/admin-posts');
 	};
 
 	return ReactDom.createPortal(
@@ -74,7 +87,7 @@ export default function Modal({children}) {
 				</button>
 				<button
 					onClick={() => {
-						updatePost();
+						updatePost(post.id);
 					}}
 				>
 					Pokračovat v akci

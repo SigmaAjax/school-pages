@@ -62,15 +62,15 @@ app.post('/api/create', (req, res) => {
 	);
 });
 
-app.put('api/updatePost', (req, res) => {
-	const id = req.params.id;
+app.put('/api/updatePost', (req, res) => {
+	const id = req.body.id;
 	const text = req.body.text;
 	const title = req.body.title;
 	const userPass = req.body.userPass;
 	const slug = req.body.slug;
 
 	db.query(
-		'UPDATE posts SET (title, post_text, user_name, slug) VALUES (?,?,?,?) WHERE id=?',
+		'UPDATE posts SET title=?, post_text=?, user_name=?, slug=? WHERE id=?',
 		[title, text, userPass, slug, id],
 		(err, result) => {
 			if (err) {

@@ -31,19 +31,13 @@ export default function PostDetail({admin}) {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		console.log('ref');
-		console.table({
-			title: title.current.value,
-			post_text: post_text.current.value,
-		});
+
 		setPost({
 			...post,
 			title: title.current.value,
 			post_text: post_text.current.value,
 			slug: slugify(title.current.value),
 		});
-		console.log('The post is..');
-		console.table(post);
 	}
 
 	return (
