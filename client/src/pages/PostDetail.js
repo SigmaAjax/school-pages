@@ -1,13 +1,13 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
-import {useAdminUpdate} from '../context/AdminContext';
+import {useAdmin, useAdminUpdate} from '../context/AdminContext';
 import useCap from '../Hooks/useCap';
 
-export default function PostDetail({admin, onOpen}) {
-	const setIsOpenModal = useAdminUpdate();
+export default function PostDetail({admin}) {
+	const {setIsOpenModal, setPost} = useAdminUpdate();
+	const {post} = useAdmin();
 	const {titleSlug, id} = useParams();
-	const [post, setPost] = useState({});
 	const {capitalize} = useCap();
 
 	useEffect(() => {
@@ -43,7 +43,10 @@ export default function PostDetail({admin, onOpen}) {
 						type="button"
 						onClick={() =>
 							setIsOpenModal((prev) => {
-								console.log('open modal got clicked from post');
+								console.log(
+									'open modal got clicked from Post Deatil and your post is...'
+								);
+
 								return !prev;
 							})
 						}
@@ -54,7 +57,10 @@ export default function PostDetail({admin, onOpen}) {
 						type="button"
 						onClick={() =>
 							setIsOpenModal((prev) => {
-								console.log('open modal got clicked from post');
+								console.log(
+									'open modal got clicked UPRAVIT from Post Detail and your post is...'
+								);
+
 								return !prev;
 							})
 						}

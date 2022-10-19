@@ -3,7 +3,7 @@ import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
 import Modal from '../admin/adminComponents/Modal.js';
-import CreatePost from '../admin/CreatePost.js';
+import CreatePost from '../admin/adminComponents/PostComponents/CreatePost.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
 import {AdminProvider} from '../context/AdminContext.js';
 import News from './News.js';

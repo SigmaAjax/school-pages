@@ -23,18 +23,52 @@ const OVERLAY_STYLES = {
 };
 
 export default function Modal({children}) {
-	const isOpenModal = useAdmin();
-	const setIsOpenModal = useAdminUpdate();
+	const {isOpenModal, post} = useAdmin();
+	const {setIsOpenModal} = useAdminUpdate();
 
 	if (!isOpenModal) return null;
+
+	console.table(post);
+
+	const deletePost = (e) => {
+		console.log('You are going to carry on deleting data');
+	};
+
 	return ReactDom.createPortal(
 		<div style={OVERLAY_STYLES}>
 			<div style={MODAL_STYLES}>
 				<h5>{isOpenModal}</h5>
-				<button onClick={() => setIsOpenModal()}>X</button>
+				<button
+					onClick={() =>
+						setIsOpenModal((prev) => {
+							console.log('You are closing modal from X button');
+							return !prev;
+						})
+					}
+				>
+					X
+				</button>
 				{children}
-				<button onClick={() => setIsOpenModal()}>Zrušit</button>
-				<button onClick={() => setIsOpenModal()}>Pokračovat v akci</button>
+				<button
+					onClick={() =>
+						setIsOpenModal((prev) => {
+							console.log('You are closing modal from ZRUŠIT button');
+							return !prev;
+						})
+					}
+				>
+					Zrušit
+				</button>
+				<button
+					onClick={() => {
+						deletePost();
+						setIsOpenModal((prev) => {
+							return !prev;
+						});
+					}}
+				>
+					Pokračovat v akci
+				</button>
 			</div>
 		</div>,
 		document.getElementById('portal')

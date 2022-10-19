@@ -2,8 +2,8 @@ import {Link} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
 export default function Post({content, admin}) {
-	const isOpenModal = useAdmin();
-	const setIsOpenModal = useAdminUpdate();
+	const {isOpenModal} = useAdmin();
+	const {setIsOpenModal} = useAdminUpdate();
 
 	return (
 		<div className="container">

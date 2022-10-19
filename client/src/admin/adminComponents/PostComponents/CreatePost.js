@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import useSlugify from '../Hooks/useSlugify';
-import CreatePostNav from './adminComponents/CreatePostNav';
+import CreatePostNav from './CreatePostNav';
+import useSlugify from 'client/src/Hooks/useSlugify.js';
 
 export default function CreatePost() {
-	const [backendData, setBackendData] = useState([{}]);
+	//const [backendData, setBackendData] = useState([{}]);
 	const [title, setTitle] = useState('');
 	const [text, setText] = useState('');
 	const [userPass, setUserPass] = useState('');
