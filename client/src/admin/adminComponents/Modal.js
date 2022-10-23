@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import {useNavigate} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
+import useDeleteUpdate from '../../Hooks/useDeleteUpdate';
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -26,17 +27,23 @@ const OVERLAY_STYLES = {
 
 export default function Modal({children}) {
 	const navigate = useNavigate();
-	const {isOpenModal, post} = useAdmin();
-	const {setIsOpenModal} = useAdminUpdate();
+	const {isOpenModal, post, buttonName} = useAdmin();
+	const {setIsOpenModal, setButtonName} = useAdminUpdate();
+	const {updateOrDelete} = useDeleteUpdate(buttonName, post);
 
 	if (!isOpenModal) return null;
 
-	console.log(typeof post.id);
+	// function updateOrDelete(nameOfButton) {
+	// 	nameOfButton === 'delete'
+	// 		? console.log('delete with button....', nameOfButton) // deletePost function
+	// 		: console.log('Updating post with button', nameOfButton); //updatePost funtion
+	// }
+
+	const deletePost = (id) => {
+		console.log('Deleting post with button', buttonName);
+	};
 
 	const updatePost = (id) => {
-		console.log('You are going to carry on deleting data');
-		console.table(post);
-
 		axios
 			.put('/api/updatePost', {
 				id: post.id,
@@ -51,8 +58,6 @@ export default function Modal({children}) {
 			.catch((error) => {
 				console.error(error);
 			});
-		console.log('After slugifing the post title...');
-		console.table(post);
 
 		setIsOpenModal((prev) => {
 			return !prev;
@@ -65,29 +70,40 @@ export default function Modal({children}) {
 			<div style={MODAL_STYLES}>
 				<h5>{isOpenModal}</h5>
 				<button
-					onClick={() =>
+					onClick={() => {
 						setIsOpenModal((prev) => {
 							console.log('You are closing modal from X button');
 							return !prev;
-						})
-					}
+						});
+						setButtonName((prev) => {
+							return (prev = '');
+						});
+					}}
 				>
 					X
 				</button>
 				{children}
 				<button
-					onClick={() =>
+					onClick={() => {
 						setIsOpenModal((prev) => {
 							console.log('You are closing modal from ZRUŠIT button');
 							return !prev;
-						})
-					}
+						});
+						setButtonName((prev) => {
+							return (prev = '');
+						});
+					}}
 				>
 					Zrušit
 				</button>
 				<button
 					onClick={() => {
-						updatePost(post.id);
+						updateOrDelete(post);
+						setIsOpenModal((prev) => {
+							return !prev;
+						});
+						//updatePost(post.id);
+						navigate('/admin/newPost/admin-posts');
 					}}
 				>
 					Pokračovat v akci

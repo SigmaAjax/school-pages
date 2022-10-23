@@ -14,16 +14,18 @@ export function useAdminUpdate() {
 export function AdminProvider({children}) {
 	// Modal states
 	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [buttonName, setButtonName] = useState('');
 	//News states
 	const [postList, setPostList] = useState([]);
 	const [post, setPost] = useState({}); // For one particular post
 
-	const valueStates = {isOpenModal, postList, post};
+	const valueStates = {isOpenModal, postList, post, buttonName};
 
 	const valueSetStates = {
 		setIsOpenModal,
 		setPostList,
 		setPost,
+		setButtonName,
 	};
 
 	return (

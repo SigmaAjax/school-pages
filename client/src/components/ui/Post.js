@@ -1,9 +1,12 @@
 import {Link} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
+import useDeleteUpdate from '../../Hooks/useDeleteUpdate';
 
 export default function Post({content, admin}) {
-	const {isOpenModal} = useAdmin();
-	const {setIsOpenModal} = useAdminUpdate();
+	const {buttonName, post} = useAdmin();
+	const {setIsOpenModal, setButtonName, setPost} = useAdminUpdate();
+	// I can only delete from this page
+	const {updateOrDelete} = useDeleteUpdate(buttonName, content);
 
 	return (
 		<div className="container">
@@ -27,11 +30,13 @@ export default function Post({content, admin}) {
 				{admin && (
 					<>
 						<button
+							name="post-delete"
 							onClick={() => {
 								setIsOpenModal((prev) => {
-									console.log('open modal got clicked from post');
 									return !prev;
 								});
+								setPost(content);
+								updateOrDelete(post);
 							}}
 						>
 							Vymazat příspěvek
@@ -40,7 +45,15 @@ export default function Post({content, admin}) {
 							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
 							rel="noreferrer"
 						>
-							<button onClick={() => alert('Příspěvek bude upraven')}>
+							<button
+								onClick={(e) => {
+									alert('Příspěvek bude upraven');
+									setButtonName((prev) => {
+										prev = e.target.name;
+										return prev;
+									});
+								}}
+							>
 								Upravit příspěvek
 							</button>
 						</a>

@@ -15,7 +15,7 @@ export default function useSlugify() {
 			.replace(/\s+/g, '-') // collapse whitespace and replace by -
 			.replace(/-+/g, '-'); // collapse dashes
 
-		console.log(text);
+		//console.log(text);
 
 		return text;
 	}

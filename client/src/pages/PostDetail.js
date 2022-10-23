@@ -6,7 +6,7 @@ import useCap from '../Hooks/useCap';
 import useSlugify from '../Hooks/useSlugify';
 
 export default function PostDetail({admin}) {
-	const {setIsOpenModal, setPost} = useAdminUpdate();
+	const {setIsOpenModal, setPost, setButtonName} = useAdminUpdate();
 	const {post} = useAdmin();
 	const {titleSlug, id} = useParams();
 	// custom hooks
@@ -61,30 +61,35 @@ export default function PostDetail({admin}) {
 						</>
 					)}
 					<button
+						name="post-delete"
 						type="button"
-						onClick={() =>
+						onClick={(e) => {
 							setIsOpenModal((prev) => {
-								console.log(
-									'open modal got clicked from Post Deatil and your post is...'
-								);
-
 								return !prev;
-							})
-						}
+							});
+							setButtonName((prev) => {
+								console.log('event from post detatil...', e.target.name);
+								prev = e.target.name;
+								return prev;
+							});
+						}}
 					>
 						Vymazat
 					</button>
 					<button
+						name="post-update"
 						type="submit"
-						onClick={() =>
+						onClick={(e) => {
 							setIsOpenModal((prev) => {
-								console.log(
-									'open modal got clicked UPRAVIT from Post Detail and your post is...'
-								);
-
 								return !prev;
-							})
-						}
+							});
+							setButtonName((prev) => {
+								console.log(prev);
+								console.log('event from post detatil...', e.target.name);
+								prev = e.target.name;
+								return prev;
+							});
+						}}
 					>
 						Upravit
 					</button>
