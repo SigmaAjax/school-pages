@@ -69,6 +69,8 @@ app.put('/api/updatePost', (req, res) => {
 	const userPass = req.body.userPass;
 	const slug = req.body.slug;
 
+	console.log(req.params.id);
+
 	db.query(
 		'UPDATE posts SET title=?, post_text=?, user_name=?, slug=? WHERE id=?',
 		[title, text, userPass, slug, id],
@@ -80,6 +82,17 @@ app.put('/api/updatePost', (req, res) => {
 			}
 		}
 	);
+});
+
+app.delete('/api/deletePost/:id', (req, res) => {
+	const id = req.params.id;
+	db.query('DELETE FROM posts WHERE id = ?', id, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else {
+			res.send(result);
+		}
+	});
 });
 
 app.listen(port, (res, req) => {

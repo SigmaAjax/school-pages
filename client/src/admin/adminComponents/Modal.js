@@ -43,28 +43,6 @@ export default function Modal({children}) {
 		console.log('Deleting post with button', buttonName);
 	};
 
-	const updatePost = (id) => {
-		axios
-			.put('/api/updatePost', {
-				id: post.id,
-				userPass: post.user_name,
-				title: post.title,
-				text: post.post_text,
-				slug: post.slug,
-			})
-			.then((response) => {
-				alert('Updating this data...', response.data);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-
-		setIsOpenModal((prev) => {
-			return !prev;
-		});
-		navigate('/admin/newPost/admin-posts');
-	};
-
 	return ReactDom.createPortal(
 		<div style={OVERLAY_STYLES}>
 			<div style={MODAL_STYLES}>

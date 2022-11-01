@@ -22,7 +22,7 @@ export default function News({admin}) {
 		return () => {
 			controller.abort();
 		};
-	}, []);
+	}, [postList]);
 
 	return (
 		<div className="item two">
