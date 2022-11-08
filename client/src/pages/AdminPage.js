@@ -2,6 +2,8 @@ import React from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
+import AlbumNav from '../admin/adminComponents/GalleryComponents/AlbumNav.js';
+import CreateAlbum from '../admin/adminComponents/GalleryComponents/CreateAlbum.js';
 import Modal from '../admin/adminComponents/Modal.js';
 import CreatePost from '../admin/adminComponents/PostComponents/CreatePost.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
@@ -49,7 +51,28 @@ export default function AdminPage() {
 						path="newPost/admin-posts/:id/:titleSlug"
 						element={<PostDetail admin={true} />}
 					/>
-					<Route path="galerie" element={<h1>Galerie</h1>} />
+					<Route
+						path="galerie/*"
+						element={
+							<div className="item three">
+								<AlbumNav />
+								<h1>Jednotlivá Alba</h1>
+							</div>
+						}
+					/>
+					<Route
+						path="galerie/newAlbum"
+						element={
+							<div className="item three">
+								<AlbumNav />
+								<CreateAlbum />
+							</div>
+						}
+					/>
+					<Route
+						path="galerie/album/:id/:albumSlug"
+						element={<h1>detail alba</h1>}
+					/>
 					<Route path="dokumenty" element={<h1>dokumety</h1>} />
 				</RouterRoutes>
 			</div>
