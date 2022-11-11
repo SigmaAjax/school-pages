@@ -2,6 +2,7 @@ import React from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import AdminSidebar from '../admin/adminComponents/AdminSidebar.js';
+import AlbumDetail from '../admin/adminComponents/GalleryComponents/AlbumDetail.js';
 import AlbumNav from '../admin/adminComponents/GalleryComponents/AlbumNav.js';
 import CreateAlbum from '../admin/adminComponents/GalleryComponents/CreateAlbum.js';
 import Modal from '../admin/adminComponents/Modal.js';
@@ -71,7 +72,12 @@ export default function AdminPage() {
 					/>
 					<Route
 						path="galerie/album/:id/:albumSlug"
-						element={<h1>detail alba</h1>}
+						element={
+							<div className="item three">
+								<h1>detail alba</h1>
+								<AlbumDetail />
+							</div>
+						}
 					/>
 					<Route path="dokumenty" element={<h1>dokumety</h1>} />
 				</RouterRoutes>
