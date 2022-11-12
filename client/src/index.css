@@ -478,3 +478,12 @@ button {
 	display: flex;
 	flex-direction: column;
 }
+
+/* Dropzone */
+
+.dropzone {
+	border: 2px dotted gray;
+	background-color: azure;
+	height: 150px;
+	margin-top: 16px;
+}
