@@ -1,21 +1,50 @@
-import {useCallback} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 
 export default function CreateAlbum() {
+	const [images, setImages] = useState([]);
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-		console.log('accepted files', acceptedFiles);
-		console.log('rejected files', rejectedFiles);
+		acceptedFiles.forEach((file) => {
+			// how to get rid of duplicate from react state
+
+			setImages((prev) => {
+				/// this Hook accept images and discard images with same name
+				const uniqueIds = [];
+				const arrImages = [...prev, file];
+
+				const uniqueImages = arrImages.filter((image) => {
+					const isDuplicate = uniqueIds.includes(image.name);
+
+					if (!isDuplicate) {
+						uniqueIds.push(image.name);
+
+						return true;
+					}
+
+					return false;
+				});
+				return uniqueImages;
+			});
+		});
+		//console.log('accepted files', acceptedFiles);
+		//console.log('rejected files', rejectedFiles);
 	}, []);
 	const {getRootProps, getInputProps, isDragActive} = useDropzone({
 		onDrop,
 		accept: 'image/*',
 	});
 
-	//console.log(getRootProps(), getInputProps());
+	useEffect(() => {
+		console.log('filter fnc');
+		console.table(images);
+	}, [images]);
 
 	return (
 		<div className="item three">
-			<form className="form-group" onSubmit={console.log('Album created')}>
+			<form
+				className="form-group"
+				onSubmit={() => console.log('Album created')}
+			>
 				<label htmlFor="albumName">Název Alba</label>
 				<input
 					name="albumName"
