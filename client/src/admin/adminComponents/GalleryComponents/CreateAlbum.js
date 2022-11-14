@@ -4,7 +4,7 @@ import useFileSize from '../../../Hooks/useFileSize';
 
 export default function CreateAlbum() {
 	const {formatBytes} = useFileSize();
-	//const [imagesURL, setImagesURL] = useState([]);
+	const [imagesURL, setImagesURL] = useState([]);
 	const [images, setImages] = useState([]);
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
 		acceptedFiles.forEach((file) => {
@@ -29,8 +29,19 @@ export default function CreateAlbum() {
 				return uniqueImages;
 			});
 		});
-		console.log('accepted files', acceptedFiles);
-		console.log('rejected files', rejectedFiles);
+		if (!images) {
+			return;
+		} else {
+			images.map((image) => {
+				const reader = new FileReader();
+				reader.onload = () => {
+					setImagesURL((prev) => [...prev, reader.result]);
+				};
+				reader.readAsDataURL(image);
+			});
+		}
+		// console.log('accepted files', acceptedFiles);
+		// console.log('rejected files', rejectedFiles);
 	}, []);
 	const {fileRejections, getRootProps, getInputProps, isDragActive} =
 		useDropzone({
@@ -39,10 +50,15 @@ export default function CreateAlbum() {
 		});
 
 	useEffect(() => {
-		console.log('Images hook');
-		console.table(images);
-		// console.log('Images URL hook');
-		// console.table(imagesURL);
+		// console.log('Images hook');
+		console.log(!images);
+		if (!images) {
+			return;
+		} else {
+			setImagesURL((previous) => [...new Set(previous)]);
+		}
+		console.log('.............');
+		console.table(imagesURL);
 	}, [images]);
 
 	const fileRejectionItems = fileRejections.map(({file, errors}) => (
