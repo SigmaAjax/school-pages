@@ -29,17 +29,6 @@ export default function CreateAlbum() {
 				return uniqueImages;
 			});
 		});
-		if (!images) {
-			return;
-		} else {
-			images.map((image) => {
-				const reader = new FileReader();
-				reader.onload = () => {
-					setImagesURL((prev) => [...prev, reader.result]);
-				};
-				reader.readAsDataURL(image);
-			});
-		}
 		// console.log('accepted files', acceptedFiles);
 		// console.log('rejected files', rejectedFiles);
 	}, []);
@@ -50,16 +39,15 @@ export default function CreateAlbum() {
 		});
 
 	useEffect(() => {
-		// console.log('Images hook');
-		console.log(!images);
-		if (!images) {
-			return;
-		} else {
-			setImagesURL((previous) => [...new Set(previous)]);
-		}
-		console.log('.............');
-		console.table(imagesURL);
-	}, [images]);
+		setTimeout(() => {
+			console.log('images');
+			console.table(images ? images : 'Nop images yet');
+		}, 150);
+		return () => {
+			console.log(' cleanup');
+			console.table(imagesURL ? imagesURL : 'No url data as images');
+		};
+	}, [imagesURL]);
 
 	const fileRejectionItems = fileRejections.map(({file, errors}) => (
 		<li key={file.path}>
@@ -77,7 +65,7 @@ export default function CreateAlbum() {
 		<div className="item three">
 			<form
 				className="form-group"
-				onSubmit={() => console.log('Album created with images: ', images)}
+				onSubmit={() => console.log('Album created with images: ')}
 			>
 				<label htmlFor="albumName">Název Alba</label>
 				<input
@@ -136,6 +124,30 @@ export default function CreateAlbum() {
 					</ul>
 				)}
 				<button type="submit">Vytvořit Album</button>
+				<button
+					type="button"
+					onClick={() => {
+						setTimeout(() => {
+							if (images.length == 0) {
+								console.log('No images');
+								return;
+							} else {
+								images.map((image) => {
+									const reader = new FileReader();
+									reader.onload = () => {
+										setImagesURL((prev) => [...prev, reader.result]);
+									};
+									reader.readAsDataURL(image);
+								});
+							}
+							setTimeout(() => {
+								setImagesURL((previous) => [...new Set(previous)]);
+							}, 350);
+						}, 150);
+					}}
+				>
+					Konzole
+				</button>
 			</form>
 		</div>
 	);
