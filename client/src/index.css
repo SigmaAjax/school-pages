@@ -487,3 +487,11 @@ button {
 	height: 150px;
 	margin-top: 16px;
 }
+
+.selected-images {
+	height: 100px;
+	width: 100px;
+	object-fit: cover;
+	margin: 16px;
+	background-color: antiquewhite;
+}

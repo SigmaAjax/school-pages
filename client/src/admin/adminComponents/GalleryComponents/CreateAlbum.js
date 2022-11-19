@@ -40,14 +40,31 @@ export default function CreateAlbum() {
 
 	useEffect(() => {
 		setTimeout(() => {
-			console.log('images');
-			console.table(images ? images : 'Nop images yet');
-		}, 150);
+			console.log('images data url bigger than 0 is', imagesURL.length > 0);
+			if (images.length === 0) {
+				console.log('No images');
+				return;
+			} else {
+				images.map((image) => {
+					const reader = new FileReader();
+					reader.onload = () => {
+						setImagesURL((prev) => [...prev, reader.result]);
+					};
+					reader.readAsDataURL(image);
+				});
+			}
+			setTimeout(() => {
+				setImagesURL((previous) => [...new Set(previous)]);
+			}, 150);
+		}, 75);
 		return () => {
-			console.log(' cleanup');
-			console.table(imagesURL ? imagesURL : 'No url data as images');
+			console.log('cleanup');
+			console.log(images.length > 0 ? images : 'No images');
+			console.log('--------------------------------');
+			console.log('imagesUrl');
+			console.table(imagesURL.length > 0 ? imagesURL : 'No url data');
 		};
-	}, [imagesURL]);
+	}, [images]);
 
 	const fileRejectionItems = fileRejections.map(({file, errors}) => (
 		<li key={file.path}>
@@ -91,6 +108,7 @@ export default function CreateAlbum() {
 						? 'Chystáte se vložit fotografie'
 						: 'Můžete vložit fotografie'}
 				</div>
+				{/* Error message for admin after file rejection*/}
 				{fileRejections.length === 1 && (
 					<p style={{color: 'red'}}>
 						Váš soubor není v povoleném formátu pro fotografie!!
@@ -123,26 +141,33 @@ export default function CreateAlbum() {
 						{fileRejectionItems}
 					</ul>
 				)}
+				{/* display preview of images */}
+				{imagesURL.length > 0 ? (
+					<div className="item two">
+						{imagesURL.map((image, index) => {
+							return (
+								<img className="selected-images" key={index} src={image} />
+							);
+						})}
+					</div>
+				) : (
+					<h5>No images yet</h5>
+				)}
 				<button type="submit">Vytvořit Album</button>
 				<button
 					type="button"
 					onClick={() => {
 						setTimeout(() => {
-							if (images.length == 0) {
-								console.log('No images');
-								return;
-							} else {
-								images.map((image) => {
-									const reader = new FileReader();
-									reader.onload = () => {
-										setImagesURL((prev) => [...prev, reader.result]);
-									};
-									reader.readAsDataURL(image);
-								});
-							}
-							setTimeout(() => {
-								setImagesURL((previous) => [...new Set(previous)]);
-							}, 350);
+							const imgOne = imagesURL.map((image) => {
+								return image;
+							});
+							imagesURL.map((image, index) => {
+								//console.log(image);
+								console.log(image === imgOne[index]);
+							});
+
+							console.log('ImagesUrl');
+							console.table(imagesURL);
 						}, 150);
 					}}
 				>
