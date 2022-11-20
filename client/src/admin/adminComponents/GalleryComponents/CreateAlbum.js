@@ -4,30 +4,51 @@ import useFileSize from '../../../Hooks/useFileSize';
 
 export default function CreateAlbum() {
 	const {formatBytes} = useFileSize();
-	const [imagesURL, setImagesURL] = useState([]);
 	const [images, setImages] = useState([]);
+	/////
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+		let uniqueImages = [];
 		acceptedFiles.forEach((file) => {
 			// how to get rid of duplicate from react state
+			const uniqueIds = [];
+			const arrImages = [...uniqueImages, file];
 
-			setImages((prev) => {
-				/// this Hook accept images and discard images with same name
-				const uniqueIds = [];
-				const arrImages = [...prev, file];
+			uniqueImages = arrImages.filter((file) => {
+				const isDuplicate = uniqueIds.includes(file.name);
 
-				const uniqueImages = arrImages.filter((image) => {
-					const isDuplicate = uniqueIds.includes(image.name);
+				if (!isDuplicate) {
+					uniqueIds.push(file.name);
 
-					if (!isDuplicate) {
-						uniqueIds.push(image.name);
-
-						return true;
-					}
-
-					return false;
-				});
-				return uniqueImages;
+					return true;
+				}
+				return false;
 			});
+			return uniqueImages;
+		});
+		uniqueImages.map((image) => {
+			const reader = new FileReader();
+
+			reader.onload = () => {
+				const imagePlusUrl = image;
+				imagePlusUrl.url = reader.result;
+				setImages((prev) => {
+					/// creating key: value pair url: reader.result
+					const uniqueNames = [];
+					const arrImages = [...prev, imagePlusUrl];
+
+					const uniqueImagesURL = arrImages.filter((imageURL) => {
+						const isDuplicate = uniqueNames.includes(imageURL.name);
+
+						if (!isDuplicate) {
+							uniqueNames.push(imageURL.name);
+							return true;
+						}
+						return false;
+					});
+					return uniqueImagesURL;
+				});
+			};
+			reader.readAsDataURL(image);
 		});
 		// console.log('accepted files', acceptedFiles);
 		// console.log('rejected files', rejectedFiles);
@@ -40,29 +61,11 @@ export default function CreateAlbum() {
 
 	useEffect(() => {
 		setTimeout(() => {
-			console.log('images data url bigger than 0 is', imagesURL.length > 0);
-			if (images.length === 0) {
-				console.log('No images');
-				return;
-			} else {
-				images.map((image) => {
-					const reader = new FileReader();
-					reader.onload = () => {
-						setImagesURL((prev) => [...prev, reader.result]);
-					};
-					reader.readAsDataURL(image);
-				});
-			}
-			setTimeout(() => {
-				setImagesURL((previous) => [...new Set(previous)]);
-			}, 150);
+			console.log('useEffect');
+			console.table(images);
 		}, 75);
 		return () => {
 			console.log('cleanup');
-			console.log(images.length > 0 ? images : 'No images');
-			console.log('--------------------------------');
-			console.log('imagesUrl');
-			console.table(imagesURL.length > 0 ? imagesURL : 'No url data');
 		};
 	}, [images]);
 
@@ -142,11 +145,27 @@ export default function CreateAlbum() {
 					</ul>
 				)}
 				{/* display preview of images */}
-				{imagesURL.length > 0 ? (
+				{images.length > 0 ? (
 					<div className="item two">
-						{imagesURL.map((image, index) => {
+						{images.map((image, index) => {
 							return (
-								<img className="selected-images" key={index} src={image} />
+								<>
+									<img
+										className="selected-images"
+										key={image.name}
+										src={image.url}
+										alt=""
+									/>
+									<button
+										key={image.name + '-button'}
+										type="button"
+										onClick={(e) => {
+											console.log(e.target.key);
+										}}
+									>
+										X
+									</button>
+								</>
 							);
 						})}
 					</div>
@@ -158,16 +177,10 @@ export default function CreateAlbum() {
 					type="button"
 					onClick={() => {
 						setTimeout(() => {
-							const imgOne = imagesURL.map((image) => {
-								return image;
-							});
-							imagesURL.map((image, index) => {
-								//console.log(image);
-								console.log(image === imgOne[index]);
-							});
-
-							console.log('ImagesUrl');
-							console.table(imagesURL);
+							// console.log('ImagesUrl');
+							// console.table(imagesURL);
+							console.log('images');
+							console.table(images);
 						}, 150);
 					}}
 				>
