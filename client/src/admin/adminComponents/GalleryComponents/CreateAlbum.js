@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import useFileSize from '../../../Hooks/useFileSize';
+import MainPhotoCheckbox from './MainPhotoCheckbox';
 
 export default function CreateAlbum() {
 	const {formatBytes} = useFileSize();
@@ -10,6 +11,14 @@ export default function CreateAlbum() {
 		let uniqueImages = [];
 		acceptedFiles.forEach((file) => {
 			// how to get rid of duplicate from react state
+			//console.table(file);
+
+			//console.table({name, path, lastModified, lastModifiedDate, type});
+
+			const newFile = {file: file, introductionary: false};
+
+			console.log(newFile.file.path);
+
 			const uniqueIds = [];
 			const arrImages = [...uniqueImages, file];
 
@@ -25,12 +34,14 @@ export default function CreateAlbum() {
 			});
 			return uniqueImages;
 		});
+
 		uniqueImages.map((image) => {
 			const reader = new FileReader();
 
 			reader.onload = () => {
 				const imagePlusUrl = image;
 				imagePlusUrl.url = reader.result;
+				imagePlusUrl.introductionary = false;
 				setImages((prev) => {
 					/// creating key: value pair url: reader.result
 					const uniqueNames = [];
@@ -48,7 +59,7 @@ export default function CreateAlbum() {
 					return uniqueImagesURL;
 				});
 			};
-			reader.readAsDataURL(image);
+			return reader.readAsDataURL(image);
 		});
 		// console.log('accepted files', acceptedFiles);
 		// console.log('rejected files', rejectedFiles);
@@ -62,24 +73,31 @@ export default function CreateAlbum() {
 	useEffect(() => {
 		setTimeout(() => {
 			console.log('useEffect');
+			console.log(fileRejectionItems);
 			console.table(images);
 		}, 75);
 		return () => {
 			console.log('cleanup');
+			console.log(fileRejectionItems);
+			console.table(images);
 		};
 	}, [images]);
 
-	const fileRejectionItems = fileRejections.map(({file, errors}) => (
-		<li key={file.path}>
-			<h5>Název souboru a velikost</h5>
-			{file.path} - {formatBytes(file.size, 2)}
-			<ul>
-				{errors.map((e) => (
-					<li key={e.code}>{e.message}</li>
-				))}
-			</ul>
-		</li>
-	));
+	const fileRejectionItems =
+		fileRejections.map(({file, errors}) => (
+			<li key={file.path}>
+				<h5>Název souboru a velikost</h5>
+				{file.path} - {formatBytes(file.size, 2)}
+				<ul>
+					{errors.map((e) => (
+						<li key={e.code}>{e.message}</li>
+					))}
+				</ul>
+			</li>
+		)) || [];
+
+	const arr = images;
+	let newArr = [];
 
 	return (
 		<div className="item three">
@@ -103,14 +121,20 @@ export default function CreateAlbum() {
 					placeholder="Byli jsme na výletě...."
 				></textarea>
 				<label htmlFor="dropzone">
-					Můžete přetáhnou fotografie nebo kliknout a vybrat fotografie
+					<p>
+						Sem můžete přetáhnou fotografie nebo vybrat fotografie kliknutím sem
+						&#128071;
+					</p>
 				</label>
 				<div name="dropzone" className="dropzone" {...getRootProps()}>
 					<input {...getInputProps()} />
 					{isDragActive
-						? 'Chystáte se vložit fotografie'
+						? images.length > 0
+							? 'Chystáte se vložit fotografie k ostatním fotografiím'
+							: 'Chystáte se vložit fotografie'
 						: 'Můžete vložit fotografie'}
 				</div>
+				{/* //////////////////////////////////////////////////////////////// */}
 				{/* Error message for admin after file rejection*/}
 				{fileRejections.length === 1 && (
 					<p style={{color: 'red'}}>
@@ -144,27 +168,77 @@ export default function CreateAlbum() {
 						{fileRejectionItems}
 					</ul>
 				)}
+				{/* //////////////////////////////////////////////////////////////////////// */}
 				{/* display preview of images */}
 				{images.length > 0 ? (
 					<div className="item two">
-						{images.map((image, index) => {
+						{images.map((image) => {
 							return (
 								<>
 									<img
 										className="selected-images"
 										key={image.name}
 										src={image.url}
-										alt=""
+										alt="Vybraná fotografie"
 									/>
 									<button
 										key={image.name + '-button'}
+										name={image.name}
 										type="button"
 										onClick={(e) => {
-											console.log(e.target.key);
+											setImages((prev) => {
+												const imagesAfterDelete = prev.filter((picture) => {
+													return picture.name !== e.target.name;
+												});
+												return imagesAfterDelete;
+											});
 										}}
 									>
 										X
 									</button>
+									<input
+										name={image.name + '-checkbox'}
+										key={image.name + '-checkbox'}
+										disabled={false}
+										type="checkbox"
+										onChange={(e) => {
+											console.log(e.target.name === image.name + '-checkbox');
+
+											newArr = arr.map((item) => {
+												if (item.path + '-checkbox' === e.target.name) {
+													const newItem = item;
+													return {
+														...item,
+														introductionary: !item.introductionary,
+													};
+												}
+												return item;
+											});
+											setTimeout(() => {
+												console.table(newArr);
+											}, 100);
+											// setImages((current) => {
+											// 	current.map((item) => {
+											// 		if (item.name + '-checkbox' === e.target.name) {
+											// 			console.table({
+											// 				...item,
+											// 				introductionary: !item.introductionary,
+											// 			});
+											// 			return {
+											// 				...item,
+											// 				introductionary: !item.introductionary,
+											// 			};
+											// 		}
+											// 		return item;
+											// 	});
+											// });
+										}}
+									/>
+									{/* <MainPhotoCheckbox
+										imgValue={image}
+										checkboxed={setImages}
+										supportArr={images}
+									/> */}
 								</>
 							);
 						})}
@@ -172,16 +246,12 @@ export default function CreateAlbum() {
 				) : (
 					<h5>No images yet</h5>
 				)}
+				{/* //////////////////////////////////////////////////////////////// */}
 				<button type="submit">Vytvořit Album</button>
 				<button
 					type="button"
 					onClick={() => {
-						setTimeout(() => {
-							// console.log('ImagesUrl');
-							// console.table(imagesURL);
-							console.log('images');
-							console.table(images);
-						}, 150);
+						console.table(newArr);
 					}}
 				>
 					Konzole
