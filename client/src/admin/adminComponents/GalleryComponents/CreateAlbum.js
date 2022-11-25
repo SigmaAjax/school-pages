@@ -6,18 +6,12 @@ import MainPhotoCheckbox from './MainPhotoCheckbox';
 export default function CreateAlbum() {
 	const {formatBytes} = useFileSize();
 	const [images, setImages] = useState([]);
+	const [oneCheck, setOneCheck] = useState(false);
 	/////
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
 		let uniqueImages = [];
 		acceptedFiles.forEach((file) => {
 			// how to get rid of duplicate from react state
-			//console.table(file);
-
-			//console.table({name, path, lastModified, lastModifiedDate, type});
-
-			const newFile = {file: file, introductionary: false};
-
-			console.log(newFile.file.path);
 
 			const uniqueIds = [];
 			const arrImages = [...uniqueImages, file];
@@ -39,13 +33,21 @@ export default function CreateAlbum() {
 			const reader = new FileReader();
 
 			reader.onload = () => {
-				const imagePlusUrl = image;
-				imagePlusUrl.url = reader.result;
-				imagePlusUrl.introductionary = false;
+				const imageUrlAsObj = {
+					name: image.name,
+					path: image.path,
+					lastModified: image.lastModified,
+					lastModifiedDate: image.lastModifiedDate,
+					size: image.size,
+					type: image.type,
+					url: reader.result,
+					introductionary: false,
+				};
+
 				setImages((prev) => {
 					/// creating key: value pair url: reader.result
 					const uniqueNames = [];
-					const arrImages = [...prev, imagePlusUrl];
+					const arrImages = [...prev, imageUrlAsObj];
 
 					const uniqueImagesURL = arrImages.filter((imageURL) => {
 						const isDuplicate = uniqueNames.includes(imageURL.name);
@@ -73,13 +75,18 @@ export default function CreateAlbum() {
 	useEffect(() => {
 		setTimeout(() => {
 			console.log('useEffect');
-			console.log(fileRejectionItems);
-			console.table(images);
+			//console.table(images);
+			setOneCheck((prev) => {
+				const pravda = images.some((image) => {
+					if (image.introductionary === true) return true;
+					return false;
+				});
+				return pravda;
+			});
 		}, 75);
 		return () => {
 			console.log('cleanup');
-			console.log(fileRejectionItems);
-			console.table(images);
+			//console.table(images);
 		};
 	}, [images]);
 
@@ -172,76 +179,70 @@ export default function CreateAlbum() {
 				{/* display preview of images */}
 				{images.length > 0 ? (
 					<div className="item two">
-						{images.map((image) => {
-							return (
-								<>
-									<img
-										className="selected-images"
-										key={image.name}
-										src={image.url}
-										alt="Vybraná fotografie"
-									/>
-									<button
-										key={image.name + '-button'}
-										name={image.name}
-										type="button"
-										onClick={(e) => {
-											setImages((prev) => {
-												const imagesAfterDelete = prev.filter((picture) => {
-													return picture.name !== e.target.name;
-												});
-												return imagesAfterDelete;
-											});
-										}}
-									>
-										X
-									</button>
-									<input
-										name={image.name + '-checkbox'}
-										key={image.name + '-checkbox'}
-										disabled={false}
-										type="checkbox"
-										onChange={(e) => {
-											console.log(e.target.name === image.name + '-checkbox');
-
-											newArr = arr.map((item) => {
-												if (item.path + '-checkbox' === e.target.name) {
-													const newItem = item;
-													return {
-														...item,
-														introductionary: !item.introductionary,
-													};
-												}
-												return item;
-											});
-											setTimeout(() => {
-												console.table(newArr);
-											}, 100);
-											// setImages((current) => {
-											// 	current.map((item) => {
-											// 		if (item.name + '-checkbox' === e.target.name) {
-											// 			console.table({
-											// 				...item,
-											// 				introductionary: !item.introductionary,
-											// 			});
-											// 			return {
-											// 				...item,
-											// 				introductionary: !item.introductionary,
-											// 			};
-											// 		}
-											// 		return item;
-											// 	});
-											// });
-										}}
-									/>
-									{/* <MainPhotoCheckbox
-										imgValue={image}
-										checkboxed={setImages}
-										supportArr={images}
-									/> */}
-								</>
-							);
-						})}
+						{oneCheck
+							? images.map((image) => {
+									return (
+										<>
+											<img
+												className="selected-images"
+												key={image.name}
+												src={image.url}
+												alt="Vybraná fotografie"
+											/>
+											<button
+												key={image.name + '-button'}
+												name={image.name}
+												type="button"
+												onClick={(e) => {
+													setImages((prev) => {
+														const imagesAfterDelete = prev.filter((picture) => {
+															return picture.name !== e.target.name;
+														});
+														return imagesAfterDelete;
+													});
+												}}
+											>
+												X
+											</button>
+											<MainPhotoCheckbox
+												imgValue={image}
+												checkboxed={setImages}
+												intro={!image.introductionary}
+											/>
+										</>
+									);
+							  })
+							: images.map((image) => {
+									return (
+										<>
+											<img
+												className="selected-images"
+												key={image.name}
+												src={image.url}
+												alt="Vybraná fotografie"
+											/>
+											<button
+												key={image.name + '-button'}
+												name={image.name}
+												type="button"
+												onClick={(e) => {
+													setImages((prev) => {
+														const imagesAfterDelete = prev.filter((picture) => {
+															return picture.name !== e.target.name;
+														});
+														return imagesAfterDelete;
+													});
+												}}
+											>
+												X
+											</button>
+											<MainPhotoCheckbox
+												imgValue={image}
+												checkboxed={setImages}
+											/>
+										</>
+									);
+							  })}
 					</div>
 				) : (
 					<h5>No images yet</h5>
@@ -251,7 +252,7 @@ export default function CreateAlbum() {
 				<button
 					type="button"
 					onClick={() => {
-						console.table(newArr);
+						console.table(images);
 					}}
 				>
 					Konzole
