@@ -253,6 +253,20 @@ export default function CreateAlbum() {
 					type="button"
 					onClick={() => {
 						console.table(images);
+						// 	setImages((prev) => {
+						// 		const {introductionary, ...rest} = prev[1];
+						// 		const newObj = rest;
+						// 		console.log(newObj);
+						// 		const secondItem = {
+						// 			introductionary: !introductionary,
+						// 			...newObj,
+						// 		};
+						// 		const newArr = prev.filter((item, index) => {
+						// 			return index !== 1;
+						// 		});
+						// 		console.table([secondItem, ...newArr]);
+						// 		return [secondItem, ...newArr];
+						// 	});
 					}}
 				>
 					Konzole
