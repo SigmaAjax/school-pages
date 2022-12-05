@@ -1,10 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
-import useFileSize from '../../../Hooks/useFileSize';
-import MainPhotoCheckbox from './MainPhotoCheckbox';
+import ErrorMsg from './ErrorMsg';
+import ImageCard from './ImageCard';
 
 export default function CreateAlbum() {
-	const {formatBytes} = useFileSize();
 	const [images, setImages] = useState([]);
 	const [oneCheck, setOneCheck] = useState(false);
 	/////
@@ -70,6 +69,7 @@ export default function CreateAlbum() {
 		useDropzone({
 			onDrop,
 			accept: {'image/*': []},
+			maxFiles: 100,
 		});
 
 	useEffect(() => {
@@ -89,22 +89,6 @@ export default function CreateAlbum() {
 			//console.table(images);
 		};
 	}, [images]);
-
-	const fileRejectionItems =
-		fileRejections.map(({file, errors}) => (
-			<li key={file.path}>
-				<h5>Název souboru a velikost</h5>
-				{file.path} - {formatBytes(file.size, 2)}
-				<ul>
-					{errors.map((e) => (
-						<li key={e.code}>{e.message}</li>
-					))}
-				</ul>
-			</li>
-		)) || [];
-
-	const arr = images;
-	let newArr = [];
 
 	return (
 		<div className="item three">
@@ -127,6 +111,7 @@ export default function CreateAlbum() {
 					type="text"
 					placeholder="Byli jsme na výletě...."
 				></textarea>
+
 				<label htmlFor="dropzone">
 					<p>
 						Sem můžete přetáhnou fotografie nebo vybrat fotografie kliknutím sem
@@ -135,46 +120,38 @@ export default function CreateAlbum() {
 				</label>
 				<div name="dropzone" className="dropzone" {...getRootProps()}>
 					<input {...getInputProps()} />
-					{isDragActive
-						? images.length > 0
-							? 'Chystáte se vložit fotografie k ostatním fotografiím'
-							: 'Chystáte se vložit fotografie'
-						: 'Můžete vložit fotografie'}
+					{isDragActive ? (
+						images.length > 0 ? (
+							<div>
+								<p>Chystáte se vložit fotografie k ostatním fotografiím</p>
+								<em>
+									(maximální počet vložených fotografií je 100, Duplikáty budou
+									sloučeny)
+								</em>
+							</div>
+						) : (
+							<div>
+								<p>Chystáte se vložit fotografie</p>
+								<em>
+									(maximální počet vložených fotografií je 100, Duplikáty budou
+									sloučeny)
+								</em>
+							</div>
+						)
+					) : (
+						<div>
+							<p>Můžete vložit fotografie</p>
+							<em>
+								(maximální počet vložených fotografií je 100, Duplikáty budou
+								sloučeny)
+							</em>
+						</div>
+					)}
 				</div>
 				{/* //////////////////////////////////////////////////////////////// */}
 				{/* Error message for admin after file rejection*/}
-				{fileRejections.length === 1 && (
-					<p style={{color: 'red'}}>
-						Váš soubor není v povoleném formátu pro fotografie!!
-					</p>
-				)}
-				{fileRejections.length > 1 && (
-					<p style={{color: 'red'}}>
-						Váše soubory nejsou v povoleném formátu pro fotografie!!
-					</p>
-				)}
-				{fileRejections.length > 0 && (
-					<div className="error-message">
-						{' '}
-						<p style={{color: 'purple'}}>
-							Prosíme paní ředitelku, aby upravila výběr souborů natažením
-							souborů do pole určeného pro soubory.
-						</p>
-						<p style={{color: 'purple'}}>
-							Změnu soubourů se správným formátem můžete učit kliknutím na pole
-							pro soubory nebo natažením nových souborů
-						</p>
-						<p style={{color: 'green'}}>
-							{' '}
-							Počet odmítnutých souborů je: {fileRejections.length}
-						</p>
-					</div>
-				)}
-				{fileRejections.length > 0 && (
-					<ul style={{width: 'auto', height: '200px', overflow: 'auto'}}>
-						{fileRejectionItems}
-					</ul>
-				)}
+				<ErrorMsg fileRejections={fileRejections} />
+
 				{/* //////////////////////////////////////////////////////////////////////// */}
 				{/* display preview of images */}
 				{images.length > 0 ? (
@@ -182,66 +159,15 @@ export default function CreateAlbum() {
 						{oneCheck
 							? images.map((image) => {
 									return (
-										<>
-											<img
-												className="selected-images"
-												key={image.name}
-												src={image.url}
-												alt="Vybraná fotografie"
-											/>
-											<button
-												key={image.name + '-button'}
-												name={image.name}
-												type="button"
-												onClick={(e) => {
-													setImages((prev) => {
-														const imagesAfterDelete = prev.filter((picture) => {
-															return picture.name !== e.target.name;
-														});
-														return imagesAfterDelete;
-													});
-												}}
-											>
-												X
-											</button>
-											<MainPhotoCheckbox
-												imgValue={image}
-												checkboxed={setImages}
-												intro={!image.introductionary}
-											/>
-										</>
+										<ImageCard
+											image={image}
+											setImages={setImages}
+											intro={!image.introductionary}
+										/>
 									);
 							  })
 							: images.map((image) => {
-									return (
-										<>
-											<img
-												className="selected-images"
-												key={image.name}
-												src={image.url}
-												alt="Vybraná fotografie"
-											/>
-											<button
-												key={image.name + '-button'}
-												name={image.name}
-												type="button"
-												onClick={(e) => {
-													setImages((prev) => {
-														const imagesAfterDelete = prev.filter((picture) => {
-															return picture.name !== e.target.name;
-														});
-														return imagesAfterDelete;
-													});
-												}}
-											>
-												X
-											</button>
-											<MainPhotoCheckbox
-												imgValue={image}
-												checkboxed={setImages}
-											/>
-										</>
-									);
+									return <ImageCard image={image} setImages={setImages} />;
 							  })}
 					</div>
 				) : (
@@ -249,28 +175,6 @@ export default function CreateAlbum() {
 				)}
 				{/* //////////////////////////////////////////////////////////////// */}
 				<button type="submit">Vytvořit Album</button>
-				<button
-					type="button"
-					onClick={() => {
-						console.table(images);
-						// 	setImages((prev) => {
-						// 		const {introductionary, ...rest} = prev[1];
-						// 		const newObj = rest;
-						// 		console.log(newObj);
-						// 		const secondItem = {
-						// 			introductionary: !introductionary,
-						// 			...newObj,
-						// 		};
-						// 		const newArr = prev.filter((item, index) => {
-						// 			return index !== 1;
-						// 		});
-						// 		console.table([secondItem, ...newArr]);
-						// 		return [secondItem, ...newArr];
-						// 	});
-					}}
-				>
-					Konzole
-				</button>
 			</form>
 		</div>
 	);

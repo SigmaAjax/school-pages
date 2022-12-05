@@ -11,7 +11,6 @@ export default function MainPhotoCheckbox({
 			checked={imgValue.introductionary}
 			type="checkbox"
 			onChange={(e) => {
-				console.log(true === imgValue.introductionary);
 				checkboxed((current) => {
 					const checkedItem = current.map((item) => {
 						if (item.name + '-checkbox' === e.target.name) {
@@ -19,7 +18,6 @@ export default function MainPhotoCheckbox({
 						}
 						return item;
 					});
-
 					return checkedItem;
 				});
 			}}
