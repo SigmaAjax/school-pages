@@ -7,10 +7,10 @@ import AlbumNav from '../admin/adminComponents/GalleryComponents/AlbumNav.js';
 import CreateAlbum from '../admin/adminComponents/GalleryComponents/CreateAlbum.js';
 import Modal from '../admin/adminComponents/Modal.js';
 import CreatePost from '../admin/adminComponents/PostComponents/CreatePost.js';
+import AdminNews from '../admin/adminPages/AdminNews.js';
+import AdminPostDetail from '../admin/adminPages/AdminPostDetail.js';
 import EmployeeForm from '../admin/EmployeeForm.js';
 import {AdminProvider} from '../context/AdminContext.js';
-import News from './News.js';
-import PostDetail from './PostDetail.js';
 
 export default function AdminPage() {
 	//const [isOpenModal, setIsOpenModal] = useState(false);
@@ -44,13 +44,13 @@ export default function AdminPage() {
 						path="newPost/admin-posts"
 						element={
 							<div className="item three">
-								<News admin={true} />
+								<AdminNews />
 							</div>
 						}
 					/>
 					<Route
 						path="newPost/admin-posts/:id/:titleSlug"
-						element={<PostDetail admin={true} />}
+						element={<AdminPostDetail />}
 					/>
 					<Route
 						path="galerie/*"

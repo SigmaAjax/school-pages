@@ -86,6 +86,7 @@ app.put('/api/updatePost', (req, res) => {
 
 app.delete('/api/deletePost/:id', (req, res) => {
 	const id = req.params.id;
+	console.log(id);
 	db.query('DELETE FROM posts WHERE id = ?', id, (err, result) => {
 		if (err) {
 			console.log(err);

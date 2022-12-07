@@ -3,7 +3,6 @@ export default function MainPhotoCheckbox({
 	checkboxed,
 	intro = false,
 }) {
-	console.log(intro);
 	return (
 		<input
 			name={imgValue.name + '-checkbox'}

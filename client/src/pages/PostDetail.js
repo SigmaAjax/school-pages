@@ -21,10 +21,18 @@ export default function PostDetail({admin}) {
 		axios
 			.get(`/api/get/${id}/${titleSlug}`, {signal: controller.signal})
 			.then((response) => {
-				setPost(...response.data);
+				console.log(...response.data);
+
+				setPost(() => {
+					return {...response.data};
+				});
+			})
+			.catch((error) => {
+				console.log(error);
 			});
 
 		return () => {
+			console.log(Object.keys(post).length);
 			controller.abort();
 		};
 	}, [id, titleSlug]);

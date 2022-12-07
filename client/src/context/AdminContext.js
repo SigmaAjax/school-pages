@@ -18,6 +18,7 @@ export function AdminProvider({children}) {
 	//News states
 	const [postList, setPostList] = useState([]);
 	const [post, setPost] = useState({}); // For one particular post
+	// Gallery states photo states
 
 	const valueStates = {isOpenModal, postList, post, buttonName};
 

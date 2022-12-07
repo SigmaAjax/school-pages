@@ -20,6 +20,7 @@ export default function useDeleteUpdate(buttonName, item) {
 	};
 
 	const deletePostItem = (item) => {
+		console.log(item.id);
 		axios
 			.delete(`/api/deletePost/${item.id}`)
 			.then(() => {
