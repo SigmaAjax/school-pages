@@ -1,14 +1,25 @@
 import {Link} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../context/AdminContext';
-import useDeleteUpdate from '../../../Hooks/useDeleteUpdate';
+//import useDeleteUpdate from '../../../Hooks/useDeleteUpdate';
 // import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 // import useDeleteUpdate from '../../Hooks/useDeleteUpdate';
 
 export default function AdminPost({content}) {
-	const {buttonName, post} = useAdmin();
+	const {post} = useAdmin();
 	const {setIsOpenModal, setButtonName, setPost} = useAdminUpdate();
 	// I can only delete from this page
 	//const {updateOrDelete} = useDeleteUpdate(buttonName, content);
+
+	const date = new Date();
+
+	console.log(
+		new Intl.DateTimeFormat('cs-cz', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		}).format(date)
+	);
 
 	return (
 		<div className="container">
@@ -55,6 +66,7 @@ export default function AdminPost({content}) {
 							Upravit příspěvek
 						</button>
 					</a>
+					<strong>{date.toLocaleDateString()}</strong>
 				</>
 			</div>
 		</div>

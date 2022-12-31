@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import axios from 'axios';
 import CreatePostNav from './CreatePostNav';
 import useSlugify from 'client/src/Hooks/useSlugify.js';
@@ -30,9 +30,9 @@ export default function CreatePost() {
 		navigate('/admin/newPost/admin-posts');
 	};
 
-	useEffect(() => {
-		return;
-	}, [userPass, text, title]);
+	// useEffect(() => {
+	// 	return;
+	// }, [userPass, text, title]);
 
 	return (
 		<>

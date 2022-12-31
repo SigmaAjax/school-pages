@@ -75,7 +75,7 @@ export default function CreateAlbum() {
 	useEffect(() => {
 		setTimeout(() => {
 			console.log('useEffect');
-			//console.table(images);
+			console.table(images);
 			setOneCheck((prev) => {
 				const pravda = images.some((image) => {
 					if (image.introductionary === true) return true;
