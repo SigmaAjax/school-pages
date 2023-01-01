@@ -13,12 +13,14 @@ export default function CreatePost() {
 	const navigate = useNavigate();
 
 	const submitPost = () => {
+		const datePosted = new Date().toISOString().substring(0, 19);
 		axios
 			.post('/api/create', {
 				userPass: userPass,
 				title: title,
 				text: text,
 				slug: slugify(title),
+				date: datePosted,
 			})
 			.then(() => {
 				alert('Příspěvek byl přidán...');

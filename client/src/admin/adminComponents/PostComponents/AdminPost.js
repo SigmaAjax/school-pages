@@ -10,16 +10,7 @@ export default function AdminPost({content}) {
 	// I can only delete from this page
 	//const {updateOrDelete} = useDeleteUpdate(buttonName, content);
 
-	const date = new Date();
-
-	console.log(
-		new Intl.DateTimeFormat('cs-cz', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		}).format(date)
-	);
+	//const datum = new Intl(content.date_posted);
 
 	return (
 		<div className="container">
@@ -34,6 +25,9 @@ export default function AdminPost({content}) {
 						: content.post_text}
 				</p>
 				<strong>{content.user_name}</strong>
+				<strong>
+					{content.date_posted ? content.date_posted : 'Chybí Datum'}
+				</strong>
 
 				<>
 					<button
@@ -66,7 +60,8 @@ export default function AdminPost({content}) {
 							Upravit příspěvek
 						</button>
 					</a>
-					<strong>{date.toLocaleDateString()}</strong>
+					{/* <strong>Vytvořeno: {datum}</strong>
+					<strong>Naposledy změněno: {datum}</strong> */}
 				</>
 			</div>
 		</div>
