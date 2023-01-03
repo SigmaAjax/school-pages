@@ -13,8 +13,10 @@ export default function AdminPostDetail() {
 	const {capitalize} = useCap();
 	const {slugify} = useSlugify();
 	//ref for admin form
-	const title = useRef();
-	const post_text = useRef();
+	const title = useRef(post.title);
+	const post_text = useRef(post.post_text);
+	// Enable update button logic hook
+	const [enableUpdate, setEnableUpdate] = useState(true);
 	// loading hook
 
 	useEffect(() => {
@@ -38,15 +40,25 @@ export default function AdminPostDetail() {
 	function handleSubmit(e) {
 		e.preventDefault();
 
+		const date = new Date().toISOString().substring(0, 19);
+
+		console.log(date);
+
 		setPost(() => {
 			return {
 				...post,
 				title: title.current.value,
 				post_text: post_text.current.value,
 				slug: slugify(title.current.value),
+				post_updated: date,
 			};
 		});
 	}
+
+	// console.log(title === post.title ? "It's same" : "It's different");
+	// console.log(
+	// 	post_text.current.value === post.post_text ? "It's same" : "It's different"
+	// );
 
 	return (
 		<>
@@ -54,10 +66,24 @@ export default function AdminPostDetail() {
 				{' '}
 				{Object.values(post).length > 0 ? (
 					<>
-						<input ref={title} type="text" defaultValue={post.title} />
+						<input
+							ref={title}
+							type="text"
+							defaultValue={post.title}
+							onChange={(e) => {
+								e.target.value === post.title
+									? setEnableUpdate((previous) => true)
+									: setEnableUpdate((previous) => false);
+							}}
+						/>
 						<textarea
 							ref={post_text}
 							defaultValue={capitalize(post.post_text)}
+							onChange={(e) => {
+								e.target.value === post.post_text
+									? setEnableUpdate((previous) => true)
+									: setEnableUpdate((previous) => false);
+							}}
 						/>
 					</>
 				) : (
@@ -84,6 +110,7 @@ export default function AdminPostDetail() {
 				<button
 					name="post-update"
 					type="submit"
+					disabled={enableUpdate}
 					onClick={(e) => {
 						setIsOpenModal((prev) => {
 							return !prev;

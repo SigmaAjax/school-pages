@@ -47,6 +47,7 @@ export default function useDeleteUpdate(buttonName, item) {
 				title: item.title,
 				text: item.post_text,
 				slug: item.slug,
+				post_updated: item.post_updated,
 			})
 			.then((response) => {
 				alert('Updating this data...', response.data);

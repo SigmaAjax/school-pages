@@ -12,6 +12,15 @@ export default function AdminPost({content}) {
 
 	//const datum = new Intl(content.date_posted);
 
+	const datum = new Date(content.date_posted);
+
+	const datumUpdated = new Date(content.date_updated);
+
+	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {
+		dateStyle: 'full',
+		timeStyle: 'short',
+	});
+
 	return (
 		<div className="container">
 			<div key={content.id} className="postContainer item two">
@@ -25,9 +34,23 @@ export default function AdminPost({content}) {
 						: content.post_text}
 				</p>
 				<strong>{content.user_name}</strong>
-				<strong>
-					{content.date_posted ? content.date_posted : 'Chybí Datum'}
-				</strong>
+
+				{content.date_posted ? (
+					<p>
+						Vytvořeno dne: <strong>{formatDateCzech.format(datum)}</strong>
+					</p>
+				) : (
+					<strong>Chybí Datum v databázi</strong>
+				)}
+
+				{content.date_updated ? (
+					<p>
+						Naposledy změněno dne:{' '}
+						<strong>{formatDateCzech.format(datumUpdated)}</strong>
+					</p>
+				) : (
+					<strong>Zatím příspěvek nebyl upravován</strong>
+				)}
 
 				<>
 					<button

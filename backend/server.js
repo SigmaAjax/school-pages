@@ -69,12 +69,13 @@ app.put('/api/updatePost', (req, res) => {
 	const title = req.body.title;
 	const userPass = req.body.userPass;
 	const slug = req.body.slug;
+	const post_updated = req.body.post_updated;
 
 	console.log(req.params.id);
 
 	db.query(
-		'UPDATE posts SET title=?, post_text=?, user_name=?, slug=? WHERE id=?',
-		[title, text, userPass, slug, id],
+		'UPDATE posts SET title=?, post_text=?, user_name=?, date_updated=?, slug=? WHERE id=?',
+		[title, text, userPass, post_updated, slug, id],
 		(err, result) => {
 			if (err) {
 				console.log(err);
