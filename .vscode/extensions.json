@@ -1,3 +1,7 @@
 {
-	"recommendations": ["eamodio.gitlens", "donjayamanne.githistory"]
+	"recommendations": [
+		"eamodio.gitlens",
+		"donjayamanne.githistory",
+		"tabnine.tabnine-vscode"
+	]
 }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import CreatePostNav from './CreatePostNav';
 import useSlugify from 'client/src/Hooks/useSlugify.js';
 import {useNavigate} from 'react-router-dom';
+import {useAdmin, useAdminUpdate} from '../../../context/AdminContext';
 
 export default function CreatePost() {
 	//const [backendData, setBackendData] = useState([{}]);
@@ -11,6 +12,9 @@ export default function CreatePost() {
 	const [userPass, setUserPass] = useState('');
 	const {slugify} = useSlugify();
 	const navigate = useNavigate();
+	// Context
+	//const {postList, buttonName} = useAdmin();
+	//const {setPostList, setButtonName} = useAdminUpdate();
 
 	const submitPost = () => {
 		const datePosted = new Date().toISOString().substring(0, 19);
@@ -31,10 +35,6 @@ export default function CreatePost() {
 
 		navigate('/admin/newPost/admin-posts');
 	};
-
-	// useEffect(() => {
-	// 	return;
-	// }, [userPass, text, title]);
 
 	return (
 		<>

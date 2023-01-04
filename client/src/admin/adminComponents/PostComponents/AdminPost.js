@@ -83,8 +83,6 @@ export default function AdminPost({content}) {
 							Upravit příspěvek
 						</button>
 					</a>
-					{/* <strong>Vytvořeno: {datum}</strong>
-					<strong>Naposledy změněno: {datum}</strong> */}
 				</>
 			</div>
 		</div>
