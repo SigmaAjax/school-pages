@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react';
+import axios from 'axios';
+import {useEffect} from 'react';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
 import AdminPostList from '../adminComponents/PostComponents/AdminPostList';
@@ -6,28 +7,40 @@ import CreatePostNav from '../adminComponents/PostComponents/CreatePostNav';
 import SearchInput from '../adminComponents/PostComponents/SearchInput';
 import SelectInput from '../adminComponents/PostComponents/SelectInput';
 import SelectYearMonth from '../adminComponents/PostComponents/SelectYearMonth';
+import {Loader} from 'client/src/Loader.js';
 
 export default function AdminNews() {
+	const {setButtonName, setPostList} = useAdminUpdate();
 	const {postList} = useAdmin();
-	const {setButtonName} = useAdminUpdate();
 	// Filtered Searched posts
-	const [localPostList, setLocalPostList] = useState(() => postList);
+	// const [localPostList, setLocalPostList] = useState(() => {
+	// 	return postList;
+	// });
 	// Sorting state
 
 	useEffect(() => {
-		const timeout = setTimeout(() => {
-			console.log('Coping data from postList context');
-			setButtonName(() => {
-				return 'post-delete';
-			});
-			setLocalPostList(() => {
-				return [...postList];
-			}, 1000);
-			return () => {
-				clearTimeout(timeout);
-			};
+		setButtonName(() => {
+			return 'post-delete';
 		});
-	}, [postList]);
+
+		const controller = new AbortController();
+
+		async function fetchData() {
+			const response = await axios.get('/api/get', {signal: controller.signal});
+			const posts = await response.data;
+			console.log('Loading posts...');
+			setPostList(() => {
+				return [...posts];
+			});
+		}
+
+		fetchData();
+
+		return () => {
+			console.log('aborting');
+			controller.abort();
+		};
+	}, []);
 
 	return (
 		<div className="item two">
@@ -36,18 +49,18 @@ export default function AdminNews() {
 				<CreatePostNav />{' '}
 			</>
 			<label htmlFor="search">Vyhledávání příspěvků</label>
-			<SearchInput listOfPostsAfterSearch={setLocalPostList} />
+			<SearchInput listOfPostsAfterSearch={setPostList} />
 			<SelectInput
-				orderedPostFunc={setLocalPostList}
-				orderedListOfPosts={localPostList}
+				orderedPostFunc={setPostList}
+				orderedListOfPosts={postList}
 			/>
-			<SelectYearMonth orderedListFromToFunc={setLocalPostList} />
-			<AdminPostList listOfPosts={localPostList} />
-			{/* {loading ? (
-				<p>... Nahrávání dat</p>
+			<SelectYearMonth orderedListFromToFunc={setPostList} />
+			{/* <AdminPostList listOfPosts={postList} /> */}
+			{postList.length < 0 ? (
+				<Loader />
 			) : (
-				<AdminPostList listOfPosts={localPostList} />
-			)} */}
+				<AdminPostList listOfPosts={postList} />
+			)}
 		</div>
 	);
 }

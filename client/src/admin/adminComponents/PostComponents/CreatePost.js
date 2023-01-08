@@ -32,7 +32,7 @@ export default function CreatePost() {
 			.catch((error) => {
 				console.log(error.message);
 			});
-
+		alert('Příspěvek bude odeslán na server...');
 		navigate('/admin/newPost/admin-posts');
 	};
 

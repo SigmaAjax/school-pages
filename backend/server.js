@@ -47,13 +47,14 @@ app.post('/api/create', (req, res) => {
 	const title = req.body.title;
 	const userPass = req.body.userPass;
 	const date = req.body.date;
+	const date_updated = req.body.date; // It is a same because created date is equal to updated date
 	const slug = req.body.slug;
 
 	console.table({userPass, title, text, date, slug});
 
 	db.query(
-		'INSERT INTO posts (title, post_text, user_name, date_posted, slug) VALUES (?,?,?,?,?)',
-		[title, text, userPass, date, slug],
+		'INSERT INTO posts (title, post_text, user_name, date_posted, date_updated, slug) VALUES (?,?,?,?,?,?)',
+		[title, text, userPass, date, date_updated, slug],
 		(err, res) => {
 			if (err) {
 				console.log(err);
