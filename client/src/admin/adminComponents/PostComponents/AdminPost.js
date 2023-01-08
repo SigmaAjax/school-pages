@@ -9,7 +9,7 @@ export default function AdminPost({content}) {
 	const {setIsOpenModal, setButtonName, setPost} = useAdminUpdate();
 	// I can only delete from this page
 	//const {updateOrDelete} = useDeleteUpdate(buttonName, content);
-	console.log(content);
+	//console.log(content);
 
 	const datum = new Date(content.date_posted);
 

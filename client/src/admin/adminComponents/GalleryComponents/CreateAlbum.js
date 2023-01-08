@@ -1,12 +1,28 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
+import {useNavigate} from 'react-router-dom';
+import {useAdminUpdate} from '../../../context/AdminContext';
+import useSlugify from '../../../Hooks/useSlugify';
+import AlbumHeader from './AlbumHeader';
 import ErrorMsg from './ErrorMsg';
-import ImageCard from './ImageCard';
+import ImageCardsList from './ImageCardsList';
+import SubmitAlbumButton from './SubmitAlbumButton';
 
 export default function CreateAlbum() {
+	const navigate = useNavigate();
+	/// kontext for modal
+	const {setIsOpenModal} = useAdminUpdate();
+	const {slugify} = useSlugify();
+	///States for images
 	const [images, setImages] = useState([]);
 	const [oneCheck, setOneCheck] = useState(false);
-	/////
+	///// name and description states
+	const title = useRef();
+	const description = useRef();
+	//// set album object into state
+	const [album, setAlbum] = useState({});
+
+	//// Callback creating images and checking for duplicates
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
 		let uniqueImages = [];
 		acceptedFiles.forEach((file) => {
@@ -65,52 +81,75 @@ export default function CreateAlbum() {
 		// console.log('accepted files', acceptedFiles);
 		// console.log('rejected files', rejectedFiles);
 	}, []);
+
 	const {fileRejections, getRootProps, getInputProps, isDragActive} =
 		useDropzone({
 			onDrop,
 			accept: {'image/*': []},
-			maxFiles: 100,
+			maxFiles: 50,
 		});
 
 	useEffect(() => {
 		setTimeout(() => {
 			console.log('useEffect');
 			console.table(images);
-			setOneCheck((prev) => {
+			/// Setting which is
+			setOneCheck(() => {
 				const pravda = images.some((image) => {
 					if (image.introductionary === true) return true;
 					return false;
 				});
 				return pravda;
 			});
-		}, 75);
+		}, 1000);
 		return () => {
 			console.log('cleanup');
 			//console.table(images);
+			console.log('Album created with images: ');
+			console.table(album);
 		};
 	}, [images]);
 
+	const submitAlbum = (event) => {
+		// axios
+		// 	.post('/api/create/album', {
+		// 		userPass: userPass,
+		// 		title: title,
+		// 		text: text,
+		// 		slug: slugify(title),
+		// 		date: datePosted,
+		// 	})
+		// 	.then(() => {
+		// 		alert('Příspěvek byl přidán...');
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error.message);
+		// 	});
+		event.preventDefault();
+
+		const datePosted = new Date().toISOString().substring(0, 19); // substring for MySql server
+		setAlbum((prev) => {
+			const newAlbum = {
+				...prev,
+				title: title.current.value,
+				description: description.current.value,
+				date_created: datePosted,
+				date_updated: datePosted,
+				slug: slugify(title.current.value),
+				arrayOfImages: images,
+			};
+			return newAlbum;
+		});
+		alert('Album bude odesláno na server...');
+		console.log('Album created with images: ');
+		console.table({album});
+		//navigate('/admin/galerie');
+	};
+
 	return (
 		<div className="item three">
-			<form
-				className="form-group"
-				onSubmit={() => console.log('Album created with images: ')}
-			>
-				<label htmlFor="albumName">Název Alba</label>
-				<input
-					name="albumName"
-					required
-					type="text"
-					placeholder="např. Výlet do Kamenického Šenova"
-				></input>
-				<label htmlFor="albumDescription">Popisek Alba</label>
-				<textarea
-					rows="12"
-					cols="40"
-					name="albumDescription"
-					type="text"
-					placeholder="Byli jsme na výletě...."
-				></textarea>
+			<form className="form-group" onSubmit={submitAlbum}>
+				<AlbumHeader title={title} description={description} />
 
 				<label htmlFor="dropzone">
 					<p>
@@ -125,7 +164,7 @@ export default function CreateAlbum() {
 							<div>
 								<p>Chystáte se vložit fotografie k ostatním fotografiím</p>
 								<em>
-									(maximální počet vložených fotografií je 100, Duplikáty budou
+									(maximální počet vložených fotografií je 50, Duplikáty budou
 									sloučeny)
 								</em>
 							</div>
@@ -133,7 +172,7 @@ export default function CreateAlbum() {
 							<div>
 								<p>Chystáte se vložit fotografie</p>
 								<em>
-									(maximální počet vložených fotografií je 100, Duplikáty budou
+									(maximální počet vložených fotografií je 50, Duplikáty budou
 									sloučeny)
 								</em>
 							</div>
@@ -142,7 +181,7 @@ export default function CreateAlbum() {
 						<div>
 							<p>Můžete vložit fotografie</p>
 							<em>
-								(maximální počet vložených fotografií je 100, Duplikáty budou
+								(maximální počet vložených fotografií je 50, Duplikáty budou
 								sloučeny)
 							</em>
 						</div>
@@ -154,27 +193,39 @@ export default function CreateAlbum() {
 
 				{/* //////////////////////////////////////////////////////////////////////// */}
 				{/* display preview of images */}
-				{images.length > 0 ? (
-					<div className="item two">
-						{oneCheck
-							? images.map((image) => {
-									return (
-										<ImageCard
-											image={image}
-											setImages={setImages}
-											intro={!image.introductionary}
-										/>
-									);
-							  })
-							: images.map((image) => {
-									return <ImageCard image={image} setImages={setImages} />;
-							  })}
-					</div>
-				) : (
-					<h5>No images yet</h5>
-				)}
+				<ImageCardsList
+					imagesList={images}
+					setImages={setImages}
+					checkedBox={oneCheck}
+				/>
 				{/* //////////////////////////////////////////////////////////////// */}
-				<button type="submit">Vytvořit Album</button>
+				{/* <button
+					type="button"
+					onClick={() => {
+						const datePosted = new Date().toISOString().substring(0, 19); // substring for MySql server
+						setAlbum((prev) => {
+							const newAlbum = {
+								...prev,
+								title: title.current.value,
+								description: description.current.value,
+								date_created: datePosted,
+								date_updated: datePosted,
+								slug: slugify(title.current.value),
+								arrayOfImages: images,
+							};
+							return newAlbum;
+						});
+						alert('Album bude odesláno na server...');
+						console.log('Album created with images: ');
+						console.table({album});
+					}}
+				>
+					odeslat
+				</button> */}
+				<SubmitAlbumButton
+					oneCheck={oneCheck}
+					values={{title, description, images}}
+				/>
 			</form>
 		</div>
 	);

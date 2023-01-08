@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
 import AdminPostList from '../adminComponents/PostComponents/AdminPostList';
@@ -13,10 +13,12 @@ export default function AdminNews() {
 	const {setButtonName, setPostList} = useAdminUpdate();
 	const {postList} = useAdmin();
 	// Filtered Searched posts
-	// const [localPostList, setLocalPostList] = useState(() => {
-	// 	return postList;
-	// });
+	const [searchPhrase, setSearchPhrase] = useState('');
 	// Sorting state
+
+	const filterredPosts = postList.filter((post) => {
+		return post.title.toLowerCase().includes(searchPhrase);
+	});
 
 	useEffect(() => {
 		setButtonName(() => {
@@ -49,17 +51,16 @@ export default function AdminNews() {
 				<CreatePostNav />{' '}
 			</>
 			<label htmlFor="search">Vyhledávání příspěvků</label>
-			<SearchInput listOfPostsAfterSearch={setPostList} />
+			<SearchInput searchWord={setSearchPhrase} />
 			<SelectInput
 				orderedPostFunc={setPostList}
 				orderedListOfPosts={postList}
 			/>
 			<SelectYearMonth orderedListFromToFunc={setPostList} />
-			{/* <AdminPostList listOfPosts={postList} /> */}
 			{postList.length < 0 ? (
 				<Loader />
 			) : (
-				<AdminPostList listOfPosts={postList} />
+				<AdminPostList listOfPosts={filterredPosts} />
 			)}
 		</div>
 	);
