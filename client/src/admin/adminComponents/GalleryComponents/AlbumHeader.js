@@ -8,10 +8,6 @@ export default function AlbumHeader({title, description}) {
 				required
 				type="text"
 				placeholder="např. Výlet do Kamenického Šenova"
-				// onChange={(event) => {
-				// 	setTitle(() => {
-				// 		return event.target.value;
-				// 	});
 				ref={title}
 			></input>
 			<label htmlFor="albumDescription">Popisek Alba</label>
