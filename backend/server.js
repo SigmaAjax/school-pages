@@ -1,10 +1,13 @@
 const express = require('express');
 const db = require('./config/db.js');
-//const port = process.env.REACT_APP_BACKEND_PORT;
+const port = process.env.NODE_ENV_PORT;
 
 const app = express();
 
-const port = 3200;
+//const port = 3200;
+
+console.log(process.env.NODE_ENV_PORT);
+console.log(process.env.REACT_APP_BACKEND_PORT);
 
 app.use(express.json());
 
@@ -98,6 +101,8 @@ app.delete('/api/deletePost/:id', (req, res) => {
 		}
 	});
 });
+
+/// Album backend ////////////////////////////////
 
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);

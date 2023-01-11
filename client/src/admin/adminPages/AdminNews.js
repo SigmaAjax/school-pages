@@ -20,6 +20,8 @@ export default function AdminNews() {
 		return post.title.toLowerCase().includes(searchPhrase);
 	});
 
+	console.table(process.env);
+
 	useEffect(() => {
 		setButtonName(() => {
 			return 'post-delete';
