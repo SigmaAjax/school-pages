@@ -1,13 +1,17 @@
 const express = require('express');
 const db = require('./config/db.js');
+require('dotenv').config();
 const port = process.env.NODE_ENV_PORT;
 
 const app = express();
 
-//const port = 3200;
-
-console.log(process.env.NODE_ENV_PORT);
-console.log(process.env.REACT_APP_BACKEND_PORT);
+console.table({
+	host: process.env.DB_HOST,
+	user: process.env.DB_USERNAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_DATABASE,
+	port: process.env.DB_PORT,
+});
 
 app.use(express.json());
 
@@ -103,6 +107,10 @@ app.delete('/api/deletePost/:id', (req, res) => {
 });
 
 /// Album backend ////////////////////////////////
+
+app.post('/api/upload/album', async (req, res) => {
+	res.send('Sending pitures');
+});
 
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);
