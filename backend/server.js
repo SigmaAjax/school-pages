@@ -1,19 +1,16 @@
 const express = require('express');
 const db = require('./config/db.js');
+const cloudinary = require('./config/cloudinary.js');
+const {response} = require('express');
 require('dotenv').config();
 const port = process.env.NODE_ENV_PORT;
 
 const app = express();
 
-console.table({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USERNAME,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_DATABASE,
-	port: process.env.DB_PORT,
-});
-
-app.use(express.json());
+app.use(express.json({limit: '10mb', extended: true}));
+app.use(
+	express.urlencoded({limit: '10mb', extended: true, parameterLimit: 50000})
+);
 
 // app.get('/test', (req, res) => {
 // 	db.query(
@@ -109,9 +106,36 @@ app.delete('/api/deletePost/:id', (req, res) => {
 /// Album backend ////////////////////////////////
 
 app.post('/api/upload/album', async (req, res) => {
-	res.send('Sending pitures');
+	/// this cloudinary end-point
+	try {
+		const {title, images} = req.body;
+		let promises = [];
+
+		images.map(async (image) => {
+			promises.push(
+				cloudinary.uploader.upload(image.url, {
+					public_id: image.name,
+					use_filename: true,
+					folder: title,
+				})
+			);
+		});
+		const response = await Promise.all(promises);
+		res.send(response);
+	} catch (err) {
+		console.log(err.message);
+	}
 });
+
+//app.post('/api/upload/album/database', async (req, res) => {});
 
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);
 });
+
+// const public_id =
+// 	'Výlet do Kamenického Šenova/getAll-data-from-db-and-filter.png';
+
+// cloudinary.uploader.destroy(public_id).then((response) => {
+// 	console.log('deleted', response);
+// });

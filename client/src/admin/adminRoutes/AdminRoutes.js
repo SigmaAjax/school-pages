@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
-import axios from 'axios';
 
 import CreatePost from '../adminComponents/PostComponents/CreatePost';
 import AdminNews from '../adminPages/AdminNews.js';
@@ -11,7 +10,7 @@ import CreateAlbum from '../adminComponents/GalleryComponents/CreateAlbum.js';
 import Modal from '../adminComponents/Modal.js';
 import AdminPostDetail from '../adminPages/AdminPostDetail.js';
 import EmployeeForm from '../EmployeeForm.js';
-import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
+import AlbumList from '../adminComponents/GalleryComponents/AlbumList';
 
 export default function AdminRoutes() {
 	return (
@@ -55,7 +54,7 @@ export default function AdminRoutes() {
 					element={
 						<div className="item three">
 							<AlbumNav />
-							<h1>Jednotlivá Alba</h1>
+							<AlbumList />
 						</div>
 					}
 				/>

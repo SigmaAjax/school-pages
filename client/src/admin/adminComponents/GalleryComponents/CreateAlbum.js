@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import {useNavigate} from 'react-router-dom';
@@ -49,8 +50,7 @@ export default function CreateAlbum() {
 
 			reader.onload = () => {
 				const imageUrlAsObj = {
-					name: image.name,
-					path: image.path,
+					name: slugify(image.name),
 					lastModified: image.lastModified,
 					lastModifiedDate: image.lastModifiedDate,
 					size: image.size,
@@ -110,21 +110,7 @@ export default function CreateAlbum() {
 		};
 	}, [images]);
 
-	const submitAlbum = (event) => {
-		// axios
-		// 	.post('/api/create/album', {
-		// 		userPass: userPass,
-		// 		title: title,
-		// 		text: text,
-		// 		slug: slugify(title),
-		// 		date: datePosted,
-		// 	})
-		// 	.then(() => {
-		// 		alert('Příspěvek byl přidán...');
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error.message);
-		// 	});
+	const submitAlbum = async (event) => {
 		event.preventDefault();
 
 		const datePosted = new Date().toISOString().substring(0, 19); // substring for MySql server
@@ -140,9 +126,61 @@ export default function CreateAlbum() {
 			};
 			return newAlbum;
 		});
-		alert('Album bude odesláno na server...');
-		console.log('Album created with images: ');
-		console.table({album});
+
+		const imagesCloudinary = images.map((image) => {
+			return {url: image.url, name: image.name};
+		});
+
+		//console.log(imagesCloudinary);
+		try {
+			alert('Album bude odesláno na server...');
+			const firstResponse = await axios.post('/api/upload/album', {
+				title: album.slug,
+				images: imagesCloudinary,
+			});
+
+			console.log('Album created with images: ');
+			console.log(firstResponse.data);
+			/////
+			const mutatedImages = album.arrayOfImages;
+			const arrayOfIDs = firstResponse.data.map((id) => {
+				return {
+					secure_url: id.secure_url,
+					url: id.url,
+					public_id: id.public_id,
+				};
+			});
+
+			setAlbum((prev) => {
+				const mergedImages = mutatedImages.reduce((acc, obj) => {
+					let prefix = album.slug + '/';
+					const match = arrayOfIDs.find(
+						(element) => element.public_id.substring(prefix.length) === obj.name
+					);
+					if (match) acc.push({...obj, ...match});
+					return acc;
+				}, []);
+				const albumCloudinary = {...prev, arrayOfImages: mergedImages};
+				return albumCloudinary;
+			});
+		} catch (error) {
+			console.log(error.message);
+		}
+
+		//console.table(imagesCloudinary);
+		// axios
+		// 	.post('/api/upload/album', {
+		// 		title: album.title,
+		// 		images: imagesCloudinary,
+		// 	})
+		// 	.then((response) => {
+		// 		console.log('alright');
+		// 		console.table(response.data);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error.message);
+		// 	});
+		// console.log('Album created with images: ');
 		//navigate('/admin/galerie');
 	};
 
@@ -199,29 +237,15 @@ export default function CreateAlbum() {
 					checkedBox={oneCheck}
 				/>
 				{/* //////////////////////////////////////////////////////////////// */}
-				{/* <button
+				<button
 					type="button"
 					onClick={() => {
-						const datePosted = new Date().toISOString().substring(0, 19); // substring for MySql server
-						setAlbum((prev) => {
-							const newAlbum = {
-								...prev,
-								title: title.current.value,
-								description: description.current.value,
-								date_created: datePosted,
-								date_updated: datePosted,
-								slug: slugify(title.current.value),
-								arrayOfImages: images,
-							};
-							return newAlbum;
-						});
-						alert('Album bude odesláno na server...');
 						console.log('Album created with images: ');
 						console.table({album});
 					}}
 				>
 					odeslat
-				</button> */}
+				</button>
 				<SubmitAlbumButton
 					oneCheck={oneCheck}
 					values={{title, description, images}}

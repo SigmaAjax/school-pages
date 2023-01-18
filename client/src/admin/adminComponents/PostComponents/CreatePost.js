@@ -3,7 +3,6 @@ import axios from 'axios';
 import CreatePostNav from './CreatePostNav';
 import useSlugify from 'client/src/Hooks/useSlugify.js';
 import {useNavigate} from 'react-router-dom';
-import {useAdmin, useAdminUpdate} from '../../../context/AdminContext';
 
 export default function CreatePost() {
 	const title = useRef();
