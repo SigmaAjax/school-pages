@@ -109,6 +109,7 @@ app.post('/api/upload/album', async (req, res) => {
 	/// this cloudinary end-point
 	try {
 		const {title, images} = req.body;
+		console.log(title);
 		let promises = [];
 
 		images.map(async (image) => {
@@ -127,7 +128,10 @@ app.post('/api/upload/album', async (req, res) => {
 	}
 });
 
-//app.post('/api/upload/album/database', async (req, res) => {});
+app.post('/api/upload/album/database', async (req, res) => {
+	const {album} = req.body;
+	console.log(album);
+});
 
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);

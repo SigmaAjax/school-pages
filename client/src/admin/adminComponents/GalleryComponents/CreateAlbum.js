@@ -50,7 +50,7 @@ export default function CreateAlbum() {
 
 			reader.onload = () => {
 				const imageUrlAsObj = {
-					name: slugify(image.name),
+					name: image.name,
 					lastModified: image.lastModified,
 					lastModifiedDate: image.lastModifiedDate,
 					size: image.size,
@@ -131,56 +131,50 @@ export default function CreateAlbum() {
 			return {url: image.url, name: image.name};
 		});
 
-		//console.log(imagesCloudinary);
+		console.log(album.title);
+
 		try {
 			alert('Album bude odesláno na server...');
 			const firstResponse = await axios.post('/api/upload/album', {
 				title: album.slug,
 				images: imagesCloudinary,
 			});
-
-			console.log('Album created with images: ');
-			console.log(firstResponse.data);
 			/////
-			const mutatedImages = album.arrayOfImages;
 			const arrayOfIDs = firstResponse.data.map((id) => {
+				/// get URLs and public id of every image
 				return {
+					public_id: id.public_id,
 					secure_url: id.secure_url,
 					url: id.url,
-					public_id: id.public_id,
 				};
 			});
+			console.log('Array of IDs: ', arrayOfIDs);
 
 			setAlbum((prev) => {
+				const mutatedImages = prev.arrayOfImages; /// copy array of images
+				console.log('mutatedImages: ', mutatedImages);
 				const mergedImages = mutatedImages.reduce((acc, obj) => {
-					let prefix = album.slug + '/';
+					let prefix = album.slug + '/'; ///// folder prefix in order to be able to merge the old array of images with the URLs and public_id array from cloudinary
 					const match = arrayOfIDs.find(
 						(element) => element.public_id.substring(prefix.length) === obj.name
 					);
 					if (match) acc.push({...obj, ...match});
 					return acc;
 				}, []);
+				console.log(mergedImages);
 				const albumCloudinary = {...prev, arrayOfImages: mergedImages};
 				return albumCloudinary;
 			});
+			console.table(album);
+
+			const secondResponse = await axios.post('/api/upload/album/database', {
+				album: album,
+			});
+			console.log(secondResponse.data);
 		} catch (error) {
 			console.log(error.message);
 		}
 
-		//console.table(imagesCloudinary);
-		// axios
-		// 	.post('/api/upload/album', {
-		// 		title: album.title,
-		// 		images: imagesCloudinary,
-		// 	})
-		// 	.then((response) => {
-		// 		console.log('alright');
-		// 		console.table(response.data);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error.message);
-		// 	});
-		// console.log('Album created with images: ');
 		//navigate('/admin/galerie');
 	};
 
