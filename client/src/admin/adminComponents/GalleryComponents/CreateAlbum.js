@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import {useNavigate} from 'react-router-dom';
 import {useAdminUpdate} from '../../../context/AdminContext';
@@ -12,14 +12,14 @@ import SubmitAlbumButton from './SubmitAlbumButton';
 export default function CreateAlbum() {
 	const navigate = useNavigate();
 	/// kontext for modal
-	const {setIsOpenModal} = useAdminUpdate();
+	//const {setIsOpenModal} = useAdminUpdate();
 	const {slugify} = useSlugify();
 	///States for images
 	const [images, setImages] = useState([]);
 	const [oneCheck, setOneCheck] = useState(false);
 	///// name and description states
-	const title = useRef();
-	const description = useRef();
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
 	//// set album object into state
 	const [album, setAlbum] = useState({});
 
@@ -101,37 +101,35 @@ export default function CreateAlbum() {
 				});
 				return pravda;
 			});
+			const datePosted = new Date().toISOString().substring(0, 19); // substring for MySql server
+			setAlbum((prev) => {
+				const newAlbum = {
+					...prev,
+					title: title,
+					description: description,
+					date_created: datePosted,
+					date_updated: datePosted,
+					slug: slugify(title),
+					arrayOfImages: images,
+				};
+				return newAlbum;
+			});
 		}, 1000);
 		return () => {
 			console.log('cleanup');
-			//console.table(images);
-			console.log('Album created with images: ');
-			console.table(album);
 		};
-	}, [images]);
+	}, [images, title]);
 
 	const submitAlbum = async (event) => {
 		event.preventDefault();
 
-		const datePosted = new Date().toISOString().substring(0, 19); // substring for MySql server
-		setAlbum((prev) => {
-			const newAlbum = {
-				...prev,
-				title: title.current.value,
-				description: description.current.value,
-				date_created: datePosted,
-				date_updated: datePosted,
-				slug: slugify(title.current.value),
-				arrayOfImages: images,
-			};
-			return newAlbum;
-		});
-
-		const imagesCloudinary = images.map((image) => {
+		console.log(album);
+		const imagesCloudinary = await album.arrayOfImages.map((image) => {
 			return {url: image.url, name: image.name};
 		});
 
-		console.log(album.title);
+		// console.log(album.title);
+		// console.log(imagesCloudinary);
 
 		try {
 			alert('Album bude odesláno na server...');
@@ -139,8 +137,10 @@ export default function CreateAlbum() {
 				title: album.slug,
 				images: imagesCloudinary,
 			});
+
+			console.log('firstResponse is ... ', firstResponse.data);
 			/////
-			const arrayOfIDs = firstResponse.data.map((id) => {
+			const arrayOfIDs = await firstResponse.data.map((id) => {
 				/// get URLs and public id of every image
 				return {
 					public_id: id.public_id,
@@ -148,11 +148,36 @@ export default function CreateAlbum() {
 					url: id.url,
 				};
 			});
-			console.log('Array of IDs: ', arrayOfIDs);
+
+			async function mergeImagesArray() {
+				const mutatedImages = await album.arrayOfImages; /// copy array of images
+				//console.log('mutatedImages: ', mutatedImages);
+
+				const mergedImages = await mutatedImages.reduce((acc, obj) => {
+					let prefix = album.slug + '/'; ///// folder prefix in order to be able to merge the old array of images with the URLs and public_id array from cloudinary
+					const match = arrayOfIDs.find(
+						(element) => element.public_id.substring(prefix.length) === obj.name
+					);
+					if (match) acc.push({...obj, ...match});
+					return acc;
+				}, []);
+				return mergedImages;
+			}
+			let {arrayOfImages, ...albumCredentials} = album;
+
+			const mergedImages = await mergeImagesArray();
+
+			console.log(mergeImagesArray());
+
+			const secondResponse = await axios.post('/api/upload/album/database', {
+				album: albumCredentials,
+				photos: mergedImages,
+			});
+			console.log('Second response is... ', secondResponse.data);
 
 			setAlbum((prev) => {
 				const mutatedImages = prev.arrayOfImages; /// copy array of images
-				console.log('mutatedImages: ', mutatedImages);
+				//console.log('mutatedImages: ', mutatedImages);
 				const mergedImages = mutatedImages.reduce((acc, obj) => {
 					let prefix = album.slug + '/'; ///// folder prefix in order to be able to merge the old array of images with the URLs and public_id array from cloudinary
 					const match = arrayOfIDs.find(
@@ -161,16 +186,9 @@ export default function CreateAlbum() {
 					if (match) acc.push({...obj, ...match});
 					return acc;
 				}, []);
-				console.log(mergedImages);
 				const albumCloudinary = {...prev, arrayOfImages: mergedImages};
 				return albumCloudinary;
 			});
-			console.table(album);
-
-			const secondResponse = await axios.post('/api/upload/album/database', {
-				album: album,
-			});
-			console.log(secondResponse.data);
 		} catch (error) {
 			console.log(error.message);
 		}
@@ -181,7 +199,7 @@ export default function CreateAlbum() {
 	return (
 		<div className="item three">
 			<form className="form-group" onSubmit={submitAlbum}>
-				<AlbumHeader title={title} description={description} />
+				<AlbumHeader title={setTitle} description={setDescription} />
 
 				<label htmlFor="dropzone">
 					<p>

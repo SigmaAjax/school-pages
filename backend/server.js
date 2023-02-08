@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('./config/db.js');
+const {albumDb, postDb} = require('./config/db.js');
 const cloudinary = require('./config/cloudinary.js');
 const {response} = require('express');
 require('dotenv').config();
@@ -12,15 +12,9 @@ app.use(
 	express.urlencoded({limit: '10mb', extended: true, parameterLimit: 50000})
 );
 
-// app.get('/test', (req, res) => {
-// 	db.query(
-// 		"INSERT INTO posts (title, post_text, user_name) VALUES ('a title', 'There are concequences killing a god!!!', 'eva')"
-// 	);
-// });
-
 app.get('/api/get', (req, res) => {
 	// get all posts request
-	db.query('SELECT * FROM posts', (err, result) => {
+	postDb.query('SELECT * FROM posts', (err, result) => {
 		if (err) {
 			console.log(err);
 		}
@@ -34,7 +28,7 @@ app.get('/api/get/:id/:titleSlug', (req, res) => {
 	const id = req.params.id;
 	const slug = req.params.titleSlug;
 
-	db.query(
+	postDb.query(
 		'SELECT * FROM posts WHERE id=? AND slug=?',
 		[id, slug],
 		(err, result) => {
@@ -56,7 +50,7 @@ app.post('/api/create', (req, res) => {
 
 	console.table({userPass, title, text, date, slug});
 
-	db.query(
+	postDb.query(
 		'INSERT INTO posts (title, post_text, user_name, date_posted, date_updated, slug) VALUES (?,?,?,?,?,?)',
 		[title, text, userPass, date, date_updated, slug],
 		(err, res) => {
@@ -78,7 +72,7 @@ app.put('/api/updatePost', (req, res) => {
 
 	console.log(req.params.id);
 
-	db.query(
+	postDb.query(
 		'UPDATE posts SET title=?, post_text=?, user_name=?, date_updated=?, slug=? WHERE id=?',
 		[title, text, userPass, post_updated, slug, id],
 		(err, result) => {
@@ -94,7 +88,7 @@ app.put('/api/updatePost', (req, res) => {
 app.delete('/api/deletePost/:id', (req, res) => {
 	const id = req.params.id;
 	console.log(id);
-	db.query('DELETE FROM posts WHERE id = ?', id, (err, result) => {
+	postDb.query('DELETE FROM posts WHERE id = ?', id, (err, result) => {
 		if (err) {
 			console.log(err);
 		} else {
@@ -129,8 +123,180 @@ app.post('/api/upload/album', async (req, res) => {
 });
 
 app.post('/api/upload/album/database', async (req, res) => {
-	const {album} = req.body;
-	console.log(album);
+	// database endpoint for storing info about albums
+	const {album, photos} = req.body;
+	const {title, description, date_created, date_updated, slug} = album;
+
+	albumDb.connect();
+
+	try {
+		// start transaction
+		await new Promise((resolve, reject) => {
+			albumDb.beginTransaction((err) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});
+		});
+		// Inserting the data into the album-description table
+		const albumDescription = await new Promise((resolve, reject) => {
+			albumDb.query(
+				'INSERT INTO albums (album_title, description, date_created, date_updated, slug) VALUES (?,?,?,?,?)',
+				[title, description, date_created, date_updated, slug],
+				(err, result) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(result);
+					}
+				}
+			);
+		});
+
+		const albumId = albumDescription.insertId;
+		console.log('Id for every photo as foreign key is...', albumId);
+
+		// Inserting the photos into album one by one
+
+		photos.map(async (image) => {
+			const {
+				name,
+				lastModified,
+				lastModifiedDate,
+				introductionary,
+				public_id,
+				secure_url,
+				url,
+			} = image;
+
+			const lastModifiedDateISO = lastModifiedDate.substring(0, 19);
+
+			await new Promise((resolve, reject) => {
+				albumDb.query(
+					'INSERT INTO album_photos (intro, name, last_modified, last_modified_date, public_id, secure_url, url, album_id_photos) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+					[
+						introductionary,
+						name,
+						lastModified,
+						lastModifiedDateISO,
+						public_id,
+						secure_url,
+						url,
+						albumId,
+					],
+					(err) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve();
+						}
+					}
+				);
+			});
+
+			console.log('Photo inserted with with album_id as:', albumId);
+		});
+		// Commit the transaction
+
+		await new Promise((resolve, reject) => {
+			albumDb.commit((err) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});
+		});
+		res.status(201).send({message: 'Data were inserted into both tables'});
+	} catch (error) {
+		console.log(error.message);
+		// Rollback transaction
+
+		await new Promise((resolve) => {
+			albumDb.rollback(() => {
+				resolve();
+			});
+		});
+		res.status(500).send({message: 'Error in inserting data'});
+	} finally {
+		albumDb.end();
+	}
+});
+
+////////////////////////////////////////////////////////////////
+/// Getting albums data
+////////////////////////////////////////////////////////////////
+
+app.get('/api/get/albums', async (req, res) => {
+	// get all albums request
+
+	albumDb.connect();
+
+	try {
+		const albums = await new Promise((resolve, reject) => {
+			albumDb.query('SELECT * FROM albums', (err, results) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(results);
+				}
+			});
+		});
+		console.log(albums[0].album_title);
+		const albumIDs = await albums.map((album) => {
+			return album.album_id;
+		});
+
+		//const album_id = await album.album_id;
+		const photos = await Promise.all(
+			albums.map(async (album) => {
+				return new Promise((resolve, reject) => {
+					albumDb.query(
+						'SELECT * FROM album_photos WHERE album_id_photos=?',
+						album.album_id,
+						(error, results) => {
+							if (error) {
+								reject(error);
+							} else {
+								//console.log({[albumId]: results});
+								//console.log(results);
+								//resolve({[albumId]: results});
+								resolve({
+									album_title: album.album_title,
+									album_id: album.album_id,
+									description: album.description,
+									date_created: album.date_created,
+									date_updated: album.date_updated,
+									slug: album.slug,
+									arrayOfPictures: results,
+								});
+							}
+						}
+					);
+				});
+			})
+		);
+		const photosByAlbum = await photos.reduce((acc, photo) => {
+			const key = Object.keys(photo);
+			console.log(key);
+			console.log('key is...', key);
+			acc[key] = photo[key];
+			return acc;
+		}, {});
+		//console.log(photosByAlbum);
+		// res.send(photosByAlbum);
+		//console.log(...Object.values(photosByAlbum));
+		//res.send(photosByAlbum);
+		res.send(photos);
+		//res.send(...Object.values(photosByAlbum));
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({message: 'Error fetching data from the database'});
+	} finally {
+		albumDb.end();
+	}
 });
 
 app.listen(port, (res, req) => {

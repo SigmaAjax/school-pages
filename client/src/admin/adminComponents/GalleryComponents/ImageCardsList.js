@@ -2,6 +2,7 @@ import ImageCard from './ImageCard';
 
 export default function ImageCardsList({imagesList, setImages, checkedBox}) {
 	//const {checkedBox} = rest;
+	//console.log(imagesList);
 	return (
 		<>
 			{imagesList.length > 0 ? (

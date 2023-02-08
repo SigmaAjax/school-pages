@@ -10,13 +10,21 @@ export default function AlbumHeader({title, description}) {
 				required
 				type="text"
 				placeholder="např. Výlet do Kamenického Šenova"
-				ref={title}
+				onChange={(e) => {
+					title(() => {
+						return e.target.value;
+					});
+				}}
 			></input>
 			<label htmlFor="albumDescription">Popisek Alba</label>
 			<em>Maximální počet znaků je 250</em>
 			<textarea
 				maxLength={250}
-				ref={description}
+				onChange={(e) => {
+					description(() => {
+						return e.target.value;
+					});
+				}}
 				rows="12"
 				cols="40"
 				name="albumDescription"
