@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Routes as RouterRoutes, Route} from 'react-router-dom';
 
 import CreatePost from '../adminComponents/PostComponents/CreatePost';

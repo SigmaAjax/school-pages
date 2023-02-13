@@ -127,7 +127,7 @@ app.post('/api/upload/album/database', async (req, res) => {
 	const {album, photos} = req.body;
 	const {title, description, date_created, date_updated, slug} = album;
 
-	albumDb.connect();
+	//albumDb.connect();
 
 	try {
 		// start transaction
@@ -221,7 +221,8 @@ app.post('/api/upload/album/database', async (req, res) => {
 		});
 		res.status(500).send({message: 'Error in inserting data'});
 	} finally {
-		albumDb.end();
+		//albumDb.end();
+		console.log('finished uploading files..');
 	}
 });
 
@@ -232,7 +233,9 @@ app.post('/api/upload/album/database', async (req, res) => {
 app.get('/api/get/albums', async (req, res) => {
 	// get all albums request
 
-	albumDb.connect();
+	//albumDb.connect();
+
+	//console.log('connection ... ', albumDb.connect());
 
 	try {
 		const albums = await new Promise((resolve, reject) => {
@@ -245,9 +248,6 @@ app.get('/api/get/albums', async (req, res) => {
 			});
 		});
 		console.log(albums[0].album_title);
-		const albumIDs = await albums.map((album) => {
-			return album.album_id;
-		});
 
 		//const album_id = await album.album_id;
 		const photos = await Promise.all(
@@ -260,9 +260,6 @@ app.get('/api/get/albums', async (req, res) => {
 							if (error) {
 								reject(error);
 							} else {
-								//console.log({[albumId]: results});
-								//console.log(results);
-								//resolve({[albumId]: results});
 								resolve({
 									album_title: album.album_title,
 									album_id: album.album_id,
@@ -278,24 +275,13 @@ app.get('/api/get/albums', async (req, res) => {
 				});
 			})
 		);
-		const photosByAlbum = await photos.reduce((acc, photo) => {
-			const key = Object.keys(photo);
-			console.log(key);
-			console.log('key is...', key);
-			acc[key] = photo[key];
-			return acc;
-		}, {});
-		//console.log(photosByAlbum);
-		// res.send(photosByAlbum);
-		//console.log(...Object.values(photosByAlbum));
-		//res.send(photosByAlbum);
 		res.send(photos);
-		//res.send(...Object.values(photosByAlbum));
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({message: 'Error fetching data from the database'});
 	} finally {
-		albumDb.end();
+		//albumDb.end();
+		console.log('Albums done...');
 	}
 });
 
