@@ -247,7 +247,7 @@ app.get('/api/get/albums', async (req, res) => {
 				}
 			});
 		});
-		console.log(albums[0].album_title);
+		//console.log(albums[0].album_title);
 
 		//const album_id = await album.album_id;
 		const photos = await Promise.all(

@@ -59,20 +59,19 @@ export default function AdminRoutes() {
 					}
 				/>
 				<Route
+					path="galerie/:id/:albumSlug"
+					element={
+						<div className="item three">
+							<AlbumDetail />
+						</div>
+					}
+				/>
+				<Route
 					path="galerie/newAlbum"
 					element={
 						<div className="item three">
 							<AlbumNav />
 							<CreateAlbum />
-						</div>
-					}
-				/>
-				<Route
-					path="galerie/album/:id/:albumSlug"
-					element={
-						<div className="item three">
-							<h1>detail alba</h1>
-							<AlbumDetail />
 						</div>
 					}
 				/>

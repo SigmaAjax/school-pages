@@ -32,7 +32,7 @@ export default function PostDetail({admin}) {
 			});
 
 		return () => {
-			console.log(Object.keys(post).length);
+			//console.log(Object.keys(post).length);
 			controller.abort();
 		};
 	}, [id, titleSlug]);

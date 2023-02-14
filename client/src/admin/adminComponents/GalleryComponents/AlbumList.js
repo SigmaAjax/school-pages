@@ -1,6 +1,7 @@
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import {AdvancedImage} from '@cloudinary/react';
+import {AdvancedImage, placeholder} from '@cloudinary/react';
 
 export default function AlbumList() {
 	const [albums, setAlbums] = useState([]);
@@ -41,31 +42,47 @@ export default function AlbumList() {
 		};
 	}, []);
 
-	console.log(process.env.CLOUD_NAME);
-	// albums.map((album) => {
-	// 	album.arrayOfPictures.map((picture) => {
-	// 		console.log('this is a picture ... ', picture);
-	// 		console.log('this is whether it is an introductionary...', picture.intro);
-	// 		console.log('introductionary is type of ... ', typeof picture.intro);
-	// 	});
-	// });
+	albums.map((album) => {
+		console.log(album.album_id);
+		album.arrayOfPictures.map((picture) => {
+			console.log('this is a picture ... ', picture);
+		});
+	});
+
+	const renderPicture = (picture) => {
+		return (
+			picture.intro && (
+				<AdvancedImage
+					loading={'lazy'}
+					width={100}
+					height={100}
+					key={picture.public_id}
+					cloudName={process.env.REACT_APP_CLOUD_NAME}
+					publicId={picture.public_id}
+					src={picture.secure_url}
+				></AdvancedImage>
+			)
+		);
+	};
+
+	const renderAlbum = (album) => {
+		const introPicture = album.arrayOfPictures.find((picture) => picture.intro);
+		return introPicture && renderPicture(introPicture);
+	};
+
 	return (
 		<>
 			<h1>Jednotlivá Alba</h1>
-			<div>
-				{albums.map((album) => {
-					album.arrayOfPictures.map((picture) => {
-						return (
-							picture.intro && (
-								<AdvancedImage
-									key={album.id}
-									cloudName={process.env.CLOUD_NAME}
-									publicId={picture.public_id}
-								/>
-							)
-						);
-					});
-				})}
+			<div className="item two">
+				{albums.map((album) => (
+					<div key={album.album_id}>
+						<Link to={`/admin/galerie/${album.album_id}/${album.slug}`}>
+							<h4>{album.album_title}</h4>
+							{renderAlbum(album)}
+						</Link>
+						<button>X</button>
+					</div>
+				))}
 			</div>
 		</>
 	);
