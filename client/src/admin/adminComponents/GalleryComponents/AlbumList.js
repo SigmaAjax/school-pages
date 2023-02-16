@@ -1,7 +1,6 @@
 import axios from 'axios';
-import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import {AdvancedImage, placeholder} from '@cloudinary/react';
+import AlbumCard from './AlbumDetail/AlbumCard';
 
 export default function AlbumList() {
 	const [albums, setAlbums] = useState([]);
@@ -42,46 +41,12 @@ export default function AlbumList() {
 		};
 	}, []);
 
-	albums.map((album) => {
-		console.log(album.album_id);
-		album.arrayOfPictures.map((picture) => {
-			console.log('this is a picture ... ', picture);
-		});
-	});
-
-	const renderPicture = (picture) => {
-		return (
-			picture.intro && (
-				<AdvancedImage
-					loading={'lazy'}
-					width={100}
-					height={100}
-					key={picture.public_id}
-					cloudName={process.env.REACT_APP_CLOUD_NAME}
-					publicId={picture.public_id}
-					src={picture.secure_url}
-				></AdvancedImage>
-			)
-		);
-	};
-
-	const renderAlbum = (album) => {
-		const introPicture = album.arrayOfPictures.find((picture) => picture.intro);
-		return introPicture && renderPicture(introPicture);
-	};
-
 	return (
 		<>
 			<h1>Jednotlivá Alba</h1>
 			<div className="item two">
 				{albums.map((album) => (
-					<div key={album.album_id}>
-						<Link to={`/admin/galerie/${album.album_id}/${album.slug}`}>
-							<h4>{album.album_title}</h4>
-							{renderAlbum(album)}
-						</Link>
-						<button>X</button>
-					</div>
+					<AlbumCard content={album} />
 				))}
 			</div>
 		</>

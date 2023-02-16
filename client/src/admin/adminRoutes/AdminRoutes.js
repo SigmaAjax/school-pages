@@ -4,7 +4,7 @@ import {Routes as RouterRoutes, Route} from 'react-router-dom';
 import CreatePost from '../adminComponents/PostComponents/CreatePost';
 import AdminNews from '../adminPages/AdminNews.js';
 import AdminSidebar from '../adminComponents/AdminSidebar.js';
-import AlbumDetail from '../adminComponents/GalleryComponents/AlbumDetail.js';
+import AlbumDetail from '../adminComponents/GalleryComponents/AlbumDetail/AlbumDetail.js';
 import AlbumNav from '../adminComponents/GalleryComponents/AlbumNav.js';
 import CreateAlbum from '../adminComponents/GalleryComponents/CreateAlbum.js';
 import Modal from '../adminComponents/Modal.js';

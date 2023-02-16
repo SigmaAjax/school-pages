@@ -123,7 +123,6 @@ export default function CreateAlbum() {
 	const submitAlbum = async (event) => {
 		event.preventDefault();
 
-		console.log(album);
 		const imagesCloudinary = await album.arrayOfImages.map((image) => {
 			return {url: image.url, name: image.name};
 		});

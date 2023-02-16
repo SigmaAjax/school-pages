@@ -5,6 +5,7 @@ export default function MainPhotoCheckbox({
 }) {
 	return (
 		<input
+			key={imgValue.name}
 			name={imgValue.name + '-checkbox'}
 			disabled={false === !intro}
 			checked={imgValue.introductionary}
@@ -15,6 +16,7 @@ export default function MainPhotoCheckbox({
 						if (item.name + '-checkbox' === e.target.name) {
 							return {...item, introductionary: !item.introductionary};
 						}
+						console.log(item);
 						return item;
 					});
 					return checkedItem;

@@ -285,6 +285,68 @@ app.get('/api/get/albums', async (req, res) => {
 	}
 });
 
+/// get one particular Album from the database
+
+app.get('/api/get/album/:id/:titleSlug', async (req, res) => {
+	// get one album ...  request choose one row according to slug and id
+
+	const id = req.params.id;
+	const slug = req.params.titleSlug;
+
+	console.table({id, slug});
+
+	try {
+		const album = await new Promise((resolve, reject) => {
+			albumDb.query(
+				'SELECT * FROM albums WHERE album_id=? AND slug=?',
+				[id, slug],
+				(err, results) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(results);
+					}
+				}
+			);
+		});
+		//console.log(albums[0].album_title);
+
+		//const album_id = await album.album_id;
+		const photosForDetailAlbum = await Promise.all(
+			album.map(async (album) => {
+				return new Promise((resolve, reject) => {
+					albumDb.query(
+						'SELECT * FROM album_photos WHERE album_id_photos=?',
+						album.album_id,
+						(error, results) => {
+							if (error) {
+								reject(error);
+							} else {
+								resolve({
+									album_title: album.album_title,
+									album_id: album.album_id,
+									description: album.description,
+									date_created: album.date_created,
+									date_updated: album.date_updated,
+									slug: album.slug,
+									arrayOfPictures: results,
+								});
+							}
+						}
+					);
+				});
+			})
+		);
+		res.send(photosForDetailAlbum);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({message: 'Error fetching data from the database'});
+	} finally {
+		//albumDb.end();
+		console.log('Albums done...');
+	}
+});
+
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);
 });

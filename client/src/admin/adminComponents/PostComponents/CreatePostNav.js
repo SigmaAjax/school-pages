@@ -1,4 +1,8 @@
-import {NavLink} from 'react-router-dom';
+import {NavLink, useLocation} from 'react-router-dom';
+
+const isActiveFunc = (match, location) => {
+	return match && match.isExact;
+};
 
 export default function CreatePostNav() {
 	return (
@@ -6,7 +10,8 @@ export default function CreatePostNav() {
 			<ul className="navbar ul">
 				<li className="nav-item">
 					<NavLink
-						exact
+						exact={true}
+						isActive={isActiveFunc}
 						style={({isActive}) => {
 							return isActive ? {color: 'green'} : {};
 						}}
@@ -17,10 +22,12 @@ export default function CreatePostNav() {
 				</li>
 				<li className="nav-item">
 					<NavLink
-						exact
+						exact={false}
+						isActive={isActiveFunc}
 						style={({isActive}) => {
 							return isActive ? {color: 'green'} : {};
 						}}
+						// activeStyle={{color: 'green'}}
 						to="/admin/newPost/admin-posts"
 					>
 						Uprav aktualitu nebo příspěvek
