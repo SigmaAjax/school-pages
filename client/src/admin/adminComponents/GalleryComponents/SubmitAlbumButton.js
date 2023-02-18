@@ -1,5 +1,8 @@
-export default function SubmitAlbumButton({oneCheck}) {
-	//const {title, description, images} = values;
+export default function SubmitAlbumButton({images}) {
+	const oneCheck = images.some((image) => {
+		if (image.introductionary === true) return true;
+		return false;
+	});
 
 	return (
 		<button type="submit" disabled={!oneCheck}>

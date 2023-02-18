@@ -10,8 +10,8 @@ import SelectYearMonth from '../adminComponents/PostComponents/SelectYearMonth';
 import {Loader} from 'client/src/Loader.js';
 
 export default function AdminNews() {
-	const {setButtonName, setPostList} = useAdminUpdate();
-	const {postList} = useAdmin();
+	const {setButtonName, setPostList, setPost} = useAdminUpdate();
+	const {postList, post} = useAdmin();
 	// Filtered Searched posts
 	const [searchPhrase, setSearchPhrase] = useState('');
 	// Sorting state
@@ -31,6 +31,10 @@ export default function AdminNews() {
 
 		async function fetchData() {
 			const response = await axios.get('/api/get', {signal: controller.signal});
+			setPost(() => {
+				return {};
+			});
+			console.log(post);
 			const posts = await response.data;
 			console.log('Loading posts...');
 			setPostList(() => {

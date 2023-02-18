@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../context/AdminContext';
 import useCap from '../Hooks/useCap';
@@ -15,24 +15,35 @@ export default function PostDetail({admin}) {
 	//ref for admin form
 	const title = useRef();
 	const post_text = useRef();
+	// const [localPost, setLocalPost] = useState(() => {
+	// 	return {};
+	// });
 
 	useEffect(() => {
+		let isMounted = true;
+		//const source = axios.CancelToken.source();
 		const controller = new AbortController();
-		axios
-			.get(`/api/get/${id}/${titleSlug}`, {signal: controller.signal})
-			.then((response) => {
-				console.log(...response.data);
 
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(`/api/get/${id}/${titleSlug}`, {
+					signal: controller.signal,
+				});
 				setPost(() => {
 					return {...response.data};
 				});
-			})
-			.catch((error) => {
+			} catch (error) {
 				console.log(error);
-			});
+			}
+		};
 
+		fetchData();
 		return () => {
-			//console.log(Object.keys(post).length);
+			isMounted = false;
+			setPost(() => {
+				return {};
+			});
+			console.log(post);
 			controller.abort();
 		};
 	}, [id, titleSlug]);
@@ -41,7 +52,7 @@ export default function PostDetail({admin}) {
 		e.preventDefault();
 
 		setPost({
-			...post,
+			...setPost,
 			title: title.current.value,
 			post_text: post_text.current.value,
 			slug: slugify(title.current.value),

@@ -1,3 +1,4 @@
+import {useAdminUpdate} from '../../../context/AdminContext';
 import AdminPost from './AdminPost';
 
 export default function AdminPostList({listOfPosts}) {

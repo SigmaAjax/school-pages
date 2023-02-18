@@ -6,16 +6,15 @@ export default function CloudinaryImageCardsList({photosList, setPhotos}) {
 		return false;
 	});
 
-	console.log('checkedBox in CloudinaryImageCardsList...', checkedBox);
-	//console.log(imagesList);
 	return (
 		<>
-			{photosList.length > 0 ? (
+			{photosList ? (
 				<div className="item two">
 					{checkedBox
 						? photosList.map((image) => {
 								return (
 									<CloudinaryImageCard
+										key={image.name}
 										image={image}
 										setPhotos={setPhotos}
 										intro={!image.introductionary}
@@ -24,7 +23,11 @@ export default function CloudinaryImageCardsList({photosList, setPhotos}) {
 						  })
 						: photosList.map((image) => {
 								return (
-									<CloudinaryImageCard image={image} setPhotos={setPhotos} />
+									<CloudinaryImageCard
+										key={image.name}
+										image={image}
+										setPhotos={setPhotos}
+									/>
 								);
 						  })}
 				</div>

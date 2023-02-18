@@ -10,8 +10,8 @@ export default function CloudinaryImageCard({image, setPhotos, intro = false}) {
 				width={100}
 				height={100}
 				key={image.public_id}
-				cloudName={process.env.REACT_APP_CLOUD_NAME}
-				publicId={image.public_id}
+				cloudname={process.env.REACT_APP_CLOUD_NAME}
+				publicid={image.public_id}
 				src={image.secure_url}
 			/>
 			<button
