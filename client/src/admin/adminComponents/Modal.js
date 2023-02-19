@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import ReactDom from 'react-dom';
 import {useNavigate} from 'react-router-dom';
@@ -29,7 +28,7 @@ export default function Modal({children}) {
 	const navigate = useNavigate();
 	const {isOpenModal, post, buttonName} = useAdmin();
 	const {setIsOpenModal, setButtonName} = useAdminUpdate();
-	const {updateOrDelete} = useDeleteUpdate(buttonName, post);
+	const {updateOrDelete} = useDeleteUpdate(buttonName);
 
 	if (!isOpenModal) return null;
 
@@ -76,12 +75,11 @@ export default function Modal({children}) {
 				</button>
 				<button
 					onClick={() => {
-						updateOrDelete(post);
+						updateOrDelete(buttonName);
 						setIsOpenModal((prev) => {
 							return !prev;
 						});
 						//updatePost(post.id);
-						navigate('/admin/newPost/admin-posts');
 					}}
 				>
 					Pokračovat v akci

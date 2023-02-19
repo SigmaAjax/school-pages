@@ -1,78 +1,114 @@
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../context/AdminContext';
 
-export default function useDeleteUpdate(buttonName, item) {
+export default function useDeleteUpdate(buttonName) {
+	const navigate = useNavigate();
 	var arrOfButtonName = buttonName.split('-');
 	//context states for updating state after deleting
-	const {postList} = useAdmin();
-	const {setPostList} = useAdminUpdate();
+	const {postList, post, album} = useAdmin();
+	const {setPostList, setAlbum} = useAdminUpdate();
 
-	const deleteAnyItem = (item) => {
-		console.log('Deleting with button', buttonName);
-		console.log('Deleting item with id: ' + item.id);
-		console.table(item);
+	const deleteAlbum = async (album) => {
+		try {
+			console.log('Deleting with button', buttonName);
+			console.log('Deleting item with id: ' + album.album_id);
+			console.table(album);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
-	const updateAnyItem = (item) => {
-		console.log('Updating post with button', buttonName);
-		console.log('Updating item with id: ' + item.id);
-		console.table(item);
+	const updateAlbum = async (album) => {
+		try {
+			console.log('Updating with button', buttonName);
+			console.log('Updating item with id: ' + album.album_id);
+			console.table(album);
+			await axios.put(`/api/updateAlbum`, album);
+			setAlbum(() => {
+				return {};
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
-	const deletePostItem = (item) => {
-		console.log(item.id);
-		axios
-			.delete(`/api/deletePost/${item.id}`)
-			.then(() => {
-				setPostList((prev) => {
-					prev = postList.filter((post) => {
-						return post.id !== item.id;
-					});
-					return prev;
+	const deletePostItem = async (post) => {
+		try {
+			console.log(post.id);
+			const idDeletion = await post.id;
+			const copyPostList = await postList;
+			await axios.delete(`/api/deletePost/${idDeletion}`);
+			setPostList((prev) => {
+				prev = copyPostList.filter((post) => {
+					return post.id !== idDeletion;
 				});
-			})
-			.catch((error) => {
-				console.log(error.message);
+				return prev;
 			});
+		} catch (error) {
+			console.log(error.message);
+		} finally {
+			console.log('Deleted post with id: ' + post.id);
+		}
+		navigate('/admin/newPost/admin-posts');
 	};
 
-	const updatePostItem = (item) => {
-		console.log('Updating post with button', buttonName);
-		console.log('Updating item with id: ' + item.id);
-		console.table(item);
-		axios
-			.put('/api/updatePost', {
-				id: item.id,
-				userPass: item.user_name,
-				title: item.title,
-				text: item.post_text,
-				slug: item.slug,
-				post_updated: item.post_updated,
-			})
-			.then((response) => {
-				alert('Updating this data...', response.data);
-			})
-			.catch((error) => {
-				console.error(error);
+	const updatePostItem = async (post) => {
+		try {
+			console.log('Updating post with button', buttonName);
+			console.log('Updating item with id: ' + post.id);
+			console.table(post);
+			const response = await axios.put('/api/updatePost', {
+				id: post.id,
+				userPass: post.user_name,
+				title: post.title,
+				text: post.post_text,
+				slug: post.slug,
+				post_updated: post.post_updated,
 			});
+			setPostList((prev) => {
+				const updatedPostList = prev.map((item) => {
+					if (item.id === post.id) {
+						return {...item, ...post};
+					} else {
+						return item;
+					}
+				});
+				return updatedPostList;
+			});
+			alert('Updating this data...', response.data);
+		} catch (error) {
+			console.log(error.message);
+		}
+		navigate('/admin/newPost/admin-posts');
 	};
 
 	function updateOrDelete(id) {
 		switch (arrOfButtonName[0]) {
 			case 'post':
 				return arrOfButtonName[1] === 'delete'
-					? deletePostItem(item)
-					: updatePostItem(item);
+					? deletePostItem(post)
+					: updatePostItem(post);
 
 				break;
 
 			case 'employee':
 				return arrOfButtonName[1] === 'delete'
-					? deleteAnyItem(item)
-					: updateAnyItem(item);
+					? console.log('employee deleted')
+					: console.log('employee updated');
 
 				break;
+
+			case 'album':
+				return arrOfButtonName[1] === 'delete'
+					? deleteAlbum(album)
+					: updateAlbum(album);
+
 			// case image and document
+			case 'document':
+				return arrOfButtonName[1] === 'delete'
+					? console.log(document)
+					: console.log(document);
 			default:
 				console.log(buttonName);
 		}

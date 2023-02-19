@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../context/AdminContext';
 import useCap from '../Hooks/useCap';
@@ -15,9 +15,6 @@ export default function PostDetail({admin}) {
 	//ref for admin form
 	const title = useRef();
 	const post_text = useRef();
-	// const [localPost, setLocalPost] = useState(() => {
-	// 	return {};
-	// });
 
 	useEffect(() => {
 		let isMounted = true;

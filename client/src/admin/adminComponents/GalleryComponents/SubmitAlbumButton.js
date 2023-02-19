@@ -1,3 +1,5 @@
+import {useAdminUpdate} from '../../../context/AdminContext';
+
 export default function SubmitAlbumButton({images}) {
 	const oneCheck = images.some((image) => {
 		if (image.introductionary === true) return true;
