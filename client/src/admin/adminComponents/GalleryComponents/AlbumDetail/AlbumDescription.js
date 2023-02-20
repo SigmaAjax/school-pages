@@ -20,6 +20,7 @@ export default function AlbumDescription({album, heading}) {
 				<div>
 					{album?.album_title ? (
 						<input
+							required={true}
 							ref={title}
 							type="text"
 							defaultValue={capitalize(album?.album_title)}

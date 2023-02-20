@@ -1,18 +1,25 @@
 import axios from 'axios';
-import {useEffect, useState, useRef} from 'react';
+import {useDropzone} from 'react-dropzone';
+import {useEffect, useState, useRef, useCallback} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../../context/AdminContext';
 import useSlugify from 'client/src/Hooks/useSlugify.js';
 
+import AddPhotosDropzone from '../AddPhotosDropzone';
 import DeleteAlbumButton from '../AlbumDetail/DeleteAlbumButton.js';
 import SubmitAlbumButton from '../SubmitAlbumButton';
 import AlbumDescription from './AlbumDescription';
 import CloudinaryImageCardsList from './CloudinaryImageCardsList';
+import ErrorMsg from 'client/src/admin/adminComponents/GalleryComponents/ErrorMsg.js';
 
 export default function AlbumDetail() {
 	const {album} = useAdmin();
 	const {setIsOpenModal, setButtonName, setAlbum} = useAdminUpdate();
 	/// usState and Params
+	const [warningMessage, setWarningMessage] = useState('');
+	/// Photos state
+	const [addNewPhotos, setAddNewPhotos] = useState(false);
+	//const [newImages, setNewImages] = useState([]);
 	const [photos, setPhotos] = useState([]);
 	const {id, albumSlug} = useParams();
 	//ref for admin form
@@ -25,13 +32,81 @@ export default function AlbumDetail() {
 
 	const datumUpdated = new Date(album?.date_updated);
 
+	////////// These variables are used for user safety ... in order to prevent sending same album
+	const albumOriginalTitle = album?.album_title;
+	const albumOriginalDescription = album?.description;
+	const albumLength = photos?.length;
+
 	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {
 		dateStyle: 'full',
 		timeStyle: 'short',
 	});
-	console.log(
-		`/api/get/album/${encodeURIComponent(id)}/${encodeURIComponent(albumSlug)}`
-	);
+
+	//// Callback creating images and checking for duplicates
+	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+		let uniqueImages = [];
+		acceptedFiles.forEach((file) => {
+			// how to get rid of duplicate from react state
+
+			const uniqueIds = [];
+			const arrImages = [...uniqueImages, file];
+
+			uniqueImages = arrImages.filter((file) => {
+				const isDuplicate = uniqueIds.includes(file.name);
+
+				if (!isDuplicate) {
+					uniqueIds.push(file.name);
+
+					return true;
+				}
+				return false;
+			});
+			return uniqueImages;
+		});
+
+		uniqueImages.map((image) => {
+			const reader = new FileReader();
+
+			reader.onload = () => {
+				const imageUrlAsObj = {
+					name: image.name,
+					lastModified: image.lastModified,
+					lastModifiedDate: image.lastModifiedDate,
+					size: image.size,
+					type: image.type,
+					secure_url: reader.result,
+					introductionary: false,
+				};
+
+				setPhotos((prev) => {
+					/// creating key: value pair url: reader.result
+					const uniqueNames = [];
+					const arrImages = [...prev, imageUrlAsObj];
+
+					const uniqueImagesURL = arrImages.filter((imageURL) => {
+						const isDuplicate = uniqueNames.includes(imageURL.name);
+
+						if (!isDuplicate) {
+							uniqueNames.push(imageURL.name);
+							return true;
+						}
+						return false;
+					});
+					return uniqueImagesURL;
+				});
+			};
+			return reader.readAsDataURL(image);
+		});
+		// console.log('accepted files', acceptedFiles);
+		// console.log('rejected files', rejectedFiles);
+	}, []);
+
+	const {fileRejections, getRootProps, getInputProps, isDragActive} =
+		useDropzone({
+			onDrop,
+			accept: {'image/*': []},
+			maxFiles: 50 - albumLength,
+		});
 
 	useEffect(() => {
 		const fetchOneAlbum = async () => {
@@ -71,26 +146,53 @@ export default function AlbumDetail() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		setButtonName(() => {
-			return 'album-update';
-		});
+		if (
+			albumOriginalTitle === title.current.value &&
+			albumOriginalDescription === description.current.value
+		) {
+			console.log('warning');
+			setWarningMessage(() => {
+				return `Nemůžete odeslat album se stejným názvem a popisem \nVáš název: ${albumOriginalTitle} \nnebo Váš popis musí být jiný než ${
+					albumOriginalDescription === ''
+						? 'prázdný popis'
+						: albumOriginalDescription
+				}`;
+			});
+		} else {
+			console.log('not warning');
+			setWarningMessage(() => {
+				return '';
+			});
+			setButtonName(() => {
+				return 'album-update';
+			});
+			setAlbum((prev) => {
+				const updatedAlbum = {
+					...prev,
+					date_updated: date,
+					album_title: title?.current.value,
+					description: description?.current.value,
+					slug: slugify(title?.current.value),
+					arrayOfPictures: photos,
+				};
+				return updatedAlbum;
+			});
 
-		setAlbum((prev) => {
-			const updatedAlbum = {
-				...prev,
-				date_updated: date,
-				album_title: title?.current.value,
-				description: description?.current.value,
-				slug: slugify(title?.current.value),
-				arrayOfPictures: photos,
-			};
-			return updatedAlbum;
-		});
-
-		setIsOpenModal((prev) => !prev);
+			setIsOpenModal((prev) => !prev);
+		}
 	};
 
 	const handleDelete = (e) => {
+		console.log(
+			albumOriginalTitle === album.album_title &&
+				albumOriginalDescription === album.album_description
+		);
+		if (
+			albumOriginalTitle === album.album_title &&
+			albumOriginalDescription === album.album_description
+		) {
+			alert('You cannot send album with same title and description');
+		}
 		e.preventDefault();
 		console.log('delete done...', e.target.name);
 
@@ -103,7 +205,23 @@ export default function AlbumDetail() {
 			<form className="item one" onSubmit={handleSubmit}>
 				{/* Album headers part */}
 				<AlbumDescription album={album} heading={{title, description}} />
-				{/* Album's list of photos */}
+				<button
+					type="button"
+					onClick={(e) => {
+						setAddNewPhotos((prev) => !prev);
+					}}
+				>
+					{addNewPhotos ? 'Zrušit přidání nových fotek' : 'Přidat nové fotky'}
+				</button>
+				{addNewPhotos && (
+					<AddPhotosDropzone
+						isDragActive={isDragActive}
+						photos={photos}
+						getRootProps={getRootProps}
+						getInputProps={getInputProps}
+						fileRejections={fileRejections}
+					/>
+				)}
 				<CloudinaryImageCardsList photosList={photos} setPhotos={setPhotos} />
 
 				{album && album.date_created ? (
@@ -127,6 +245,12 @@ export default function AlbumDetail() {
 					odeslat
 				</button>
 				<SubmitAlbumButton images={photos} />
+				{/* Warning in order to prevent send the same title and description as original one */}
+				{warningMessage && (
+					<div style={{color: 'red'}}>
+						<p>{warningMessage}</p>
+					</div>
+				)}
 			</form>
 			<Link to="/admin/galerie">Back to the List of Albums</Link>
 			<DeleteAlbumButton images={photos} handleDelete={handleDelete} />

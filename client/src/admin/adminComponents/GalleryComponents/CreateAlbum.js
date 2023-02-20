@@ -4,6 +4,7 @@ import {useDropzone} from 'react-dropzone';
 import {useNavigate} from 'react-router-dom';
 import {useAdminUpdate} from '../../../context/AdminContext';
 import useSlugify from '../../../Hooks/useSlugify';
+import AddPhotosDropzone from './AddPhotosDropzone';
 import AlbumHeader from './AlbumHeader';
 import ErrorMsg from './ErrorMsg';
 import ImageCardsList from './ImageCardsList';
@@ -199,8 +200,15 @@ export default function CreateAlbum() {
 		<div className="item three">
 			<form className="form-group" onSubmit={submitAlbum}>
 				<AlbumHeader title={setTitle} description={setDescription} />
+				<AddPhotosDropzone
+					isDragActive={isDragActive}
+					photos={images}
+					getRootProps={getRootProps}
+					getInputProps={getInputProps}
+					fileRejections={fileRejections}
+				/>
 
-				<label htmlFor="dropzone">
+				{/* <label htmlFor="dropzone">
 					<p>
 						Sem můžete přetáhnou fotografie nebo vybrat fotografie kliknutím sem
 						&#128071;
@@ -235,10 +243,10 @@ export default function CreateAlbum() {
 							</em>
 						</div>
 					)}
-				</div>
+				</div> */}
 				{/* //////////////////////////////////////////////////////////////// */}
 				{/* Error message for admin after file rejection*/}
-				<ErrorMsg fileRejections={fileRejections} />
+				{/* <ErrorMsg fileRejections={fileRejections} /> */}
 
 				{/* //////////////////////////////////////////////////////////////////////// */}
 				{/* display preview of images */}

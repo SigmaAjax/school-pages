@@ -24,10 +24,11 @@ export default function useDeleteUpdate(buttonName) {
 			console.log('Updating with button', buttonName);
 			console.log('Updating item with id: ' + album.album_id);
 			console.table(album);
-			await axios.put(`/api/updateAlbum`, album);
-			setAlbum(() => {
-				return {};
-			});
+			// const response = await axios.put(`/api/updateAlbum`, album);
+			// setAlbum(() => {
+			// 	return {};
+			// });
+			// console.log(response.status);
 		} catch (error) {
 			console.error(error);
 		}
