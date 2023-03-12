@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useDropzone} from 'react-dropzone';
 import {useEffect, useState, useRef, useCallback} from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../../context/AdminContext';
 import useSlugify from 'client/src/Hooks/useSlugify.js';
 
@@ -10,16 +10,15 @@ import DeleteAlbumButton from '../AlbumDetail/DeleteAlbumButton.js';
 import SubmitAlbumButton from '../SubmitAlbumButton';
 import AlbumDescription from './AlbumDescription';
 import CloudinaryImageCardsList from './CloudinaryImageCardsList';
-import ErrorMsg from 'client/src/admin/adminComponents/GalleryComponents/ErrorMsg.js';
 
 export default function AlbumDetail() {
+	const navigate = useNavigate();
 	const {album} = useAdmin();
 	const {setIsOpenModal, setButtonName, setAlbum} = useAdminUpdate();
 	/// usState and Params
 	const [warningMessage, setWarningMessage] = useState('');
 	/// Photos state
 	const [addNewPhotos, setAddNewPhotos] = useState(false);
-	//const [newImages, setNewImages] = useState([]);
 	const [photos, setPhotos] = useState([]);
 	const {id, albumSlug} = useParams();
 	//ref for admin form
@@ -35,6 +34,7 @@ export default function AlbumDetail() {
 	////////// These variables are used for user safety ... in order to prevent sending same album
 	const albumOriginalTitle = album?.album_title;
 	const albumOriginalDescription = album?.description;
+	const originalSlug = album?.slug + '/';
 	const albumLength = photos?.length;
 
 	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {
@@ -69,12 +69,12 @@ export default function AlbumDetail() {
 
 			reader.onload = () => {
 				const imageUrlAsObj = {
-					name: image.name,
-					lastModified: image.lastModified,
-					lastModifiedDate: image.lastModifiedDate,
+					name: slugify(image?.name),
+					last_modified: image.lastModified,
+					last_modified_date: date,
 					size: image.size,
 					type: image.type,
-					secure_url: reader.result,
+					data_url: reader.result,
 					introductionary: false,
 				};
 
@@ -121,9 +121,26 @@ export default function AlbumDetail() {
 
 				const {arrayOfPictures, ...rawAlbum} = response.data[0];
 
+				const newArrayOfPictures = await Promise.all(
+					arrayOfPictures.map(async (image) => {
+						const response = await fetch(image.secure_url);
+						const blob = await response.blob();
+						const reader = new FileReader();
+						reader.readAsDataURL(blob);
+						return new Promise((resolve, reject) => {
+							reader.onloadend = () => {
+								const dataUrl = reader.result;
+								const newImage = {...image, data_url: dataUrl};
+								resolve(newImage);
+							};
+							reader.onerror = reject;
+						});
+					})
+				);
+
 				// code below is casting data from TINYINT  back into boolean value
 
-				const updatePictures = await arrayOfPictures.map((picture) => {
+				const updatePictures = await newArrayOfPictures.map((picture) => {
 					const pictureCopy = {...picture};
 					//renaming due to convention intro is backend and introductionary is frontend
 					pictureCopy.introductionary = !!pictureCopy.intro;
@@ -131,12 +148,14 @@ export default function AlbumDetail() {
 					delete pictureCopy.intro;
 					return pictureCopy;
 				});
+
+				console.table({...rawAlbum, arrayOfPictures: updatePictures});
 				setPhotos(updatePictures);
 				setAlbum({...rawAlbum, arrayOfPictures: updatePictures});
 			} catch (error) {
-				console.log(error.message);
+				console.log(error);
 			} finally {
-				console.log('fetch done...');
+				console.log('fetch done...', photos);
 			}
 		};
 		fetchOneAlbum();
@@ -173,6 +192,7 @@ export default function AlbumDetail() {
 					album_title: title?.current.value,
 					description: description?.current.value,
 					slug: slugify(title?.current.value),
+					originalSlug: originalSlug,
 					arrayOfPictures: photos,
 				};
 				return updatedAlbum;
@@ -183,22 +203,26 @@ export default function AlbumDetail() {
 	};
 
 	const handleDelete = (e) => {
-		console.log(
-			albumOriginalTitle === album.album_title &&
-				albumOriginalDescription === album.album_description
-		);
-		if (
-			albumOriginalTitle === album.album_title &&
-			albumOriginalDescription === album.album_description
-		) {
-			alert('You cannot send album with same title and description');
-		}
 		e.preventDefault();
+		setAlbum((prev) => {
+			const updatedAlbum = {
+				...prev,
+				date_updated: date,
+				album_title: title?.current.value,
+				description: description?.current.value,
+				slug: slugify(title?.current.value),
+				originalSlug: originalSlug,
+				arrayOfPictures: photos,
+			};
+			return updatedAlbum;
+		});
 		console.log('delete done...', e.target.name);
 
 		setButtonName(() => {
 			return e.target.name;
 		});
+
+		setIsOpenModal((prev) => !prev);
 	};
 	return (
 		<>

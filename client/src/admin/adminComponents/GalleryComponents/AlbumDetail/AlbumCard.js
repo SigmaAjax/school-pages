@@ -1,11 +1,11 @@
-import {AdvancedImage} from '@cloudinary/react';
 import {Link} from 'react-router-dom';
 
 export default function AlbumCard({content}) {
+	console.log(content);
 	const renderPicture = (picture) => {
 		return (
 			picture.intro && (
-				<AdvancedImage
+				<img
 					loading={'lazy'}
 					width={100}
 					height={100}
@@ -13,7 +13,8 @@ export default function AlbumCard({content}) {
 					cloudName={process.env.REACT_APP_CLOUD_NAME}
 					publicId={picture.public_id}
 					src={picture.secure_url}
-				></AdvancedImage>
+					alt=""
+				/>
 			)
 		);
 	};

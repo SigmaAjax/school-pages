@@ -51,11 +51,11 @@ export default function CreateAlbum() {
 
 			reader.onload = () => {
 				const imageUrlAsObj = {
-					name: image.name,
-					lastModified: image.lastModified,
-					lastModifiedDate: image.lastModifiedDate,
-					size: image.size,
-					type: image.type,
+					name: slugify(image?.name),
+					lastModified: image?.lastModified,
+					lastModifiedDate: image?.lastModifiedDate,
+					size: image?.size,
+					type: image?.type,
 					url: reader.result,
 					introductionary: false,
 				};
@@ -193,7 +193,7 @@ export default function CreateAlbum() {
 			console.log(error.message);
 		}
 
-		//navigate('/admin/galerie');
+		navigate('/admin/galerie');
 	};
 
 	return (
@@ -207,46 +207,6 @@ export default function CreateAlbum() {
 					getInputProps={getInputProps}
 					fileRejections={fileRejections}
 				/>
-
-				{/* <label htmlFor="dropzone">
-					<p>
-						Sem můžete přetáhnou fotografie nebo vybrat fotografie kliknutím sem
-						&#128071;
-					</p>
-				</label>
-				<div name="dropzone" className="dropzone" {...getRootProps()}>
-					<input {...getInputProps()} />
-					{isDragActive ? (
-						images.length > 0 ? (
-							<div>
-								<p>Chystáte se vložit fotografie k ostatním fotografiím</p>
-								<em>
-									(maximální počet vložených fotografií je 50, Duplikáty budou
-									sloučeny)
-								</em>
-							</div>
-						) : (
-							<div>
-								<p>Chystáte se vložit fotografie</p>
-								<em>
-									(maximální počet vložených fotografií je 50, Duplikáty budou
-									sloučeny)
-								</em>
-							</div>
-						)
-					) : (
-						<div>
-							<p>Můžete vložit fotografie</p>
-							<em>
-								(maximální počet vložených fotografií je 50, Duplikáty budou
-								sloučeny)
-							</em>
-						</div>
-					)}
-				</div> */}
-				{/* //////////////////////////////////////////////////////////////// */}
-				{/* Error message for admin after file rejection*/}
-				{/* <ErrorMsg fileRejections={fileRejections} /> */}
 
 				{/* //////////////////////////////////////////////////////////////////////// */}
 				{/* display preview of images */}
@@ -265,10 +225,7 @@ export default function CreateAlbum() {
 				>
 					odeslat
 				</button>
-				<SubmitAlbumButton
-					oneCheck={oneCheck}
-					values={{title, description, images}}
-				/>
+				<SubmitAlbumButton images={images} />
 			</form>
 		</div>
 	);

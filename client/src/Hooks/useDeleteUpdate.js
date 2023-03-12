@@ -14,6 +14,16 @@ export default function useDeleteUpdate(buttonName) {
 			console.log('Deleting with button', buttonName);
 			console.log('Deleting item with id: ' + album.album_id);
 			console.table(album);
+			console.log('this is the album');
+			const response = await axios.delete(
+				`/api/deleteAlbum/${album.album_id}/${album.originalSlug}`
+			);
+			setAlbum(() => {
+				return {};
+			});
+			console.log(response.status);
+			console.log(response.data);
+			navigate('/admin/galerie');
 		} catch (error) {
 			console.error(error);
 		}
@@ -24,11 +34,17 @@ export default function useDeleteUpdate(buttonName) {
 			console.log('Updating with button', buttonName);
 			console.log('Updating item with id: ' + album.album_id);
 			console.table(album);
-			// const response = await axios.put(`/api/updateAlbum`, album);
-			// setAlbum(() => {
-			// 	return {};
-			// });
-			// console.log(response.status);
+			const response = await axios.put(`/api/updateAlbum`, album);
+			setAlbum(() => {
+				return {};
+			});
+			console.log(response.status);
+			console.log(response.data);
+
+			// Reload the window after 7 seconds
+			setTimeout(() => {
+				window.location.reload();
+			}, 7000);
 		} catch (error) {
 			console.error(error);
 		}
@@ -39,13 +55,14 @@ export default function useDeleteUpdate(buttonName) {
 			console.log(post.id);
 			const idDeletion = await post.id;
 			const copyPostList = await postList;
-			await axios.delete(`/api/deletePost/${idDeletion}`);
+			const response = await axios.delete(`/api/deletePost/${idDeletion}`);
 			setPostList((prev) => {
 				prev = copyPostList.filter((post) => {
 					return post.id !== idDeletion;
 				});
 				return prev;
 			});
+			console.log(response.status);
 		} catch (error) {
 			console.log(error.message);
 		} finally {
@@ -78,6 +95,7 @@ export default function useDeleteUpdate(buttonName) {
 				return updatedPostList;
 			});
 			alert('Updating this data...', response.data);
+			window.location.reload();
 		} catch (error) {
 			console.log(error.message);
 		}
