@@ -2,11 +2,10 @@ import axios from 'axios';
 import {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import {useNavigate} from 'react-router-dom';
-import {useAdminUpdate} from '../../../context/AdminContext';
+
 import useSlugify from '../../../Hooks/useSlugify';
 import AddPhotosDropzone from './AddPhotosDropzone';
 import AlbumHeader from './AlbumHeader';
-import ErrorMsg from './ErrorMsg';
 import ImageCardsList from './ImageCardsList';
 import SubmitAlbumButton from './SubmitAlbumButton';
 
@@ -93,7 +92,6 @@ export default function CreateAlbum() {
 	useEffect(() => {
 		setTimeout(() => {
 			console.log('useEffect');
-			console.table(images);
 			/// Setting which is
 			setOneCheck(() => {
 				const pravda = images.some((image) => {

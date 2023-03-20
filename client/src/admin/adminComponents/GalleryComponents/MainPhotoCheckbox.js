@@ -12,10 +12,8 @@ export default function MainPhotoCheckbox({
 			type="checkbox"
 			onChange={(e) => {
 				checkboxed((current) => {
-					console.log(current);
 					const checkedItem = current.map((item) => {
 						if (item.name + '-checkbox' === e.target.name) {
-							console.log(item.name + '-checkbox');
 							return {...item, introductionary: !item.introductionary};
 						}
 

@@ -1,7 +1,6 @@
 import {Link} from 'react-router-dom';
 
 export default function AlbumCard({content}) {
-	console.log(content);
 	const renderPicture = (picture) => {
 		return (
 			picture.intro && (
@@ -10,10 +9,10 @@ export default function AlbumCard({content}) {
 					width={100}
 					height={100}
 					key={picture.public_id}
-					cloudName={process.env.REACT_APP_CLOUD_NAME}
-					publicId={picture.public_id}
+					// cloudName={process.env.REACT_APP_CLOUD_NAME}
+					// publicId={picture.public_id}
 					src={picture.secure_url}
-					alt=""
+					alt="Fotografie z alba"
 				/>
 			)
 		);

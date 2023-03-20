@@ -11,6 +11,9 @@ import Modal from '../adminComponents/Modal.js';
 import AdminPostDetail from '../adminPages/AdminPostDetail.js';
 import EmployeeForm from '../EmployeeForm.js';
 import AlbumList from '../adminComponents/GalleryComponents/AlbumList';
+import DocNav from '../adminComponents/DocumentsComponents/DocNav';
+import DocList from '../adminComponents/DocumentsComponents/DocList';
+import NewDoc from '../adminComponents/DocumentsComponents/NewDoc';
 
 export default function AdminRoutes() {
 	return (
@@ -75,7 +78,24 @@ export default function AdminRoutes() {
 						</div>
 					}
 				/>
-				<Route path="dokumenty" element={<h1>dokumety</h1>} />
+				<Route
+					path="dokumenty"
+					element={
+						<div className="item three">
+							<DocNav />
+							<DocList />
+						</div>
+					}
+				/>
+				<Route
+					path="dokumenty/new-doc"
+					element={
+						<div className="item three">
+							<DocNav />
+							<NewDoc />
+						</div>
+					}
+				/>
 			</RouterRoutes>
 		</div>
 	);

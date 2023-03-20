@@ -46,7 +46,7 @@ export default function AlbumList() {
 			<h1>Jednotlivá Alba</h1>
 			<div className="item two">
 				{albums.map((album) => (
-					<AlbumCard content={album} />
+					<AlbumCard key={album.album_title} content={album} />
 				))}
 			</div>
 		</>

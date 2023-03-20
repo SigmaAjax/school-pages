@@ -1,29 +1,30 @@
 import {NavLink} from 'react-router-dom';
 
-export default function AlbumNav() {
+export default function DocNav() {
 	return (
 		<nav>
 			<ul className="navbar ul">
 				<li className="nav-item">
 					<NavLink
 						exact={'true'}
+						strict
 						style={({isActive}) => {
-							return isActive ? {color: 'green'} : {};
+							return isActive ? {color: 'green'} : {color: 'blue'};
 						}}
-						to="/admin/galerie"
+						to="/admin/dokumenty"
 					>
-						Alba
+						Seznam všech dokumentů
 					</NavLink>
 				</li>
 				<li className="nav-item">
 					<NavLink
 						exact={'true'}
 						style={({isActive}) => {
-							return isActive ? {color: 'green'} : {};
+							return isActive ? {color: 'green'} : {color: 'blue'};
 						}}
-						to="/admin/galerie/newAlbum"
+						to="/admin/dokumenty/new-doc"
 					>
-						Vytvoř Album
+						Přidat nový dokument
 					</NavLink>
 				</li>
 			</ul>

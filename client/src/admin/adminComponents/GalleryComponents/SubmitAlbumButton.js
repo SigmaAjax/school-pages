@@ -3,7 +3,6 @@ export default function SubmitAlbumButton({images}) {
 		if (image.introductionary === true) return true;
 		return false;
 	});
-	console.log(oneCheck);
 
 	return (
 		<button type="submit" disabled={!oneCheck}>
