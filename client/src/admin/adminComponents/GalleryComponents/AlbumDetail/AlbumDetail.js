@@ -12,7 +12,6 @@ import AlbumDescription from './AlbumDescription';
 import CloudinaryImageCardsList from './CloudinaryImageCardsList';
 
 export default function AlbumDetail() {
-	const navigate = useNavigate();
 	const {album} = useAdmin();
 	const {setIsOpenModal, setButtonName, setAlbum} = useAdminUpdate();
 	/// usState and Params

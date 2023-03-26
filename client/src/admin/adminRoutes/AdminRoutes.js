@@ -12,8 +12,8 @@ import AdminPostDetail from '../adminPages/AdminPostDetail.js';
 import EmployeeForm from '../EmployeeForm.js';
 import AlbumList from '../adminComponents/GalleryComponents/AlbumList';
 import DocNav from '../adminComponents/DocumentsComponents/DocNav';
-import DocList from '../adminComponents/DocumentsComponents/DocList';
 import NewDoc from '../adminComponents/DocumentsComponents/NewDoc';
+import ListOfAllDocuments from '../adminComponents/DocumentsComponents/ListOfAllDocuments';
 
 export default function AdminRoutes() {
 	return (
@@ -83,7 +83,7 @@ export default function AdminRoutes() {
 					element={
 						<div className="item three">
 							<DocNav />
-							<DocList />
+							<ListOfAllDocuments />
 						</div>
 					}
 				/>
