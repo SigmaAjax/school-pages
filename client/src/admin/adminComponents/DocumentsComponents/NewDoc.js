@@ -11,6 +11,7 @@ export default function NewDoc() {
 
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
 		let uniqueDocs = [];
+		console.table(acceptedFiles);
 		acceptedFiles.forEach((file) => {
 			const isDuplicate = uniqueDocs.some(
 				(doc) => doc.name === file.name && doc.size === file.size

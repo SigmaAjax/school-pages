@@ -17,26 +17,4 @@ router.post('/upload/files', upload.array('files'), (req, res) => {
 	}
 });
 
-// GET
-router.get('/documents', (req, res) => {
-	fs.readdir(documentsDir, (err, filenames) => {
-		if (err) {
-			console.error('Error reading documents directory:', err);
-			res.status(500).json({message: 'Error reading directory'});
-		} else {
-			const files = filenames.map((filename) => {
-				const filePath = path.join(documentsDir, filename);
-				const stats = fs.statSync(filePath);
-				const mimeType = mime.lookup(filePath);
-				return {
-					name: filename,
-					size: stats.size,
-					type: mimeType,
-				};
-			});
-			res.json(files);
-		}
-	});
-});
-
 module.exports = router;

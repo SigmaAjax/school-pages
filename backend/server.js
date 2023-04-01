@@ -1,7 +1,4 @@
 const express = require('express');
-// const {albumDb, postDb} = require('./config/db.js');
-// const cloudinary = require('./config/cloudinary.js');
-// const {response} = require('express');
 require('dotenv').config();
 const port = process.env.NODE_ENV_PORT;
 
@@ -22,8 +19,11 @@ app.use('/api', postsRouter);
 app.use('/api', albumsRouter);
 app.use('/api', uploadFilesRouter);
 
-///
-// uploadFiles.js code here
+// Serve files from the documents directory
+const path = require('path');
+const documentsDir = path.join(__dirname, 'documents');
+console.log(documentsDir); /// output in console is correct "/Users/jj184/Desktop/School-Pages/school-pages/backend/documents"
+app.use('/files', express.static(documentsDir));
 
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);

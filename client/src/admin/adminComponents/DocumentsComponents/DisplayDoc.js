@@ -29,8 +29,11 @@ export default function DisplayDoc({doc}) {
 		console.log(fileExtension);
 		return viewableExtensions.includes(fileExtension);
 	};
-	console.log(URL.createObjectURL(doc)); // problematic line here
-	const fileURL = URL.createObjectURL(doc); // and here
+
+	const fileURL =
+		doc.path && doc.path.includes('documents/')
+			? `/${doc.path}`
+			: URL.createObjectURL(doc); // and here
 
 	return (
 		<Card sx={{minWidth: 275, marginBottom: 2, position: 'relative'}}>

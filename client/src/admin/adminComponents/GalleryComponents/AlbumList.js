@@ -12,6 +12,7 @@ export default function AlbumList() {
 				// adding delay
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				const response = await axios.get('/api/get/albums');
+				console.log({response: response});
 				const rawAlbums = response.data;
 
 				// code below is casting data from TINYINT  back into boolean value
