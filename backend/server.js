@@ -1,9 +1,25 @@
 const express = require('express');
 require('dotenv').config();
+const cors = require('cors');
 const port = process.env.NODE_ENV_PORT;
 
 const app = express();
 
+// Enable cors for all routes
+
+const corsOptions = {
+	origin: 'http://localhost:3000',
+	methods: ['GET', 'PUT', 'POST', 'DELETE'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+	next();
+});
 app.use(express.json({limit: '10mb', extended: true}));
 app.use(
 	express.urlencoded({limit: '10mb', extended: true, parameterLimit: 50000})
@@ -22,7 +38,8 @@ app.use('/api', uploadFilesRouter);
 // Serve files from the documents directory
 const path = require('path');
 const documentsDir = path.join(__dirname, 'documents');
-console.log(documentsDir); /// output in console is correct "/Users/jj184/Desktop/School-Pages/school-pages/backend/documents"
+console.log(documentsDir);
+/// output in console is correct "/Users/jj184/Desktop/School-Pages/school-pages/backend/documents"
 app.use('/files', express.static(documentsDir));
 
 app.listen(port, (res, req) => {

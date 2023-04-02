@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 
+// multer configuration file
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, 'documents/');
@@ -11,8 +12,9 @@ const storage = multer.diskStorage({
 			file.originalname,
 			fileExtension
 		);
-		const timestamp = Date.now();
-		const newFileName = `${fileNameWithoutExtension}-${timestamp}${fileExtension}`;
+		const encodedFileNameWithoutExtension = fileNameWithoutExtension;
+
+		const newFileName = `${encodedFileNameWithoutExtension}-${Date.now()}${fileExtension}`;
 		cb(null, newFileName);
 	},
 });

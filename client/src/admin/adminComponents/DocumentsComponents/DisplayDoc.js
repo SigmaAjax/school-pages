@@ -31,10 +31,10 @@ export default function DisplayDoc({doc}) {
 	};
 
 	const fileURL =
-		doc.path && doc.path.includes('documents/')
-			? `/${doc.path}`
+		doc.url && doc.url.includes('files/')
+			? `${doc.url}`
 			: URL.createObjectURL(doc); // and here
-
+	console.log(fileURL);
 	return (
 		<Card sx={{minWidth: 275, marginBottom: 2, position: 'relative'}}>
 			<CardContent>

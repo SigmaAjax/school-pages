@@ -68,7 +68,11 @@ export default function NewDoc() {
 	const handleUploadFiles = async () => {
 		const formData = new FormData();
 		docs.forEach((doc) => {
-			formData.append('files', doc);
+			const normalizedFilename = doc.name.normalize('NFC');
+			const encodedFilename = encodeURIComponent(normalizedFilename);
+			const file = new File([doc], encodedFilename, {type: doc.type});
+			console.log({file: file});
+			formData.append('files', file);
 		});
 
 		try {
