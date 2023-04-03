@@ -20,18 +20,25 @@ export default function ListOfAllDocuments() {
 	const fetchFiles = async () => {
 		try {
 			const response = await axios.get(`/api/documents`);
-			console.log({response_all_documents: response});
+
 			const files = await response.data;
 			const fileURLs = await Promise.all(
 				files.map(async (file) => {
+					console.log({encodedFilename: file.encodedFilename});
+					console.log(`${localhost}/api/file/${file.encodedFilename}`);
 					const fileResponse = await axios.get(
 						`${localhost}/api/file/${file.name}`
 					);
-					console.log({response_one_file: fileResponse});
+					// console.log({fileResponse_data: fileResponse.data});
+					// console.log({fileResponse: fileResponse});
 					const fileURL = fileResponse.data.url;
-					const originalFilename = fileResponse.data.originalFilename;
-					console.log({...file, url: fileURL, originalFilename});
-					return {...file, url: fileURL, originalFilename};
+					const encodedFilename = fileResponse.data.encodedFilename;
+
+					return {
+						...file,
+						url: fileURL,
+						encodedFilename: encodedFilename,
+					};
 				})
 			);
 
@@ -49,7 +56,7 @@ export default function ListOfAllDocuments() {
 		<div>
 			<h1>Uploaded Documents</h1>
 
-			{documents.length > 0 &&
+			{/* {documents.length > 0 &&
 				documents.map((doc) => {
 					return (
 						<div>
@@ -62,10 +69,10 @@ export default function ListOfAllDocuments() {
 							<button onClick={() => deleteFile(doc.name)}>Delete</button>
 						</div>
 					);
-				})}
+				})} */}
 
-			{/* {documents.length > 0 &&
-				documents.map((doc) => <DisplayDoc key={doc.name} doc={doc} />)} */}
+			{documents.length > 0 &&
+				documents.map((doc) => <DisplayDoc key={doc.name} doc={doc} />)}
 		</div>
 	);
 }

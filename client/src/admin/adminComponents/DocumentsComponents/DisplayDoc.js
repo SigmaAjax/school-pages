@@ -26,7 +26,6 @@ export default function DisplayDoc({doc}) {
 		const fileExtension = filename
 			.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 1)
 			.toLowerCase();
-		console.log(fileExtension);
 		return viewableExtensions.includes(fileExtension);
 	};
 
@@ -34,7 +33,8 @@ export default function DisplayDoc({doc}) {
 		doc.url && doc.url.includes('files/')
 			? `${doc.url}`
 			: URL.createObjectURL(doc); // and here
-	console.log(fileURL);
+	console.log({doc: doc, url: fileURL});
+
 	return (
 		<Card sx={{minWidth: 275, marginBottom: 2, position: 'relative'}}>
 			<CardContent>

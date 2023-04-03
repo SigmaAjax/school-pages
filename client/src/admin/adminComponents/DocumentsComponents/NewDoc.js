@@ -71,7 +71,6 @@ export default function NewDoc() {
 			const normalizedFilename = doc.name.normalize('NFC');
 			const encodedFilename = encodeURIComponent(normalizedFilename);
 			const file = new File([doc], encodedFilename, {type: doc.type});
-			console.log({file: file});
 			formData.append('files', file);
 		});
 

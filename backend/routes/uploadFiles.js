@@ -22,7 +22,6 @@ router.post('/upload/files', upload.array('files'), (req, res) => {
 router.get('/documents', (req, res) => {
 	fs.readdir(documentsDir, (err, filenames) => {
 		if (err) {
-			console.error('Error reading documents directory:', err);
 			res.status(500).json({message: 'Error reading directory'});
 		} else {
 			const files = filenames.map((filename) => {
@@ -30,9 +29,9 @@ router.get('/documents', (req, res) => {
 				const stats = fs.statSync(filePath);
 				const mimeType = mime.lookup(filePath);
 				const originalName = decodeURIComponent(filename);
-				console.log({originalName: originalName});
 				return {
 					name: originalName,
+					encodedFilename: filename,
 					size: stats.size,
 					type: mimeType,
 					path: filePath,
@@ -46,13 +45,12 @@ router.get('/documents', (req, res) => {
 // Serve the file to the client with the original filename
 
 router.get('/file/:filename', (req, res) => {
-	const encodedFilename = req.params.filename;
+	const encodedFilename = encodeURIComponent(req.params.filename);
 	const filename = decodeURIComponent(encodedFilename);
-	console.log({filename_decoded: filename});
 	const fileUrl = `${req.protocol}://${req.get(
 		'host'
 	)}/files/${encodedFilename}`;
-	res.json({name: filename, url: fileUrl});
+	res.json({name: filename, url: fileUrl, encodedFilename: encodedFilename});
 });
 
 // DELETE
