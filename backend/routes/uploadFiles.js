@@ -29,28 +29,21 @@ router.get('/documents', (req, res) => {
 				const stats = fs.statSync(filePath);
 				const mimeType = mime.lookup(filePath);
 				const originalName = decodeURIComponent(filename);
+				const fileUrl = `${req.protocol}://${req.get(
+					'host'
+				)}/files/${filename}`;
 				return {
 					name: originalName,
 					encodedFilename: filename,
 					size: stats.size,
 					type: mimeType,
 					path: filePath,
+					url: encodeURI(fileUrl),
 				};
 			});
 			res.json(files);
 		}
 	});
-});
-
-// Serve the file to the client with the original filename
-
-router.get('/file/:filename', (req, res) => {
-	const encodedFilename = encodeURIComponent(req.params.filename);
-	const filename = decodeURIComponent(encodedFilename);
-	const fileUrl = `${req.protocol}://${req.get(
-		'host'
-	)}/files/${encodedFilename}`;
-	res.json({name: filename, url: fileUrl, encodedFilename: encodedFilename});
 });
 
 // DELETE

@@ -38,9 +38,17 @@ app.use('/api', uploadFilesRouter);
 // Serve files from the documents directory
 const path = require('path');
 const documentsDir = path.join(__dirname, 'documents');
-console.log(documentsDir);
-/// output in console is correct "/Users/jj184/Desktop/School-Pages/school-pages/backend/documents"
-app.use('/files', express.static(documentsDir));
+
+// Middleware function to set the Content-Disposition header
+const setDownloadHeader = (req, res, next) => {
+	console.log({filename: decodeURIComponent(req.path.slice(1))});
+	const filename = decodeURIComponent(req.path.slice(1));
+	res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+	next();
+};
+
+// Serve files with the Content-Disposition header set to attachment
+app.use('/files', setDownloadHeader, express.static(documentsDir));
 
 app.listen(port, (res, req) => {
 	console.log('your port is ', port);
