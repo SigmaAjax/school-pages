@@ -3,12 +3,13 @@ import React, {useState, useEffect} from 'react';
 import NextZeroSelection from './adminComponents/FormComponents/NextZeroSelection.js';
 import {staffTree} from './staffTree.js';
 import FormStep from './adminComponents/FormComponents/FormStep.js';
-
-let timer;
+import {useAdmin, useAdminUpdate} from '../context/AdminContext.js';
 
 export default function EmployeeForm() {
-	const [staff, setStaff] = useState({});
+	//const [staff, setStaff] = useState({});
 	const [disabledPass, setDisabledPass] = useState(true); /// enable the pass button
+	const {staff, employee} = useAdmin();
+	const {setStaff, setEmployee} = useAdminUpdate();
 
 	const [sbor, vedeni] = staffTree;
 	const vedeniSub = vedeni.vedení;

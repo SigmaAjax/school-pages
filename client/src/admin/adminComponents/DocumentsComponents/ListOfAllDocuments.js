@@ -8,6 +8,7 @@ export default function ListOfAllDocuments() {
 	const [documents, setDocuments] = useState([]);
 
 	async function deleteFile(filename) {
+		console.log('delete file ' + encodeURIComponent(filename));
 		try {
 			await axios.delete(`/api/file/${encodeURIComponent(filename)}`);
 			// Refresh the list of files after successful deletion
@@ -39,23 +40,14 @@ export default function ListOfAllDocuments() {
 			<h1>Uploaded Documents</h1>
 
 			{documents.length > 0 &&
-				documents.map((doc) => {
-					console.log({url: doc.url});
-					return (
-						<div>
-							<h2>{doc.name}</h2>
-							<p>Size: {doc.size} bytes</p>
-							<p>Type: {doc.type}</p>
-							<a href={doc.url} download={doc.name}>
-								Download {doc.name}
-							</a>
-							<button onClick={() => deleteFile(doc.name)}>Delete</button>
-						</div>
-					);
-				})}
-
-			{/* {documents.length > 0 &&
-				documents.map((doc) => <DisplayDoc key={doc.name} doc={doc} />)} */}
+				documents.map((doc) => (
+					<DisplayDoc
+						key={doc.name}
+						doc={doc}
+						deleteFile={deleteFile}
+						showDeleteButton
+					/>
+				))}
 		</div>
 	);
 }

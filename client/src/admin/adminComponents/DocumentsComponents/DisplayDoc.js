@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import DocViewer from '@cyntler/react-doc-viewer';
 
-export default function DisplayDoc({doc}) {
+export default function DisplayDoc({doc, deleteFile, showDeleteButton}) {
 	const {formatBytes} = useFileSize();
 	const [showPreview, setShowPreview] = useState(false);
 
@@ -40,7 +40,16 @@ export default function DisplayDoc({doc}) {
 			<CardContent>
 				<Grid container justifyContent="center" alignItems="center">
 					<Grid item xs={12}>
-						<Typography variant="h6" align="center">
+						<Typography
+							variant="h6"
+							align="center"
+							sx={{
+								maxWidth: 'calc(100% - 80px)', // This can be adjusted based on the space you want to leave for the "Náhled" button
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								textOverflow: 'ellipsis',
+							}}
+						>
 							{doc.name}
 						</Typography>
 					</Grid>
@@ -50,7 +59,7 @@ export default function DisplayDoc({doc}) {
 				</Grid>
 			</CardContent>
 			<CardActions>
-				<Grid container justifyContent="center" alignItems="center">
+				<Grid container justifyContent="center" alignItems="center" spacing={2}>
 					<Grid item>
 						<a
 							href={fileURL}
@@ -66,18 +75,29 @@ export default function DisplayDoc({doc}) {
 							</Button>
 						</a>
 					</Grid>
-					{isViewable(doc.name) && (
-						<Box
-							sx={{
-								position: 'absolute',
-								top: 8,
-								right: 8,
-							}}
-						>
-							<Button onClick={togglePreview}>Náhled</Button>
-						</Box>
+					{showDeleteButton && (
+						<Grid item>
+							<Button
+								variant="contained"
+								color="secondary"
+								onClick={() => deleteFile(doc.name)}
+							>
+								Delete
+							</Button>
+						</Grid>
 					)}
 				</Grid>
+				{isViewable(doc.name) && (
+					<Box
+						sx={{
+							position: 'absolute',
+							top: 8,
+							right: 8,
+						}}
+					>
+						<Button onClick={togglePreview}>Náhled</Button>
+					</Box>
+				)}
 			</CardActions>
 
 			{showPreview && (

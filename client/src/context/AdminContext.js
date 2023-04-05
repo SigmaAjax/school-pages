@@ -20,8 +20,18 @@ export function AdminProvider({children}) {
 	const [post, setPost] = useState({}); // For one particular post
 	const [album, setAlbum] = useState({});
 	// Gallery states photo states
+	const [employee, setEmployee] = useState({});
+	const [staff, setStaff] = useState([]);
 
-	const valueStates = {isOpenModal, postList, post, buttonName, album};
+	const valueStates = {
+		isOpenModal,
+		postList,
+		post,
+		buttonName,
+		album,
+		employee,
+		staff,
+	};
 
 	const valueSetStates = {
 		setIsOpenModal,
@@ -29,6 +39,8 @@ export function AdminProvider({children}) {
 		setPost,
 		setButtonName,
 		setAlbum,
+		setEmployee,
+		setStaff,
 	};
 
 	return (

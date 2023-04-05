@@ -41,7 +41,9 @@ const documentsDir = path.join(__dirname, 'documents');
 
 // Middleware function to set the Content-Disposition header
 const setDownloadHeader = (req, res, next) => {
-	console.log({filename: decodeURIComponent(req.path.slice(1))});
+	console.log({
+		filename_setDownloadHeader: decodeURIComponent(req.path.slice(1)),
+	});
 	const filename = decodeURIComponent(req.path.slice(1));
 	res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
 	next();

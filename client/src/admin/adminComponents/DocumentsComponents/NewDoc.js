@@ -1,11 +1,13 @@
 import axios from 'axios';
 import {useCallback, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import AddDocsDropzone from './AddDocsDropzone';
 import DisplayDoc from './DisplayDoc';
 
 export default function NewDoc() {
 	const [docs, setDocs] = useState([]);
+	const navigate = useNavigate();
 
 	//// Callback creating images and checking for duplicates
 
@@ -83,10 +85,12 @@ export default function NewDoc() {
 
 			if (response.status === 200) {
 				alert('Files uploaded successfully');
+				navigate('/admin/dokumenty');
 			}
 		} catch (error) {
 			console.error('Error uploading files:', error);
-			alert('Error uploading files');
+			// Display the error message from the server
+			alert(error.response.data);
 		}
 	};
 
