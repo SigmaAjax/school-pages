@@ -5,6 +5,8 @@ import {staffTree} from './staffTree.js';
 import FormStep from './adminComponents/FormComponents/FormStep.js';
 import {useAdmin, useAdminUpdate} from '../context/AdminContext.js';
 
+let timer;
+
 export default function EmployeeForm() {
 	//const [staff, setStaff] = useState({});
 	const [disabledPass, setDisabledPass] = useState(true); /// enable the pass button

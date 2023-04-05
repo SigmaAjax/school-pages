@@ -1,5 +1,5 @@
 export const staffTree = {
-	label: 'Root',
+	label: 'Pracovní zařazení',
 	children: [
 		{
 			label: 'vedení',

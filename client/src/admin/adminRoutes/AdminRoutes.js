@@ -14,6 +14,7 @@ import AlbumList from '../adminComponents/GalleryComponents/AlbumList';
 import DocNav from '../adminComponents/DocumentsComponents/DocNav';
 import NewDoc from '../adminComponents/DocumentsComponents/NewDoc';
 import ListOfAllDocuments from '../adminComponents/DocumentsComponents/ListOfAllDocuments';
+import EmployeeFormNew from '../EmployeeFormNew';
 
 export default function AdminRoutes() {
 	return (
@@ -28,7 +29,7 @@ export default function AdminRoutes() {
 					path="zamestnanci"
 					element={
 						<div className="item three">
-							<EmployeeForm />
+							<EmployeeFormNew />
 						</div>
 					}
 				/>
