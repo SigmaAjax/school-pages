@@ -22,6 +22,7 @@ const renderOptions = (options, capitalize) => {
 const renderLayer = (
 	layerOptions,
 	layerName,
+	nextLayerName,
 	values,
 	handleChange,
 	capitalize
@@ -49,7 +50,8 @@ const renderLayer = (
 					layerOptions.children.find(
 						(child) => child.label === currentLayerValue
 					),
-					`${layerName}_child`,
+					nextLayerName,
+					`layer${parseInt(nextLayerName.slice(-1)) + 1}`,
 					values,
 					handleChange,
 					capitalize
@@ -66,7 +68,14 @@ const StaffPositionForm = ({title, staffTree, values, onChange}) => {
 			<CardContent>
 				<Typography variant="h6">{title}</Typography>
 				<Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-					{renderLayer(staffTree, 'layer1', values, onChange, capitalize)}
+					{renderLayer(
+						staffTree,
+						'layer1',
+						'layer2',
+						values,
+						onChange,
+						capitalize
+					)}
 				</Box>
 			</CardContent>
 		</Card>

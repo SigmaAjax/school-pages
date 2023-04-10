@@ -29,11 +29,13 @@ app.use(
 const postsRouter = require('./routes/posts');
 const albumsRouter = require('./routes/albums');
 const uploadFilesRouter = require('./routes/uploadFiles');
+const employeesRouter = require('./routes/employees');
 
 // Use routers
 app.use('/api', postsRouter);
 app.use('/api', albumsRouter);
 app.use('/api', uploadFilesRouter);
+app.use('/api', employeesRouter);
 
 // Serve files from the documents directory
 const path = require('path');

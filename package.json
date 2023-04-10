@@ -11,7 +11,8 @@
 		"client"
 	],
 	"scripts": {
-		"start": "concurrently \"yarn workspace backend start\" \"yarn workspace client start\" "
+		"start": "concurrently \"yarn workspace backend start\" \"yarn workspace client start\" ",
+		"client:start": "react-scripts start --open"
 	},
 	"devDependencies": {
 		"concurrently": "^7.4.0"

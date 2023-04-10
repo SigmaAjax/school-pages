@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {Button, Box} from '@mui/material';
-import {useAdminUpdate} from '../context/AdminContext';
+import {useAdmin, useAdminUpdate} from '../context/AdminContext';
 import ContactInfoForm from './adminComponents/FormComponents/ContactInfoForm';
-import StaffPositionForm from './adminComponents/FormComponents/StaffPositionForm';
-import {staffTree} from './staffTree';
+import StaffPositionEasy from './adminComponents/FormComponents/StaffPositionEasy';
+import axios from 'axios';
 
 export default function EmployeeFormNew() {
+	const {employee} = useAdmin();
 	const {setEmployee} = useAdminUpdate();
 	const [emailError, setEmailError] = useState(false);
 	const [phoneError, setPhoneError] = useState(false);
@@ -16,7 +17,7 @@ export default function EmployeeFormNew() {
 	}
 
 	function isValidPhoneNumber(phoneNumber) {
-		const phoneNumberRegex = /^\d{10,15}$/;
+		const phoneNumberRegex = /^((\+420|0)\d{2}|(\+420 )?\d{3}) ?\d{3} ?\d{3}$/;
 		return phoneNumberRegex.test(phoneNumber);
 	}
 
@@ -26,10 +27,10 @@ export default function EmployeeFormNew() {
 		academicTitle: '',
 		email: '',
 		phone: '',
-		layer1: '',
-		layer2: '',
-		layer3: '',
-		layer4: '',
+		funkce1: '',
+		funkce2: '',
+		funkce3: '',
+		funkce4: '',
 	});
 
 	const handleChange = (event) => {
@@ -37,7 +38,7 @@ export default function EmployeeFormNew() {
 		setFormValues((prevValues) => ({...prevValues, [name]: value}));
 	};
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		const isEmailValid = isValidEmail(formValues.email);
@@ -48,12 +49,20 @@ export default function EmployeeFormNew() {
 
 		if (isEmailValid && isPhoneValid) {
 			setEmployee(formValues);
+			try {
+				const response = await axios.post('/api/add/employees', formValues);
+				console.log(response.data);
+				alert(response.status);
+			} catch (error) {
+				console.error(error);
+				alert(error.message);
+			}
 		}
 	};
 
-	const handleStaffPositionChange = (name, value) => {
-		setFormValues((prevValues) => ({...prevValues, [name]: value}));
-	};
+	// const handleStaffPositionChange = (name, value) => {
+	// 	setFormValues((prevValues) => ({...prevValues, [name]: value}));
+	// };
 
 	return (
 		<>
@@ -79,13 +88,7 @@ export default function EmployeeFormNew() {
 					emailError={emailError}
 					phoneError={phoneError}
 				/>
-
-				<StaffPositionForm
-					title="Pracovní zařazení"
-					staffTree={staffTree}
-					values={formValues}
-					onChange={handleStaffPositionChange}
-				/>
+				<StaffPositionEasy onChange={handleChange} />
 				{/* Additional form steps will go here */}
 				<Box sx={{marginTop: 2}}>
 					<Button type="submit" variant="contained">

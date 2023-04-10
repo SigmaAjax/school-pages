@@ -6,8 +6,8 @@ export default function useDeleteUpdate(buttonName) {
 	const navigate = useNavigate();
 	var arrOfButtonName = buttonName.split('-');
 	//context states for updating state after deleting
-	const {postList, post, album} = useAdmin();
-	const {setPostList, setAlbum} = useAdminUpdate();
+	const {postList, post, album, employee} = useAdmin();
+	const {setPostList, setAlbum, setEmployee} = useAdminUpdate();
 
 	const deleteAlbum = async (album) => {
 		try {
