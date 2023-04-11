@@ -1,5 +1,3 @@
-import {useAdmin} from '../../../context/AdminContext';
-
 export default function SearchInput({searchWord}) {
 	//const {postList} = useAdmin();
 	return (

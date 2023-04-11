@@ -1,6 +1,7 @@
-import {Link} from 'react-router-dom';
+import {Link as RouterLink} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 import useDeleteUpdate from '../../Hooks/useDeleteUpdate';
+import {Box, Typography, Button} from '@mui/material';
 
 export default function Post({content, admin}) {
 	const {buttonName, post} = useAdmin();
@@ -9,27 +10,31 @@ export default function Post({content, admin}) {
 	const {updateOrDelete} = useDeleteUpdate(buttonName, content);
 
 	return (
-		<div className="container">
-			<div key={content.id} className="postContainer item two">
+		<Box>
+			<Box key={content.id} className="postContainer item two">
 				{admin ? (
-					<Link to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}>
-						<h2>{content.title}</h2>
-					</Link>
+					<RouterLink
+						to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
+					>
+						<Typography variant="h5">{content.title}</Typography>
+					</RouterLink>
 				) : (
-					<Link to={`/aktuality/${content.id}/${content.slug}`}>
-						<h2>{content.title}</h2>
-					</Link>
+					<RouterLink to={`/aktuality/${content.id}/${content.slug}`}>
+						<Typography variant="h5">{content.title}</Typography>
+					</RouterLink>
 				)}
 
-				<p>
+				<Typography>
 					{content.post_text.length > 200
 						? content.post_text.substring(0, 200) + '...'
 						: content.post_text}
-				</p>
-				<strong>{content.user_name}</strong>
+				</Typography>
+				<Typography variant="subtitle1" component="strong">
+					{content.user_name}
+				</Typography>
 				{admin && (
 					<>
-						<button
+						<Button
 							name="post-delete"
 							onClick={() => {
 								setIsOpenModal((prev) => {
@@ -40,12 +45,11 @@ export default function Post({content, admin}) {
 							}}
 						>
 							Vymazat příspěvek
-						</button>
-						<a
-							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
-							rel="noreferrer"
+						</Button>
+						<RouterLink
+							to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
 						>
-							<button
+							<Button
 								onClick={(e) => {
 									alert('Příspěvek bude upraven');
 									setButtonName((prev) => {
@@ -55,11 +59,11 @@ export default function Post({content, admin}) {
 								}}
 							>
 								Upravit příspěvek
-							</button>
-						</a>
+							</Button>
+						</RouterLink>
 					</>
 				)}
-			</div>
-		</div>
+			</Box>
+		</Box>
 	);
 }

@@ -1,91 +1,116 @@
 const express = require('express');
-const {postDb} = require('../config/db.js');
+const {postDbPool} = require('../config/db.js');
 const {response} = require('express');
 const router = express.Router();
 
+const query = (sql, args) => {
+	return new Promise((resolve, reject) => {
+		postDbPool.query(sql, args, (err, result) => {
+			if (err) {
+				return reject(err);
+			}
+			resolve(result);
+		});
+	});
+};
+
 router.get('/get', (req, res) => {
-	// get all posts request
-	postDb.query('SELECT * FROM posts', (err, result) => {
-		if (err) {
-			console.log(err);
-		}
-		res.send(result);
+	postDbPool.getConnection((err, connection) => {
+		if (err) throw err;
+		connection.query('SELECT * FROM posts', (err, result) => {
+			connection.release();
+			if (err) {
+				console.log(err);
+			}
+			res.send(result);
+		});
 	});
 });
 
 router.get('/get/:id/:titleSlug', (req, res) => {
-	// get one post ...  request choose one row according to slug and id
-
 	const id = req.params.id;
 	const slug = req.params.titleSlug;
 
-	postDb.query(
-		'SELECT * FROM posts WHERE id=? AND slug=?',
-		[id, slug],
-		(err, result) => {
-			if (err) {
-				console.log(err);
-			}
-			res.send(result);
-		}
-	);
-});
-
-router.post('/create', (req, res) => {
-	const text = req.body.text; //accessing variables from frontend
-	const title = req.body.title;
-	const userPass = req.body.userPass;
-	const date = req.body.date;
-	const date_updated = req.body.date; // It is a same because created date is equal to updated date
-	const slug = req.body.slug;
-
-	console.table({userPass, title, text, date, slug});
-
-	postDb.query(
-		'INSERT INTO posts (title, post_text, user_name, date_posted, date_updated, slug) VALUES (?,?,?,?,?,?)',
-		[title, text, userPass, date, date_updated, slug],
-		(err, res) => {
-			if (err) {
-				console.log(err);
-			}
-			console.log(res);
-		}
-	);
-});
-
-router.put('/updatePost', (req, res) => {
-	const id = req.body.id;
-	const text = req.body.text;
-	const title = req.body.title;
-	const userPass = req.body.userPass;
-	const slug = req.body.slug;
-	const post_updated = req.body.post_updated;
-
-	console.log(req.params.id);
-
-	postDb.query(
-		'UPDATE posts SET title=?, post_text=?, user_name=?, date_updated=?, slug=? WHERE id=?',
-		[title, text, userPass, post_updated, slug, id],
-		(err, result) => {
-			if (err) {
-				console.log(err);
-			} else {
+	postDbPool.getConnection((err, connection) => {
+		if (err) throw err;
+		connection.query(
+			'SELECT * FROM posts WHERE id=? AND slug=?',
+			[id, slug],
+			(err, result) => {
+				connection.release();
+				if (err) {
+					console.log(err);
+				}
 				res.send(result);
 			}
-		}
-	);
+		);
+	});
 });
 
-router.delete('/deletePost/:id', (req, res) => {
-	const id = req.params.id;
-	console.log(id);
-	postDb.query('DELETE FROM posts WHERE id = ?', id, (err, result) => {
-		if (err) {
-			console.log(err);
+router.post('/create', async (req, res) => {
+	const {text, title, userPass, date, slug} = req.body;
+	const date_updated = date;
+
+	try {
+		// Assuming 'postDbPool.query()' already returns a promise
+		const result = await query(
+			'INSERT INTO posts (title, post_text, user_name, date_posted, date_updated, slug) VALUES (?, ?, ?, ?, ?, ?)',
+			[title, text, userPass, date, date_updated, slug]
+		);
+		console.log(result);
+		res
+			.status(200)
+			.json({message: 'Post created successfully', result: result});
+	} catch (err) {
+		console.log(err);
+		res
+			.status(500)
+			.json({message: 'An error occurred while creating the post'});
+	}
+});
+
+router.put('/updatePost', async (req, res) => {
+	const {id, text, title, userPass, slug, post_updated} = req.body;
+
+	try {
+		const result = await query(
+			'UPDATE posts SET title=?, post_text=?, user_name=?, date_updated=?, slug=? WHERE id=?',
+			[title, text, userPass, post_updated, slug, id]
+		);
+
+		if (result.affectedRows > 0) {
+			res
+				.status(200)
+				.json({message: 'Post updated successfully', result: result});
 		} else {
-			res.send(result);
+			res.status(404).json({message: `Post with id ${id} not found.`});
 		}
-	});
+	} catch (err) {
+		console.log(err);
+		res
+			.status(500)
+			.json({message: 'An error occurred while updating the post.'});
+	}
+});
+
+router.delete('/deletePost/:id', async (req, res) => {
+	const id = req.params.id;
+
+	try {
+		// Assuming 'postDbPool.query()' already returns a promise
+		const result = await query('DELETE FROM posts WHERE id = ?', id);
+
+		if (result.affectedRows > 0) {
+			res.status(200).json({message: `Post with id ${id} has been deleted.`});
+		} else {
+			res.status(404).json({message: `Post with id ${id} not found.`});
+		}
+	} catch (err) {
+		console.log(err);
+		res
+			.status(500)
+			.json({message: 'An error occurred while deleting the post.'});
+	}
 });
 
 module.exports = router;

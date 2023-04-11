@@ -54,14 +54,14 @@ export default function useDeleteUpdate(buttonName) {
 		try {
 			console.log(post.id);
 			const idDeletion = await post.id;
-			const copyPostList = await postList;
 			const response = await axios.delete(`/api/deletePost/${idDeletion}`);
-			setPostList((prev) => {
-				prev = copyPostList.filter((post) => {
-					return post.id !== idDeletion;
+			if (response.status === 200) {
+				setPostList((prev) => {
+					return prev.filter((post) => {
+						return post.id !== idDeletion;
+					});
 				});
-				return prev;
-			});
+			}
 			console.log(response.status);
 		} catch (error) {
 			console.log(error.message);
@@ -75,7 +75,7 @@ export default function useDeleteUpdate(buttonName) {
 		try {
 			console.log('Updating post with button', buttonName);
 			console.log('Updating item with id: ' + post.id);
-			console.table(post);
+			// console.table(post);
 			const response = await axios.put('/api/updatePost', {
 				id: post.id,
 				userPass: post.user_name,
@@ -84,18 +84,20 @@ export default function useDeleteUpdate(buttonName) {
 				slug: post.slug,
 				post_updated: post.post_updated,
 			});
-			setPostList((prev) => {
-				const updatedPostList = prev.map((item) => {
-					if (item.id === post.id) {
-						return {...item, ...post};
-					} else {
-						return item;
-					}
+			if (response.status === 200) {
+				setPostList((prev) => {
+					const updatedPostList = prev.map((item) => {
+						if (item.id === post.id) {
+							return {...item, ...post};
+						} else {
+							return item;
+						}
+					});
+					return updatedPostList;
 				});
-				return updatedPostList;
-			});
-			alert('Updating this data...', response.data);
-			window.location.reload();
+				alert('Updating this data...', response.data);
+				window.location.reload();
+			}
 		} catch (error) {
 			console.log(error.message);
 		}

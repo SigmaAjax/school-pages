@@ -3,11 +3,11 @@ import {useEffect, useState} from 'react';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 
 import AdminPostList from '../adminComponents/PostComponents/AdminPostList';
-import CreatePostNav from '../adminComponents/PostComponents/CreatePostNav';
 import SearchInput from '../adminComponents/PostComponents/SearchInput';
 import SelectInput from '../adminComponents/PostComponents/SelectInput';
 import SelectYearMonth from '../adminComponents/PostComponents/SelectYearMonth';
 import {Loader} from 'client/src/Loader.js';
+import SubNavigation from '../Subnavigation';
 
 export default function AdminNews() {
 	const {setButtonName, setPostList, setPost} = useAdminUpdate();
@@ -54,7 +54,20 @@ export default function AdminNews() {
 		<div className="item two">
 			<>
 				<h1>Aktuality</h1>
-				<CreatePostNav />{' '}
+				<SubNavigation
+					navItems={[
+						{
+							exact: true,
+							to: '/admin/newPost',
+							label: 'Vytvoř aktualitu nebo příspěvek',
+						},
+						{
+							exact: false,
+							to: '/admin/newPost/admin-posts',
+							label: 'Uprav aktualitu nebo příspěvek',
+						},
+					]}
+				/>{' '}
 			</>
 			<label htmlFor="search">Vyhledávání příspěvků</label>
 			<SearchInput searchWord={setSearchPhrase} />

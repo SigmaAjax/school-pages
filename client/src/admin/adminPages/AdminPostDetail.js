@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useEffect, useRef, useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {Link as RouterLink, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 import useCap from '../../Hooks/useCap';
 import useSlugify from '../../Hooks/useSlugify';
@@ -18,19 +18,36 @@ export default function AdminPostDetail() {
 	// Enable update button logic hook
 	const [enableUpdate, setEnableUpdate] = useState(true);
 	// loading hook
+	const [errorMessage, setErrorMessage] = useState(null);
 
 	useEffect(() => {
 		const controller = new AbortController();
-		axios
-			.get(`/api/get/${id}/${titleSlug}`, {signal: controller.signal})
-			.then((response) => {
-				setPost(() => {
-					return response.data[0];
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(`/api/get/${id}/${titleSlug}`, {
+					signal: controller.signal,
 				});
-			})
-			.catch((error) => {
+
+				if (response.status === 200) {
+					setPost(() => {
+						return response.data[0];
+					});
+				} else {
+					setErrorMessage(`Error: ${response.status} - ${response.statusText}`);
+				}
+			} catch (error) {
 				console.log(error);
-			});
+				if (error.response) {
+					setErrorMessage(
+						`Error: ${error.response.status} - ${error.response.statusText}`
+					);
+				} else {
+					setErrorMessage('Error: Failed to fetch data.');
+				}
+			}
+		};
+
+		fetchData();
 
 		return () => {
 			controller.abort();
@@ -66,7 +83,9 @@ export default function AdminPostDetail() {
 				{' '}
 				{Object.values(post).length > 0 ? (
 					<>
+						<label htmlFor="post-title">Nadpis</label>
 						<input
+							id="post-title"
 							ref={title}
 							type="text"
 							defaultValue={post.title}
@@ -76,7 +95,11 @@ export default function AdminPostDetail() {
 									: setEnableUpdate((previous) => false);
 							}}
 						/>
+						<label htmlFor="post-text">Text příspěvku</label>
 						<textarea
+							id="post-text"
+							rows="20"
+							cols={'60'}
 							ref={post_text}
 							defaultValue={capitalize(post.post_text)}
 							onChange={(e) => {
@@ -88,7 +111,11 @@ export default function AdminPostDetail() {
 					</>
 				) : (
 					<>
-						<p>Nepodařilo se nic načíst</p>
+						<p>
+							{errorMessage
+								? `Nepodařilo se nic načíst: ${errorMessage}`
+								: 'Nepodařilo se nic načíst'}
+						</p>
 					</>
 				)}
 				<button
@@ -125,7 +152,7 @@ export default function AdminPostDetail() {
 				>
 					Upravit
 				</button>
-				<Link to="/admin/newPost/admin-posts">Go back</Link>
+				<RouterLink to="/admin/newPost/admin-posts">Go back</RouterLink>
 			</form>
 		</>
 	);

@@ -195,8 +195,8 @@ export default function CreateAlbum() {
 	};
 
 	return (
-		<div className="item three">
-			<form className="form-group" onSubmit={submitAlbum}>
+		<div>
+			<form onSubmit={submitAlbum}>
 				<AlbumHeader title={setTitle} description={setDescription} />
 				<AddPhotosDropzone
 					isDragActive={isDragActive}

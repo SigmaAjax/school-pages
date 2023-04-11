@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {useEffect} from 'react';
-import CreatePostNav from '../admin/adminComponents/PostComponents/CreatePostNav';
 import Post from '../components/ui/Post';
 import {useAdmin, useAdminUpdate} from '../context/AdminContext';
+import SubNavigation from '../admin/Subnavigation';
 
 export default function News({admin}) {
 	//const [postList, setPostList] = useState([]);
@@ -29,7 +29,20 @@ export default function News({admin}) {
 			{admin ? (
 				<>
 					<h1>Aktuality</h1>
-					<CreatePostNav />{' '}
+					<SubNavigation
+						navItems={[
+							{
+								exact: true,
+								to: '/admin/newPost',
+								label: 'Vytvoř aktualitu nebo příspěvek',
+							},
+							{
+								exact: false,
+								to: '/admin/newPost/admin-posts',
+								label: 'Uprav aktualitu nebo příspěvek',
+							},
+						]}
+					/>{' '}
 				</>
 			) : (
 				<h1>Co nového? aka Aktuality</h1>

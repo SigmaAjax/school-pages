@@ -1,7 +1,4 @@
-import {useAdmin} from '../../../context/AdminContext';
-
 export default function SelectInput({orderedPostFunc, orderedListOfPosts}) {
-	//const {postList} = useAdmin();
 	const copyPosts = [...orderedListOfPosts];
 
 	return (

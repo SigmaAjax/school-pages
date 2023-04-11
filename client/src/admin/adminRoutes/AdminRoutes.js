@@ -5,16 +5,14 @@ import CreatePost from '../adminComponents/PostComponents/CreatePost';
 import AdminNews from '../adminPages/AdminNews.js';
 import AdminSidebar from '../adminComponents/AdminSidebar.js';
 import AlbumDetail from '../adminComponents/GalleryComponents/AlbumDetail/AlbumDetail.js';
-import AlbumNav from '../adminComponents/GalleryComponents/AlbumNav.js';
 import CreateAlbum from '../adminComponents/GalleryComponents/CreateAlbum.js';
 import Modal from '../adminComponents/Modal.js';
 import AdminPostDetail from '../adminPages/AdminPostDetail.js';
-import EmployeeForm from '../EmployeeForm.js';
 import AlbumList from '../adminComponents/GalleryComponents/AlbumList';
-import DocNav from '../adminComponents/DocumentsComponents/DocNav';
 import NewDoc from '../adminComponents/DocumentsComponents/NewDoc';
 import ListOfAllDocuments from '../adminComponents/DocumentsComponents/ListOfAllDocuments';
 import EmployeeFormNew from '../EmployeeFormNew';
+import SubNavigation from '../Subnavigation';
 
 export default function AdminRoutes() {
 	return (
@@ -57,7 +55,21 @@ export default function AdminRoutes() {
 					path="galerie/*"
 					element={
 						<div className="item three">
-							<AlbumNav />
+							<SubNavigation
+								className="album-nav"
+								navItems={[
+									{
+										exact: true,
+										to: '/admin/galerie',
+										label: 'Alba',
+									},
+									{
+										exact: true,
+										to: '/admin/galerie/newAlbum',
+										label: 'Vytvoř Album',
+									},
+								]}
+							/>
 							<AlbumList />
 						</div>
 					}
@@ -74,7 +86,21 @@ export default function AdminRoutes() {
 					path="galerie/newAlbum"
 					element={
 						<div className="item three">
-							<AlbumNav />
+							<SubNavigation
+								className="album-nav"
+								navItems={[
+									{
+										exact: true,
+										to: '/admin/galerie',
+										label: 'Alba',
+									},
+									{
+										exact: true,
+										to: '/admin/galerie/newAlbum',
+										label: 'Vytvoř Album',
+									},
+								]}
+							/>
 							<CreateAlbum />
 						</div>
 					}
@@ -83,7 +109,20 @@ export default function AdminRoutes() {
 					path="dokumenty"
 					element={
 						<div className="item three">
-							<DocNav />
+							<SubNavigation
+								navItems={[
+									{
+										exact: true,
+										to: '/admin/dokumenty',
+										label: 'Seznam všech dokumentů',
+									},
+									{
+										exact: true,
+										to: '/admin/dokumenty/new-doc',
+										label: 'Přidat nový dokument',
+									},
+								]}
+							/>
 							<ListOfAllDocuments />
 						</div>
 					}
@@ -92,7 +131,20 @@ export default function AdminRoutes() {
 					path="dokumenty/new-doc"
 					element={
 						<div className="item three">
-							<DocNav />
+							<SubNavigation
+								navItems={[
+									{
+										exact: true,
+										to: '/admin/dokumenty',
+										label: 'Seznam všech dokumentů',
+									},
+									{
+										exact: true,
+										to: '/admin/dokumenty/new-doc',
+										label: 'Přidat nový dokument',
+									},
+								]}
+							/>
 							<NewDoc />
 						</div>
 					}

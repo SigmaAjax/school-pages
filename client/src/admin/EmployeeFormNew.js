@@ -67,28 +67,34 @@ export default function EmployeeFormNew() {
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
-				<ContactInfoForm
-					title="Základní údaje"
-					fields={[
-						{name: 'name', label: 'Jméno', required: true},
-						{name: 'surname', label: 'Příjmení', required: true},
-						{name: 'academicTitle', label: 'Akademický titul'},
-					]}
-					values={formValues}
-					onChange={handleChange}
-				/>
-				<ContactInfoForm
-					title="Kontaktní údaje"
-					fields={[
-						{name: 'email', label: 'Email'},
-						{name: 'phone', label: 'Telefon'},
-					]}
-					values={formValues}
-					onChange={handleChange}
-					emailError={emailError}
-					phoneError={phoneError}
-				/>
-				<StaffPositionEasy onChange={handleChange} />
+				<Box mb={2}>
+					<ContactInfoForm
+						title="Základní údaje"
+						fields={[
+							{name: 'name', label: 'Jméno', required: true},
+							{name: 'surname', label: 'Příjmení', required: true},
+							{name: 'academicTitle', label: 'Akademický titul'},
+						]}
+						values={formValues}
+						onChange={handleChange}
+					/>
+				</Box>
+				<Box mb={2}>
+					<ContactInfoForm
+						title="Kontaktní údaje"
+						fields={[
+							{name: 'email', label: 'Email'},
+							{name: 'phone', label: 'Telefon'},
+						]}
+						values={formValues}
+						onChange={handleChange}
+						emailError={emailError}
+						phoneError={phoneError}
+					/>
+				</Box>
+				<Box mb={2}>
+					<StaffPositionEasy onChange={handleChange} />
+				</Box>
 				{/* Additional form steps will go here */}
 				<Box sx={{marginTop: 2}}>
 					<Button type="submit" variant="contained">

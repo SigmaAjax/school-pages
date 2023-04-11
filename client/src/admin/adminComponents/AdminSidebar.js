@@ -7,7 +7,6 @@ export default function AdminSidebar() {
 		<div className="item one sidebar">
 			<ul className="SidebarList">
 				{SidebarData.map((value, key) => {
-					//console.table(window.location);
 					return (
 						<li className="SidebarItem" key={key}>
 							<NavLink
