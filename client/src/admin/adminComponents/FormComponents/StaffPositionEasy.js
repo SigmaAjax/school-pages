@@ -15,7 +15,7 @@ const renderInputFields = (numFields, onChange) => {
 		fields.push(
 			<TextField
 				key={i}
-				label={`Funkce ${i + 1}`}
+				label={`Pracovní zařazení ${i + 1}`}
 				variant="outlined"
 				fullWidth
 				onChange={onChange}
