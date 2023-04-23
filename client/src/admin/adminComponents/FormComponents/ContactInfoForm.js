@@ -20,8 +20,17 @@ const ContactInfoForm = ({
 							name={field.name}
 							label={field.label}
 							required={field.required}
-							value={values[field.name]}
+							value={
+								field.name === 'phone'
+									? values[field.name].replace(
+											/(\d{3})(\d{3})(\d{3})?/,
+											(match, p1, p2, p3) =>
+												p3 ? `${p1} ${p2} ${p3}` : p2 ? `${p1} ${p2}` : p1
+									  )
+									: values[field.name]
+							}
 							onChange={onChange}
+							inputProps={{maxLength: field.name === 'phone' ? 11 : undefined}}
 							error={
 								field.name === 'email'
 									? emailError
@@ -36,7 +45,7 @@ const ContactInfoForm = ({
 										: ''
 									: field.name === 'phone'
 									? phoneError
-										? 'Prosím zadejte platný formát telefonního čísla'
+										? 'Prosím zadejte platný formát telefonního čísla, bez předvolby +420'
 										: ''
 									: ''
 							}

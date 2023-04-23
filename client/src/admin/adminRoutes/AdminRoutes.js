@@ -13,6 +13,7 @@ import NewDoc from '../adminComponents/DocumentsComponents/NewDoc';
 import ListOfAllDocuments from '../adminComponents/DocumentsComponents/ListOfAllDocuments';
 import EmployeeFormNew from '../EmployeeFormNew';
 import SubNavigation from '../Subnavigation';
+import ListOfStaff from '../adminComponents/FormComponents/ListOfStaff/ListOfStaff';
 
 export default function AdminRoutes() {
 	return (
@@ -24,9 +25,47 @@ export default function AdminRoutes() {
 			{/* <div className="item two">flex item 2</div> */}
 			<RouterRoutes>
 				<Route
-					path="zamestnanci"
+					path="zamestnanci/*"
 					element={
 						<div className="item three">
+							<SubNavigation
+								className="album-nav"
+								navItems={[
+									{
+										exact: true,
+										to: '/admin/zamestnanci',
+										label: 'Zaměstnanci',
+									},
+									{
+										exact: true,
+										to: '/admin/zamestnanci/newStaff',
+										label: 'Přidat zaměstnance',
+									},
+								]}
+							/>
+							<ListOfStaff />
+						</div>
+					}
+				/>
+				<Route
+					path="/zamestnanci/newStaff"
+					element={
+						<div className="item three">
+							<SubNavigation
+								className="album-nav"
+								navItems={[
+									{
+										exact: true,
+										to: '/admin/zamestnanci',
+										label: 'Zaměstnanci',
+									},
+									{
+										exact: true,
+										to: '/admin/zamestnanci/newStaff',
+										label: 'Přidat zaměstnance',
+									},
+								]}
+							/>
 							<EmployeeFormNew />
 						</div>
 					}
