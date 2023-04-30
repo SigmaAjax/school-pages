@@ -38,10 +38,6 @@ export default function Modal({children}) {
 	// 		: console.log('Updating post with button', nameOfButton); //updatePost funtion
 	// }
 
-	const deletePost = (id) => {
-		console.log('Deleting post with button', buttonName);
-	};
-
 	return ReactDom.createPortal(
 		<div style={OVERLAY_STYLES}>
 			<div style={MODAL_STYLES}>

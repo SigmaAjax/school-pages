@@ -14,6 +14,7 @@ import ListOfAllDocuments from '../adminComponents/DocumentsComponents/ListOfAll
 import EmployeeFormNew from '../EmployeeFormNew';
 import SubNavigation from '../Subnavigation';
 import ListOfStaff from '../adminComponents/FormComponents/ListOfStaff/ListOfStaff';
+import StaffDetail from '../adminComponents/FormComponents/StaffDetail/StaffDetail';
 
 export default function AdminRoutes() {
 	return (
@@ -48,7 +49,15 @@ export default function AdminRoutes() {
 					}
 				/>
 				<Route
-					path="/zamestnanci/newStaff"
+					path="zamestnanci/zamestnanec/:id"
+					element={
+						<div className="item three">
+							<StaffDetail />
+						</div>
+					}
+				/>
+				<Route
+					path="zamestnanci/newStaff"
 					element={
 						<div className="item three">
 							<SubNavigation
@@ -70,6 +79,7 @@ export default function AdminRoutes() {
 						</div>
 					}
 				/>
+
 				<Route
 					path="newPost/*"
 					element={

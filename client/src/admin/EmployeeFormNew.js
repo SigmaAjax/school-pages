@@ -1,20 +1,15 @@
 import React, {useState} from 'react';
 import {Button, Box} from '@mui/material';
-//import {useAdmin, useAdminUpdate} from '../context/AdminContext';
 import ContactInfoForm from './adminComponents/FormComponents/ContactInfoForm';
 import StaffPositionEasy from './adminComponents/FormComponents/StaffPositionEasy';
 import axios from 'axios';
 
-const encodeFormValues = (formValues, inputFields) => {
-	return Object.entries(formValues).reduce((encodedValues, [key, value]) => {
+const processFormValues = (formValues, inputFields) => {
+	return Object.entries(formValues).reduce((processedValues, [key, value]) => {
 		// Check if key starts with 'pozice' and remove it if its index is greater than inputFields
 		const poziceMatch = key.match(/^pozice(\d+)/);
 		if (poziceMatch && parseInt(poziceMatch[1], 10) > inputFields) {
-			return encodedValues; // Skip adding this key to the encodedValues
-		}
-
-		if (key.startsWith('pozice') || key === 'name' || key === 'surname') {
-			value = encodeURIComponent(value);
+			return processedValues; // Skip adding this key to the processedValues
 		}
 
 		if (key === 'phone') {
@@ -24,14 +19,12 @@ const encodeFormValues = (formValues, inputFields) => {
 			value = value.replace(/\s/g, ''); // Remove spaces from the phone number
 		}
 
-		encodedValues[key] = value;
-		return encodedValues;
+		processedValues[key] = value;
+		return processedValues;
 	}, {});
 };
 
 export default function EmployeeFormNew() {
-	// const {employee} = useAdmin();
-	// const {setEmployee} = useAdminUpdate();
 	const [emailError, setEmailError] = useState(false);
 	const [phoneError, setPhoneError] = useState(false);
 	const [inputFields, setInputFields] = useState(1);
@@ -81,11 +74,11 @@ export default function EmployeeFormNew() {
 		setEmailError(!isEmailValid);
 		setPhoneError(!isPhoneValid);
 
-		const encodedValues = encodeFormValues(formValues, inputFields);
+		const processedValues = processFormValues(formValues, inputFields);
 
 		if (isEmailValid && isPhoneValid) {
 			try {
-				const response = await axios.post('/api/add/employee', encodedValues);
+				const response = await axios.post('/api/add/employee', processedValues);
 				console.log(response.data);
 				alert(response.status, response.message);
 			} catch (error) {
@@ -94,10 +87,6 @@ export default function EmployeeFormNew() {
 			}
 		}
 	};
-
-	// const handleStaffPositionChange = (name, value) => {
-	// 	setFormValues((prevValues) => ({...prevValues, [name]: value}));
-	// };
 
 	return (
 		<>

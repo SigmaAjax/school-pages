@@ -21,13 +21,13 @@ const ContactInfoForm = ({
 							label={field.label}
 							required={field.required}
 							value={
-								field.name === 'phone'
-									? values[field.name].replace(
+								field?.name === 'phone'
+									? values[field?.name].replace(
 											/(\d{3})(\d{3})(\d{3})?/,
 											(match, p1, p2, p3) =>
 												p3 ? `${p1} ${p2} ${p3}` : p2 ? `${p1} ${p2}` : p1
 									  )
-									: values[field.name]
+									: values[field?.name]
 							}
 							onChange={onChange}
 							inputProps={{maxLength: field.name === 'phone' ? 11 : undefined}}

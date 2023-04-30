@@ -6,23 +6,41 @@ import {
 	Box,
 	TextField,
 	IconButton,
+	Tooltip,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import {placeholder} from '@cloudinary/react';
 
-const renderInputFields = (numFields, onChange, placeholders) => {
+const renderInputFields = (
+	numFields,
+	onChange,
+	placeholders,
+	initialValues
+) => {
 	const fields = [];
 	for (let i = 0; i < numFields; i++) {
 		fields.push(
-			<TextField
-				key={i}
-				name={`pozice${i + 1}`}
-				label={`Pracovní pozice ${i + 1}`}
-				variant="outlined"
-				placeholder={placeholders[i]}
-				fullWidth
-				onChange={onChange}
-			/>
+			<Tooltip
+				title={placeholders[i] + ' Pouze jedno z těchto slov'}
+				key={placeholders[i]}
+			>
+				<TextField
+					key={i}
+					name={`pozice${i + 1}`}
+					label={`Pracovní pozice ${i + 1}`}
+					variant="outlined"
+					placeholder={placeholders[i]}
+					defaultValue={
+						initialValues[`funkce${i + 1}`] !== 'N/A'
+							? initialValues[`funkce${i + 1}`]
+							: ''
+					}
+					fullWidth
+					onChange={onChange}
+					helperText={placeholders[i] + ' Pouze jedno z těchto slov'}
+				/>
+			</Tooltip>
 		);
 	}
 	return fields;
@@ -33,6 +51,7 @@ export default function StaffPositionEasy({
 	handleAddInputField,
 	handleRemoveInputField,
 	onChange,
+	initialValues,
 }) {
 	const placeholders = [
 		'ředitel, zástupce_ředitele, gdpr',
@@ -62,7 +81,12 @@ export default function StaffPositionEasy({
 			<CardContent>
 				<Typography variant="h6">Pracovní zařazení</Typography>
 				<Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-					{renderInputFields(inputFields, onChange, humanReadable)}
+					{renderInputFields(
+						inputFields,
+						onChange,
+						humanReadable,
+						initialValues
+					)}
 					<IconButton
 						color="primary"
 						onClick={handleAddInputField}

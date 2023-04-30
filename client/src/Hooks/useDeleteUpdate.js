@@ -7,7 +7,8 @@ export default function useDeleteUpdate(buttonName) {
 	var arrOfButtonName = buttonName.split('-');
 	//context states for updating state after deleting
 	const {postList, post, album, employee} = useAdmin();
-	const {setPostList, setAlbum, setEmployee} = useAdminUpdate();
+	const {setPostList, setAlbum, setEmployee, setStaff, setButtonName} =
+		useAdminUpdate();
 
 	const deleteAlbum = async (album) => {
 		try {
@@ -104,6 +105,54 @@ export default function useDeleteUpdate(buttonName) {
 		navigate('/admin/newPost/admin-posts');
 	};
 
+	const deleteEmployee = async (employee) => {
+		setButtonName(() => {
+			return '';
+		});
+		try {
+			const idDelete = await employee.employee_id;
+			const response = await axios.delete(`/api/delete/employee/${idDelete}`);
+			if (response.status === 200) {
+				setStaff((prev) => {
+					return prev.filter((employee) => {
+						return employee.employee_id !== idDelete;
+					});
+				});
+
+				if (employee.page !== undefined && employee.page === 'detail-page') {
+					setTimeout(() => {
+						navigate('/admin/zamestnanci');
+					}, 2000);
+				}
+				// Reload the window after 7 seconds
+				setTimeout(() => {
+					window.location.reload();
+				}, 7000);
+			}
+			console.log(response.status);
+		} catch (error) {
+			console.log(error.message);
+		} finally {
+			console.log(
+				`Employee named ${employee.name} ${employee.surname} was deleted \nid: ${employee.employee_id}`
+			);
+		}
+	};
+
+	const updateEmployee = async (employee) => {
+		console.log(arrOfButtonName);
+		try {
+			console.log(employee);
+			console.log('employee updated');
+		} catch (error) {
+			console.log(error.message);
+		} finally {
+			console.log(
+				`Employee named ${employee.name} ${employee.surname} was UPDATED \nid: ${employee.employee_id}`
+			);
+		}
+	};
+
 	function updateOrDelete(id) {
 		switch (arrOfButtonName[0]) {
 			case 'post':
@@ -115,8 +164,8 @@ export default function useDeleteUpdate(buttonName) {
 
 			case 'employee':
 				return arrOfButtonName[1] === 'delete'
-					? console.log('employee deleted')
-					: console.log('employee updated');
+					? deleteEmployee(employee)
+					: updateEmployee(employee);
 
 				break;
 

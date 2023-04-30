@@ -7,26 +7,31 @@ import {
 	TableHead,
 	TableRow,
 	Paper,
+	IconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import {Loader} from '../../../../Loader';
-
-const decodeEmployee = (employee) => {
-	return Object.keys(employee).reduce((decodedEmployee, key) => {
-		const shouldDecode =
-			key === 'name' || key === 'surname' || key.startsWith('funkce');
-		const decodedKey = shouldDecode ? decodeURIComponent(key) : key;
-		decodedEmployee[decodedKey] = shouldDecode
-			? decodeURIComponent(employee[key])
-			: employee[key];
-		return decodedEmployee;
-	}, {});
-};
+import {useAdmin, useAdminUpdate} from '../../../../context/AdminContext';
+import {Link} from 'react-router-dom';
 
 export default function ListOfStaff() {
-	const [employees, setEmployees] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const {staff} = useAdmin();
+	const {setIsOpenModal, setButtonName, setEmployee, setStaff} =
+		useAdminUpdate();
+	//const [employees, setEmployees] = useState([]);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
+
+	const handleModal = (e) => {
+		setIsOpenModal((prev) => !prev);
+		setButtonName(e.currentTarget.name);
+		const employee = staff.filter((employee) => {
+			return employee.employee_id === parseInt(e.currentTarget.value);
+		});
+		setEmployee(...employee);
+	};
 
 	useEffect(() => {
 		fetchEmployees();
@@ -34,20 +39,13 @@ export default function ListOfStaff() {
 
 	const fetchEmployees = async () => {
 		try {
-			setLoading(true);
+			setLoading((prev) => !prev);
 			const response = await axios.get('/api/all/employees');
 			const data = await response.data;
-			console.log(data.data);
 
-			const decodedEmployees = data.data.map((employee) => {
-				console.log(employee);
-				return decodeEmployee(employee);
-			});
-
-			// Add a 2-second delay
 			setTimeout(() => {
-				setEmployees(decodedEmployees);
-				setLoading(false);
+				setStaff(data.data);
+				setLoading((prev) => !prev);
 			}, 2000);
 		} catch (error) {
 			console.error('Error fetching employees:', error);
@@ -86,27 +84,57 @@ export default function ListOfStaff() {
 						<TableCell>Email</TableCell>
 						<TableCell>Telefon</TableCell>
 						<TableCell>Pracovní pozice</TableCell>
+						<TableCell>Upravit zaměstnance</TableCell>
+						<TableCell>Smazat zaměstnance</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{employees.map((employee) => (
-						<TableRow key={employee.name}>
-							<TableCell>{employee.name}</TableCell>
-							<TableCell>{employee.surname}</TableCell>
-							<TableCell>{employee.academic_title}</TableCell>
-							<TableCell>{employee.email}</TableCell>
-							<TableCell>{employee.phone}</TableCell>
-							<TableCell>
-								{employee.funkce1}
-								<br />
-								{employee.funkce2 === 'N/A' ? '..' : employee.funkce2}
-								<br />
-								{employee.funkce3 === 'N/A' ? '...' : employee.funkce4}
-								<br />
-								{employee.funkce4 === 'N/A' ? '....' : employee.funkce4}
-							</TableCell>
-						</TableRow>
-					))}
+					{staff.map((employee) => {
+						return (
+							<TableRow key={employee.employee_id}>
+								<TableCell>{employee.name}</TableCell>
+								<TableCell>{employee.surname}</TableCell>
+								<TableCell>{employee.academic_title}</TableCell>
+								<TableCell>{employee.email}</TableCell>
+								<TableCell>{employee.phone}</TableCell>
+								<TableCell>
+									{employee.funkce1}
+									<br />
+									{employee.funkce2 === 'N/A' ? '..' : employee.funkce2}
+									<br />
+									{employee.funkce3 === 'N/A' ? '....' : employee.funkce4}
+									<br />
+									{employee.funkce4 === 'N/A' ? '......' : employee.funkce4}
+								</TableCell>
+								<TableCell>
+									<Link
+										to={`/admin/zamestnanci/zamestnanec/${employee.employee_id}`}
+									>
+										<IconButton
+											name="employee-update"
+											size="small"
+											color="primary"
+											aria-label="edit"
+										>
+											<EditIcon />
+										</IconButton>
+									</Link>
+								</TableCell>
+								<TableCell>
+									<IconButton
+										value={employee.employee_id}
+										name="employee-delete"
+										size="small"
+										color="error"
+										aria-label="delete"
+										onClick={(e) => handleModal(e)}
+									>
+										<DeleteIcon />
+									</IconButton>
+								</TableCell>
+							</TableRow>
+						);
+					})}
 				</TableBody>
 			</Table>
 		</TableContainer>

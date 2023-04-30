@@ -85,4 +85,48 @@ router.get('/all/employees', async (req, res) => {
 	}
 });
 
+router.get('/employee/get/:id', async (req, res) => {
+	const id = req.params.id;
+	try {
+		const result = await query(
+			'SELECT * FROM employees WHERE employee_id=?',
+			id
+		);
+		res.json({
+			status: 'success',
+			message: "Employee's detail fetched successfully",
+			employee: result,
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({
+			status: 'error',
+			message: "Error fetching employee' detail",
+			error: error.message,
+		});
+	}
+});
+
+router.delete('/delete/employee/:idDelete', async (req, res) => {
+	const id = req.params.idDelete;
+	try {
+		// Assuming 'employeesDbPool.query()' already returns a promise
+		const result = await query(
+			'DELETE FROM employees WHERE employee_id = ?',
+			id
+		);
+
+		if (result.affectedRows > 0) {
+			res.status(200).json({message: `Post with id ${id} has been deleted.`});
+		} else {
+			res.status(404).json({message: `Post with id ${id} not found.`});
+		}
+	} catch (err) {
+		console.log(err);
+		res
+			.status(500)
+			.json({message: 'An error occurred while deleting the post.'});
+	}
+});
+
 module.exports = router;
