@@ -1,6 +1,8 @@
 import React from 'react';
 import ErrorMsg from './ErrorMsg';
 
+import styles from '../../../pages/admin.module.css';
+
 export default function AddPhotosDropzone({
 	isDragActive,
 	photos,
@@ -16,7 +18,7 @@ export default function AddPhotosDropzone({
 					&#128071;
 				</p>
 			</label>
-			<div name="dropzone" className="dropzone" {...getRootProps()}>
+			<div name="dropzone" className={styles.dropzone} {...getRootProps()}>
 				<input {...getInputProps()} />
 				{isDragActive ? (
 					photos.length > 0 ? (

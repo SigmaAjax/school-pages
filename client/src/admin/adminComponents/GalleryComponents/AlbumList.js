@@ -2,6 +2,8 @@ import axios from 'axios';
 import {useEffect, useState} from 'react';
 import AlbumCard from './AlbumDetail/AlbumCard';
 
+import styles from './../../../pages/admin.module.css';
+
 export default function AlbumList() {
 	const [albums, setAlbums] = useState([]);
 	//const [photos, setPhotos] = useState([]);
@@ -45,7 +47,7 @@ export default function AlbumList() {
 	return (
 		<>
 			<h1>Jednotlivá Alba</h1>
-			<div className="item two">
+			<div className={`${styles.item} ${styles.two}`}>
 				{albums.map((album) => (
 					<AlbumCard key={album.album_title} content={album} />
 				))}

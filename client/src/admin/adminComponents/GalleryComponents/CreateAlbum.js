@@ -221,7 +221,7 @@ export default function CreateAlbum() {
 						console.table({album});
 					}}
 				>
-					odeslat
+					odeslat pouze konzole
 				</button>
 				<SubmitAlbumButton images={images} />
 			</form>

@@ -2,13 +2,15 @@ import {NavLink} from 'react-router-dom';
 
 import {SidebarData} from '../SidebarData.js';
 
+import styles from '../../pages/admin.module.css';
+
 export default function AdminSidebar() {
 	return (
-		<div className="item one sidebar">
-			<ul className="SidebarList">
+		<div className={`${styles.item} ${styles.one} ${styles.sidebar}`}>
+			<ul className={styles.SidebarList}>
 				{SidebarData.map((value, key) => {
 					return (
-						<li className="SidebarItem" key={key}>
+						<li className={styles.SidebarItem} key={key}>
 							<NavLink
 								style={({isActive}) => {
 									return isActive ? {color: 'red'} : {};

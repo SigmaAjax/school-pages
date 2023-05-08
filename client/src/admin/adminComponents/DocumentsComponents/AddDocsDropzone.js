@@ -1,5 +1,7 @@
 import ErrorMsg from '../GalleryComponents/ErrorMsg';
 
+import styles from '../../../pages/admin.module.css';
+
 export default function AddDocsDropzone({
 	documents,
 	isDragActive,
@@ -15,7 +17,7 @@ export default function AddDocsDropzone({
 					&#128071;
 				</p>
 			</label>
-			<div name="dropzone" className="dropzone" {...getRootProps()}>
+			<div name="dropzone" className={styles.dropzone} {...getRootProps()}>
 				<input {...getInputProps()} />
 				{isDragActive ? (
 					documents.length > 0 ? (

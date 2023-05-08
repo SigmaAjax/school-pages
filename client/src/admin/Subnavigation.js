@@ -1,11 +1,13 @@
 import {NavLink} from 'react-router-dom';
 
+import styles from '../pages/admin.module.css';
+
 export default function SubNavigation({navItems}) {
 	return (
 		<nav>
-			<ul className="navbar ul">
+			<ul className={styles.navbar}>
 				{navItems.map((item, index) => (
-					<li key={index} className="nav-item">
+					<li key={index} className={styles.navItem}>
 						<NavLink
 							exact={item.exact}
 							style={({isActive}) => {

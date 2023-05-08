@@ -1,4 +1,4 @@
-import {useAdminUpdate} from '../../../../context/AdminContext';
+import {Button} from '@mui/material';
 
 export default function DeleteAlbumButton({images, handleDelete}) {
 	const oneCheck = images.some((image) => {
@@ -7,15 +7,22 @@ export default function DeleteAlbumButton({images, handleDelete}) {
 	});
 
 	return (
-		<button
+		<Button
+			color="error"
+			variant="contained"
 			name="album-delete"
 			type="button"
 			disabled={!oneCheck}
+			sx={{
+				'&:hover': {
+					backgroundColor: 'darkred',
+				},
+			}}
 			onClick={(e) => {
 				handleDelete(e);
 			}}
 		>
 			Vymazat Album
-		</button>
+		</Button>
 	);
 }

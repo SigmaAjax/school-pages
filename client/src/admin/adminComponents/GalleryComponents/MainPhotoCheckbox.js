@@ -1,15 +1,16 @@
+import {Checkbox} from '@mui/material';
+
 export default function MainPhotoCheckbox({
 	imgValue,
 	checkboxed,
 	intro = false,
 }) {
 	return (
-		<input
+		<Checkbox
 			key={imgValue.name}
 			name={imgValue.name + '-checkbox'}
 			disabled={false === !intro}
 			checked={imgValue.introductionary}
-			type="checkbox"
 			onChange={(e) => {
 				checkboxed((current) => {
 					const checkedItem = current.map((item) => {

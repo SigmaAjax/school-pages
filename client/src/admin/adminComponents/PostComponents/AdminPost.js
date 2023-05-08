@@ -1,8 +1,7 @@
 import {Link} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../context/AdminContext';
-//import useDeleteUpdate from '../../../Hooks/useDeleteUpdate';
-// import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
-// import useDeleteUpdate from '../../Hooks/useDeleteUpdate';
+
+//import styles from '../../../pages/admin.module.css';
 
 export default function AdminPost({content}) {
 	const {post} = useAdmin();

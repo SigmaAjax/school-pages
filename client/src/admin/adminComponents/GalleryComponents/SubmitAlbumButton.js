@@ -1,3 +1,5 @@
+import {Button} from '@mui/material';
+
 export default function SubmitAlbumButton({images}) {
 	const oneCheck = images?.some((image) => {
 		if (image.introductionary === true) return true;
@@ -5,8 +7,13 @@ export default function SubmitAlbumButton({images}) {
 	});
 
 	return (
-		<button type="submit" disabled={!oneCheck}>
+		<Button
+			color="primary"
+			variant="contained"
+			type="submit"
+			disabled={!oneCheck}
+		>
 			Vytvořit Album
-		</button>
+		</Button>
 	);
 }

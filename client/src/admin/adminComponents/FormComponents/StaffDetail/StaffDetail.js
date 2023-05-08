@@ -36,7 +36,7 @@ export default function StaffDetail() {
 	const [error, setError] = useState(null);
 	const [detailEmployee, setDetailEmployee] = useState({});
 	const {id} = useParams();
-	const navigate = useNavigate();
+	const navigate = useNavigate(); /// change for useLocation to avoid needless useEffect re-renders
 
 	const handleAddInputField = () => {
 		if (inputFields < 4) {

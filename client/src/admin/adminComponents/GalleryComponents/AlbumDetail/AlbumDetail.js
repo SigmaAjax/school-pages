@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useDropzone} from 'react-dropzone';
 import {useEffect, useState, useRef, useCallback} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../../context/AdminContext';
 import useSlugify from 'client/src/Hooks/useSlugify.js';
 
@@ -10,6 +10,8 @@ import DeleteAlbumButton from '../AlbumDetail/DeleteAlbumButton.js';
 import SubmitAlbumButton from '../SubmitAlbumButton';
 import AlbumDescription from './AlbumDescription';
 import CloudinaryImageCardsList from './CloudinaryImageCardsList';
+
+import styles from '../../../../pages/admin.module.css';
 
 export default function AlbumDetail() {
 	const {album} = useAdmin();
@@ -225,7 +227,7 @@ export default function AlbumDetail() {
 	};
 	return (
 		<>
-			<form className="item one" onSubmit={handleSubmit}>
+			<form className={`${styles.item} ${styles.one}`} onSubmit={handleSubmit}>
 				{/* Album headers part */}
 				<AlbumDescription album={album} heading={{title, description}} />
 				<button

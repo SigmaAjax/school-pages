@@ -1,5 +1,7 @@
 import CloudinaryImageCard from './CloudinaryImageCard';
 
+import styles from '../../../../pages/admin.module.css';
+
 export default function CloudinaryImageCardsList({photosList, setPhotos}) {
 	const checkedBox = photosList.some((image) => {
 		if (image.introductionary === true) return true;
@@ -9,7 +11,7 @@ export default function CloudinaryImageCardsList({photosList, setPhotos}) {
 	return (
 		<>
 			{photosList ? (
-				<div className="item two">
+				<div className={`${styles.item} ${styles.two}`}>
 					{checkedBox
 						? photosList.map((image) => {
 								return (
