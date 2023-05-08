@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import ContactInfoForm from '../ContactInfoForm';
 import StaffPositionEasy from '../StaffPositionEasy';
 import {Box, Button} from '@mui/material';
@@ -9,8 +9,8 @@ import {useAdminUpdate} from '../../../../context/AdminContext';
 
 const processFormValues = (formValues, inputFields) => {
 	return Object.entries(formValues).reduce((processedValues, [key, value]) => {
-		// Check if key starts with 'pozice' and remove it if its index is greater than inputFields
-		const poziceMatch = key.match(/^pozice(\d+)/);
+		// Check if key starts with 'funkce' and remove it if its index is greater than inputFields
+		const poziceMatch = key.match(/^funkce(\d+)/);
 		if (poziceMatch && parseInt(poziceMatch[1], 10) > inputFields) {
 			return processedValues; // Skip adding this key to the processedValues
 		}
@@ -35,7 +35,8 @@ export default function StaffDetail() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [detailEmployee, setDetailEmployee] = useState({});
-	const param = useParams();
+	const {id} = useParams();
+	const navigate = useNavigate();
 
 	const handleAddInputField = () => {
 		if (inputFields < 4) {
@@ -46,7 +47,15 @@ export default function StaffDetail() {
 	const handleRemoveInputField = () => {
 		if (inputFields > 1) {
 			setInputFields((prev) => prev - 1);
+			setDetailEmployee((prevValues) => {
+				const {[`funkce${inputFields}`]: value, ...rest} = prevValues;
+				return rest;
+			});
 		}
+	};
+
+	const handleBack = () => {
+		navigate('/admin/zamestnanci');
 	};
 
 	function isValidEmail(email) {
@@ -61,20 +70,29 @@ export default function StaffDetail() {
 
 	const handleChange = (event) => {
 		const {name, value} = event.target;
-
 		setDetailEmployee((prevValues) => ({...prevValues, [name]: value}));
 	};
 
 	const handleModal = (e) => {
-		setIsOpenModal((prev) => !prev);
-		// setButtonName(() => {
-		// 	return e.target.name;
-		// });
-		const employee = detailEmployee;
-		if (e.target.name !== 'button-delete') {
-			setEmployee(employee);
+		const isEmailValid = isValidEmail(detailEmployee.email);
+		const isPhoneValid = isValidPhoneNumber(detailEmployee.phone);
+
+		setEmailError(!isEmailValid);
+		setPhoneError(!isPhoneValid);
+
+		setButtonName(() => {
+			return e.target.name;
+		});
+
+		const processedValues = processFormValues(detailEmployee, inputFields);
+		if (isEmailValid && isPhoneValid) {
+			setIsOpenModal((prev) => !prev);
+			const employee = processedValues;
+			if (e.target.name !== 'button-delete') {
+				setEmployee(employee);
+			}
+			setEmployee({...employee, page: 'detail-page'});
 		}
-		setEmployee({...employee, page: 'detail-page'});
 	};
 
 	useEffect(() => {
@@ -84,7 +102,7 @@ export default function StaffDetail() {
 	const fetchEmployeeDetail = async () => {
 		setLoading((prev) => !prev);
 		try {
-			const response = await axios.get(`/api/employee/get/${param.id}`);
+			const response = await axios.get(`/api/employee/get/${id}`);
 			console.log(response.status);
 			console.log(response.data.employee);
 
@@ -168,23 +186,43 @@ export default function StaffDetail() {
 					initialValues={detailEmployee}
 				/>
 			</Box>
-			<Box sx={{marginTop: 2, display: 'flex', gap: 2}}>
+			<Box
+				sx={{
+					marginTop: 2,
+					display: 'flex',
+					gap: 2,
+					justifyContent: 'space-between',
+				}}
+			>
+				<Box sx={{display: 'flex', gap: 2}}>
+					<Button
+						name="employee-delete"
+						onClick={handleModal}
+						type="button"
+						variant="contained"
+						sx={{
+							backgroundColor: 'red',
+							':hover': {backgroundColor: 'darkred'},
+						}}
+					>
+						Vymazat
+					</Button>
+					<Button
+						name="employee-update"
+						onClick={handleModal}
+						type="button"
+						variant="contained"
+					>
+						Změnit
+					</Button>
+				</Box>
 				<Button
-					name="employee-delete"
-					onClick={handleModal}
+					name="employee-back"
+					onClick={handleBack}
 					type="button"
 					variant="contained"
-					sx={{backgroundColor: 'red', ':hover': {backgroundColor: 'darkred'}}}
 				>
-					Vymazat
-				</Button>
-				<Button
-					name="employee-update"
-					onClick={handleModal}
-					type="button"
-					variant="contained"
-				>
-					Změnit
+					Zpět
 				</Button>
 			</Box>
 		</form>

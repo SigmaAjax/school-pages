@@ -8,6 +8,8 @@ const postDbPool = mysql.createPool({
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE_POST,
 	port: process.env.DB_PORT,
+	waitForConnections: true,
+	queueLimit: 0,
 });
 
 const albumDbPool = mysql.createPool({
@@ -17,6 +19,8 @@ const albumDbPool = mysql.createPool({
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE_ALBUMS,
 	port: process.env.DB_PORT,
+	waitForConnections: true,
+	queueLimit: 0,
 });
 
 const employeesDbPool = mysql.createPool({
@@ -26,6 +30,8 @@ const employeesDbPool = mysql.createPool({
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE_EMPLOYEES,
 	port: process.env.DB_PORT,
+	waitForConnections: true,
+	queueLimit: 0,
 });
 
 module.exports = {postDbPool, albumDbPool, employeesDbPool};

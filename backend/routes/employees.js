@@ -129,4 +129,51 @@ router.delete('/delete/employee/:idDelete', async (req, res) => {
 	}
 });
 
+router.patch('/update/employee/:idUpdate', async (req, res) => {
+	const idUpdate = req.params.idUpdate;
+	const employee = req.body;
+	const {employee_id, ...rest} = employee;
+	const funkce2 = rest.funkce2 || 'N/A';
+	const funkce3 = rest.funkce3 || 'N/A';
+	const funkce4 = rest.funkce4 || 'N/A';
+
+	try {
+		// Update employee record in the database
+		if (parseInt(idUpdate) === parseInt(employee_id)) {
+			const result = await query(
+				`UPDATE employees
+			 SET name = ?, surname = ?, academic_title = ?, email = ?, phone = ?, funkce1 = ?, funkce2 = ?, funkce3 = ?, funkce4 = ?
+			 WHERE employee_id = ?`,
+				[
+					employee.name,
+					employee.surname,
+					employee.academic_title,
+					employee.email,
+					employee.phone,
+					employee.funkce1,
+					funkce2,
+					funkce3,
+					funkce4,
+					idUpdate,
+				]
+			);
+
+			if (result.affectedRows > 0) {
+				res.status(200).send({
+					status: 'success',
+					message: 'Employee updated successfully',
+				});
+			} else {
+				res.status(404).send({
+					status: 'error',
+					message: `Employee with id ${idUpdate} not found.`,
+				});
+			}
+		}
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).send('Server error');
+	}
+});
+
 module.exports = router;

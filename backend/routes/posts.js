@@ -1,6 +1,5 @@
 const express = require('express');
 const {postDbPool} = require('../config/db.js');
-const {response} = require('express');
 const router = express.Router();
 
 const query = (sql, args) => {

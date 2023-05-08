@@ -124,12 +124,7 @@ export default function useDeleteUpdate(buttonName) {
 						navigate('/admin/zamestnanci');
 					}, 2000);
 				}
-				// Reload the window after 7 seconds
-				setTimeout(() => {
-					window.location.reload();
-				}, 7000);
 			}
-			console.log(response.status);
 		} catch (error) {
 			console.log(error.message);
 		} finally {
@@ -140,12 +135,20 @@ export default function useDeleteUpdate(buttonName) {
 	};
 
 	const updateEmployee = async (employee) => {
-		console.log(arrOfButtonName);
 		try {
-			console.log(employee);
-			console.log('employee updated');
+			const idUpdate = await employee.employee_id;
+			const response = await axios.patch(
+				`/api/update/employee/${idUpdate}`,
+				employee
+			);
+			if (response.status === 200) {
+				console.log(response);
+				alert(`${response.data.status}\n${response.data.message}`);
+				navigate('/admin/zamestnanci');
+			}
 		} catch (error) {
-			console.log(error.message);
+			console.log(error);
+			alert(`${error.data.status}\n${error.data.message}`);
 		} finally {
 			console.log(
 				`Employee named ${employee.name} ${employee.surname} was UPDATED \nid: ${employee.employee_id}`

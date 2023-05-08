@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
 	Card,
 	CardContent,
@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import {placeholder} from '@cloudinary/react';
 
 const renderInputFields = (
 	numFields,
@@ -22,12 +21,12 @@ const renderInputFields = (
 	for (let i = 0; i < numFields; i++) {
 		fields.push(
 			<Tooltip
-				title={placeholders[i] + ' Pouze jedno z těchto slov'}
+				title={placeholders[i] + 'použijte pouze jedno z těchto slov'}
 				key={placeholders[i]}
 			>
 				<TextField
 					key={i}
-					name={`pozice${i + 1}`}
+					name={`funkce${i + 1}`}
 					label={`Pracovní pozice ${i + 1}`}
 					variant="outlined"
 					placeholder={placeholders[i]}

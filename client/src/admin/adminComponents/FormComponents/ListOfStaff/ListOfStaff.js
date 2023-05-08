@@ -98,13 +98,19 @@ export default function ListOfStaff() {
 								<TableCell>{employee.email}</TableCell>
 								<TableCell>{employee.phone}</TableCell>
 								<TableCell>
-									{employee.funkce1}
+									{'* ' + employee.funkce1}
 									<br />
-									{employee.funkce2 === 'N/A' ? '..' : employee.funkce2}
+									{employee.funkce2 === 'N/A'
+										? '* ..'
+										: '* ' + employee.funkce2}
 									<br />
-									{employee.funkce3 === 'N/A' ? '....' : employee.funkce4}
+									{employee.funkce3 === 'N/A'
+										? '* ....'
+										: '* ' + employee.funkce4}
 									<br />
-									{employee.funkce4 === 'N/A' ? '......' : employee.funkce4}
+									{employee.funkce4 === 'N/A'
+										? '* ......'
+										: '* ' + employee.funkce4}
 								</TableCell>
 								<TableCell>
 									<Link
