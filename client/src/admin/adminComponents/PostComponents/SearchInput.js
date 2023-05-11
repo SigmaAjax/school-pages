@@ -1,5 +1,4 @@
 export default function SearchInput({searchWord}) {
-	//const {postList} = useAdmin();
 	return (
 		<input
 			type={'text'}

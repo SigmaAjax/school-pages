@@ -4,15 +4,16 @@ import useSlugify from 'client/src/Hooks/useSlugify.js';
 import {useNavigate} from 'react-router-dom';
 import SubNavigation from '../../Subnavigation';
 
+import {Button, TextField, Typography, Box, Grid} from '@mui/material';
+
+import styles from '../../../pages/admin.module.css';
+
 export default function CreatePost() {
 	const title = useRef();
 	const text = useRef();
 	const userPass = useRef();
 	const {slugify} = useSlugify();
 	const navigate = useNavigate();
-	// Context
-	//const {postList, buttonName} = useAdmin();
-	//const {setPostList, setButtonName} = useAdminUpdate();
 
 	const submitPost = async () => {
 		const datePosted = new Date().toISOString().substring(0, 19);
@@ -64,9 +65,7 @@ export default function CreatePost() {
 
 	return (
 		<>
-			<h1>Aktuality</h1>
-			{/*Navigation for the create post*/}
-			{/* <CreatePostNav /> */}
+			<Typography variant="h4">Aktuality</Typography>
 			<SubNavigation
 				navItems={[
 					{
@@ -80,36 +79,40 @@ export default function CreatePost() {
 						label: 'Uprav aktualitu nebo příspěvek',
 					},
 				]}
-			/>{' '}
-			<div className="item one">
-				<label htmlFor="user">Heslo pro admina</label>
-				<input
-					ref={userPass}
-					name="user"
-					type="text"
-					placeholder="Kdo to napsal?"
-					required
-				/>
-				<label htmlFor="headline">Nadpis</label>
-				<input
-					ref={title}
-					required
-					className="postTitle"
-					name="headline"
-					type="text"
-					placeholder="Nadpis"
-				/>
-				<label htmlFor="post">Příspěvek</label>
-				<textarea
-					ref={text}
-					required
-					name="post"
-					rows="12"
-					cols="40"
-					placeholder="Co máš na mysli?"
-				/>
-				<button onClick={submitPost}>Odeslat příspěvek na server</button>
-			</div>
+			/>
+			<Grid container spacing={2}>
+				<Grid item xs={12}>
+					<TextField
+						inputRef={userPass}
+						label="Heslo pro admina"
+						variant="outlined"
+						required
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<TextField
+						inputRef={title}
+						label="Nadpis"
+						variant="outlined"
+						required
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<TextField
+						inputRef={text}
+						label="Příspěvek"
+						variant="outlined"
+						multiline
+						rows={12}
+						required
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<Button variant="contained" color="primary" onClick={submitPost}>
+						Odeslat příspěvek na server
+					</Button>
+				</Grid>
+			</Grid>
 		</>
 	);
 }

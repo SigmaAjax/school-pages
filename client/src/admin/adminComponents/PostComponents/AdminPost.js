@@ -1,5 +1,14 @@
 import {Link} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../context/AdminContext';
+import {
+	Button,
+	Box,
+	Grid,
+	Card,
+	CardContent,
+	CardActions,
+	Typography,
+} from '@mui/material';
 
 //import styles from '../../../pages/admin.module.css';
 
@@ -20,69 +29,113 @@ export default function AdminPost({content}) {
 	});
 
 	return (
-		<div className="container">
-			<div key={content.id} className="postContainer item two">
-				<Link to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}>
-					<h2>{content.title}</h2>
-				</Link>
+		<Card
+			sx={{
+				maxWidth: 400,
+				marginBottom: 2,
+				position: 'relative',
+				boxShadow: '0 3px 5px rgba(0, 0, 0, 0.3)',
+				borderRadius: '4px',
+				padding: '16px',
+				backgroundColor: '#f5f5f5',
+			}}
+		>
+			<CardContent>
+				<Grid container justifyContent="center" alignItems="center" spacing={2}>
+					<Grid item xs={12}>
+						<Link
+							to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
+						>
+							<Typography variant="h6" align="center">
+								{content.title}
+							</Typography>
+						</Link>
+					</Grid>
 
-				<p>
-					{content.post_text.length > 200
-						? content.post_text.substring(0, 200) + '...'
-						: content.post_text}
-				</p>
-				<strong>{content.user_name}</strong>
+					<Grid item xs={12}>
+						<Typography align="center" fontWeight={'bold'}>
+							{content.user_name}
+						</Typography>
+					</Grid>
+					{content.date_posted ? (
+						<Grid item xs={12}>
+							<Typography display="inline" align="center">
+								Vytvořeno dne:{' '}
+							</Typography>
+							<Typography display="inline" align="center" fontWeight="bold">
+								{formatDateCzech.format(datum)}
+							</Typography>
+						</Grid>
+					) : (
+						<Grid item xs={12}>
+							<Typography align="center" fontWeight={'bold'}>
+								Chybí Datum v databázi
+							</Typography>
+						</Grid>
+					)}
 
-				{content.date_posted ? (
-					<p>
-						Vytvořeno dne: <strong>{formatDateCzech.format(datum)}</strong>
-					</p>
-				) : (
-					<strong>Chybí Datum v databázi</strong>
-				)}
-
-				{content.date_updated ? (
-					<p>
-						Naposledy změněno dne:{' '}
-						<strong>{formatDateCzech.format(datumUpdated)}</strong>
-					</p>
-				) : (
-					<strong>Zatím příspěvek nebyl upravován</strong>
-				)}
-
-				<>
-					<button
-						name="post-delete"
-						onClick={(e) => {
-							//console.log(e.target.name === buttonName);
-							setIsOpenModal((prev) => {
-								return !prev;
-							});
-							setPost((prev) => content);
-							console.log(post);
-							// updateOrDelete(post);
-						}}
-					>
-						Vymazat příspěvek
-					</button>
-					<a
-						href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
-						rel="noreferrer"
-					>
-						<button
+					{content.date_updated && (
+						<Grid item xs={12}>
+							<Typography align="center">
+								Naposledy změněno dne:{' '}
+								<strong>{formatDateCzech.format(datumUpdated)}</strong>
+							</Typography>
+						</Grid>
+					)}
+				</Grid>
+			</CardContent>
+			<CardActions>
+				<Grid
+					container
+					justifyContent="center"
+					alignItems="center"
+					spacing={0.5}
+				>
+					{' '}
+					{/* 0.5 * 8px (default theme spacing unit) = 4px */}
+					<Grid item>
+						<Button
+							name="post-delete"
+							variant="contained"
+							color="error"
+							sx={{
+								'&:hover': {
+									backgroundColor: 'darkred',
+								},
+							}}
 							onClick={(e) => {
-								alert('Příspěvek bude upraven', e.target.name);
-								setButtonName((prev) => {
-									prev = e.target.name;
-									return prev;
+								setIsOpenModal((prev) => {
+									return !prev;
 								});
+								setPost((prev) => content);
+								console.log(post);
 							}}
 						>
-							Upravit příspěvek
-						</button>
-					</a>
-				</>
-			</div>
-		</div>
+							Vymazat příspěvek
+						</Button>
+					</Grid>
+					<Grid item>
+						<a
+							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
+							rel="noreferrer"
+						>
+							<Button
+								color="primary"
+								variant="contained"
+								onClick={(e) => {
+									alert('Příspěvek bude upraven', e.target.name);
+									setButtonName((prev) => {
+										prev = e.target.name;
+										return prev;
+									});
+								}}
+							>
+								Upravit příspěvek
+							</Button>
+						</a>
+					</Grid>
+				</Grid>
+			</CardActions>
+		</Card>
 	);
 }

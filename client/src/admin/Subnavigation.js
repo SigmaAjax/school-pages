@@ -1,25 +1,33 @@
+import {ListItem, ListItemText, List, Toolbar} from '@mui/material';
 import {NavLink} from 'react-router-dom';
-
-import styles from '../pages/admin.module.css';
 
 export default function SubNavigation({navItems}) {
 	return (
-		<nav>
-			<ul className={styles.navbar}>
+		<Toolbar>
+			<List
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					padding: '0',
+				}}
+			>
 				{navItems.map((item, index) => (
-					<li key={index} className={styles.navItem}>
-						<NavLink
-							exact={item.exact}
-							style={({isActive}) => {
-								return isActive ? {color: 'green'} : {};
-							}}
-							to={item.to}
-						>
-							{item.label}
-						</NavLink>
-					</li>
+					<ListItem key={index} sx={{minWidth: 'auto'}}>
+						<ListItemText>
+							<NavLink
+								exact={item.exact}
+								style={({isActive}) => {
+									return isActive ? {color: 'green'} : {};
+								}}
+								to={item.to}
+							>
+								{item.label}
+							</NavLink>
+						</ListItemText>
+					</ListItem>
 				))}
-			</ul>
-		</nav>
+			</List>
+		</Toolbar>
 	);
 }
