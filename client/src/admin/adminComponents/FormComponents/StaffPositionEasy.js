@@ -50,7 +50,7 @@ export default function StaffPositionEasy({
 	handleAddInputField,
 	handleRemoveInputField,
 	onChange,
-	initialValues,
+	initialValues = {},
 }) {
 	const placeholders = [
 		'ředitel, zástupce_ředitele, gdpr',

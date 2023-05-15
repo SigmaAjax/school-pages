@@ -16,11 +16,13 @@ import SubNavigation from '../Subnavigation';
 import ListOfStaff from '../adminComponents/FormComponents/ListOfStaff/ListOfStaff';
 import StaffDetail from '../adminComponents/FormComponents/StaffDetail/StaffDetail';
 
+import styles from '../../pages/admin.module.css';
+
 export default function AdminRoutes() {
 	return (
-		<div className="container">
+		<div className={styles.container}>
 			<Modal>Fancy Modal</Modal>
-			<div className="item one">
+			<div className={`${styles.item} ${styles.one}`}>
 				<AdminSidebar />
 			</div>
 			{/* <div className="item two">flex item 2</div> */}
@@ -28,7 +30,7 @@ export default function AdminRoutes() {
 				<Route
 					path="zamestnanci/*"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<SubNavigation
 								className="album-nav"
 								navItems={[
@@ -51,7 +53,7 @@ export default function AdminRoutes() {
 				<Route
 					path="zamestnanci/zamestnanec/:id"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<StaffDetail />
 						</div>
 					}
@@ -59,7 +61,7 @@ export default function AdminRoutes() {
 				<Route
 					path="zamestnanci/newStaff"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<SubNavigation
 								className="album-nav"
 								navItems={[
@@ -83,7 +85,7 @@ export default function AdminRoutes() {
 				<Route
 					path="newPost/*"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<CreatePost />
 						</div>
 					}
@@ -91,7 +93,7 @@ export default function AdminRoutes() {
 				<Route
 					path="newPost/admin-posts"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<AdminNews />
 						</div>
 					}
@@ -103,9 +105,8 @@ export default function AdminRoutes() {
 				<Route
 					path="galerie/*"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<SubNavigation
-								className="album-nav"
 								navItems={[
 									{
 										exact: true,
@@ -126,7 +127,7 @@ export default function AdminRoutes() {
 				<Route
 					path="galerie/:id/:albumSlug"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<AlbumDetail />
 						</div>
 					}
@@ -134,7 +135,7 @@ export default function AdminRoutes() {
 				<Route
 					path="galerie/newAlbum"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<SubNavigation
 								className="album-nav"
 								navItems={[
@@ -157,7 +158,7 @@ export default function AdminRoutes() {
 				<Route
 					path="dokumenty"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<SubNavigation
 								navItems={[
 									{
@@ -179,7 +180,7 @@ export default function AdminRoutes() {
 				<Route
 					path="dokumenty/new-doc"
 					element={
-						<div className="item three">
+						<div className={`${styles.item} ${styles.three}`}>
 							<SubNavigation
 								navItems={[
 									{

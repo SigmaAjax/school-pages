@@ -3,18 +3,31 @@ import {NavLink} from 'react-router-dom';
 
 export default function SubNavigation({navItems}) {
 	return (
-		<Toolbar>
+		<Toolbar
+			sx={{
+				backgroundColor: 'grey.200',
+				boxShadow: 3,
+				justifyContent: 'center',
+			}}
+		>
 			<List
 				sx={{
 					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					padding: '0',
+					justifyContent: 'space-around',
 				}}
 			>
 				{navItems.map((item, index) => (
-					<ListItem key={index} sx={{minWidth: 'auto'}}>
-						<ListItemText>
+					<ListItem
+						key={index}
+						sx={{
+							minWidth: 'auto',
+							boxShadow: 2,
+							ml: 1,
+							mr: 1,
+							alignItems: 'center',
+						}}
+					>
+						<ListItemText primaryTypographyProps={{align: 'center'}}>
 							<NavLink
 								exact={item.exact}
 								style={({isActive}) => {
