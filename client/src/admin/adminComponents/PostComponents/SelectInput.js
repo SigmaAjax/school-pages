@@ -1,12 +1,32 @@
 import {InputLabel} from '@mui/material';
 
+const FORM_STYLES = {
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	justifyContent: 'space-between',
+	backgroundColor: '#f8f8f8',
+	borderRadius: '8px',
+	width: '100%',
+};
+
+const SELECT_STYLES = {
+	width: '50%',
+	maxWidth: '300px',
+	padding: '10px',
+	marginBottom: '10px',
+	borderRadius: '4px',
+	border: '1px solid #ddd',
+};
+
 export default function SelectInput({orderedPostFunc, orderedListOfPosts}) {
 	const copyPosts = [...orderedListOfPosts];
 
 	return (
-		<>
+		<div style={FORM_STYLES}>
 			<InputLabel htmlFor="ordering-option">Seřadit podle</InputLabel>
 			<select
+				style={SELECT_STYLES}
 				name="ordering-options"
 				onChange={(e) => {
 					switch (e.target.value) {
@@ -123,6 +143,6 @@ export default function SelectInput({orderedPostFunc, orderedListOfPosts}) {
 					Datumu změny od nejstarší
 				</option>
 			</select>
-		</>
+		</div>
 	);
 }

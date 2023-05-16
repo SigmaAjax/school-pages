@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useAdmin} from '../../../context/AdminContext';
-import {Button, Grid, InputLabel} from '@mui/material';
+import {Box, Button, Grid, InputLabel, Typography} from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const FORM_STYLES = {
 	display: 'flex',
@@ -76,6 +77,16 @@ export default function SelectYearMonth({orderedListFromToFunc}) {
 					});
 				}}
 			/>
+			{dateFrom !== dateTo && (
+				<Typography variant="h6" style={{marginTop: '10px'}}>
+					Příspěvky budou zobrazeny <br />
+					od: <b>{formatDateCzech.format(new Date(dateFrom))}</b> <br />
+					<Box display="flex" justifyContent="center" alignItems="center">
+						<ArrowDownwardIcon fontSize="large" />
+					</Box>
+					do: <b>{formatDateCzech.format(new Date(dateTo))}</b>
+				</Typography>
+			)}
 			<Grid container spacing={2} sx={{marginTop: 'auto', width: 'auto'}}>
 				<Grid item>
 					<Button
