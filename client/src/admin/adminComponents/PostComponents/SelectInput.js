@@ -1,9 +1,11 @@
+import {InputLabel} from '@mui/material';
+
 export default function SelectInput({orderedPostFunc, orderedListOfPosts}) {
 	const copyPosts = [...orderedListOfPosts];
 
 	return (
 		<>
-			<label htmlFor="ordering-option">Seřadit podle</label>
+			<InputLabel htmlFor="ordering-option">Seřadit podle</InputLabel>
 			<select
 				name="ordering-options"
 				onChange={(e) => {

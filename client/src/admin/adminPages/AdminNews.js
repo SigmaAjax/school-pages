@@ -10,6 +10,7 @@ import {Loader} from 'client/src/Loader.js';
 import SubNavigation from '../Subnavigation';
 
 import styles from '../../pages/admin.module.css';
+import {InputLabel} from '@mui/material';
 
 export default function AdminNews() {
 	const {setButtonName, setPostList, setPost} = useAdminUpdate();
@@ -71,7 +72,7 @@ export default function AdminNews() {
 					]}
 				/>{' '}
 			</>
-			<label htmlFor="search">Vyhledávání příspěvků</label>
+			<InputLabel htmlFor="search">Vyhledávání příspěvků</InputLabel>
 			<SearchInput searchWord={setSearchPhrase} />
 			<SelectInput
 				orderedPostFunc={setPostList}
