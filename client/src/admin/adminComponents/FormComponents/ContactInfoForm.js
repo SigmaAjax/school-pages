@@ -10,10 +10,12 @@ const ContactInfoForm = ({
 	phoneError,
 }) => {
 	return (
-		<Card>
+		<Card sx={{maxWidth: 400}}>
 			<CardContent>
 				<Typography variant="h6">{title}</Typography>
-				<Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+				<Box
+					sx={{display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 400}}
+				>
 					{fields.map((field) => (
 						<TextField
 							key={field.name}

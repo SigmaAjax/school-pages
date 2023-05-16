@@ -4,7 +4,16 @@ import useSlugify from 'client/src/Hooks/useSlugify.js';
 import {useNavigate} from 'react-router-dom';
 import SubNavigation from '../../Subnavigation';
 
-import {Button, TextField, Typography, Box, Grid} from '@mui/material';
+import {
+	Button,
+	TextField,
+	Typography,
+	Box,
+	Grid,
+	Card,
+	CardContent,
+	CardActions,
+} from '@mui/material';
 
 import styles from '../../../pages/admin.module.css';
 
@@ -80,39 +89,81 @@ export default function CreatePost() {
 					},
 				]}
 			/>
-			<Grid container spacing={2}>
-				<Grid item xs={12}>
-					<TextField
-						inputRef={userPass}
-						label="Heslo pro admina"
-						variant="outlined"
-						required
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						inputRef={title}
-						label="Nadpis"
-						variant="outlined"
-						required
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						inputRef={text}
-						label="Příspěvek"
-						variant="outlined"
-						multiline
-						rows={12}
-						required
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<Button variant="contained" color="primary" onClick={submitPost}>
-						Odeslat příspěvek na server
-					</Button>
-				</Grid>
-			</Grid>
+			<Card
+				sx={{
+					boxShadow: '0 3px 5px rgba(0, 0, 0, 0.3)',
+					backgroundColor: '#f5f5f5',
+					borderRadius: '4px',
+					marginBottom: 2,
+					marginTop: 2,
+				}}
+			>
+				<CardContent>
+					<Grid
+						container
+						direction="column"
+						alignItems="center"
+						justifyContent="center"
+						spacing={2}
+					>
+						<Grid item xs={12} sm={8} md={6} lg={4}>
+							<TextField
+								fullWidth
+								style={{minWidth: 400}}
+								inputRef={userPass}
+								label="Autor příspěvku"
+								variant="outlined"
+								required
+							/>
+						</Grid>
+						<Grid item xs={12} sm={8} md={6} lg={4}>
+							<TextField
+								fullWidth
+								style={{minWidth: 400}}
+								inputRef={title}
+								label="Nadpis"
+								variant="outlined"
+								required
+							/>
+						</Grid>
+						<Grid item xs={12} sm={8} md={6} lg={4}>
+							<TextField
+								fullWidth
+								style={{minWidth: 400}}
+								inputRef={text}
+								label="Příspěvek"
+								variant="outlined"
+								multiline
+								rows={12}
+								columns={12}
+								required
+							/>
+						</Grid>
+					</Grid>
+				</CardContent>
+				<CardActions>
+					<Grid
+						container
+						direction="row"
+						alignItems="center"
+						justifyContent="center"
+					>
+						<Grid
+							item
+							xs={12}
+							sm={6}
+							md={4}
+							lg={3}
+							container
+							justifyContent={'center'}
+						>
+							<Button variant="contained" color="primary" onClick={submitPost}>
+								Publikovat příspěvek
+							</Button>
+						</Grid>
+					</Grid>
+				</CardActions>
+			</Card>
 		</>
 	);
 }

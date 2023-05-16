@@ -9,6 +9,8 @@ import SelectYearMonth from '../adminComponents/PostComponents/SelectYearMonth';
 import {Loader} from 'client/src/Loader.js';
 import SubNavigation from '../Subnavigation';
 
+import styles from '../../pages/admin.module.css';
+
 export default function AdminNews() {
 	const {setButtonName, setPostList, setPost} = useAdminUpdate();
 	const {postList, post} = useAdmin();
@@ -51,7 +53,7 @@ export default function AdminNews() {
 	}, []);
 
 	return (
-		<div className="item two">
+		<div className={`${styles.item} ${styles.two}`}>
 			<>
 				<h1>Aktuality</h1>
 				<SubNavigation

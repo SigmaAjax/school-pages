@@ -9,6 +9,10 @@ export default function SubNavigation({navItems}) {
 				boxShadow: 3,
 				justifyContent: 'center',
 			}}
+			xs={12}
+			sm={6}
+			md={4}
+			lg={3}
 		>
 			<List
 				sx={{
@@ -20,6 +24,7 @@ export default function SubNavigation({navItems}) {
 					<ListItem
 						key={index}
 						sx={{
+							borderRadius: 1,
 							minWidth: 'auto',
 							boxShadow: 2,
 							ml: 1,

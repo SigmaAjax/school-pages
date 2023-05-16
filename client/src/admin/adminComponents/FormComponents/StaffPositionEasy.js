@@ -76,10 +76,12 @@ export default function StaffPositionEasy({
 	const humanReadable = humanReadablePlaceholders();
 
 	return (
-		<Card>
+		<Card sx={{maxWidth: 400}}>
 			<CardContent>
 				<Typography variant="h6">Pracovní zařazení</Typography>
-				<Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+				<Box
+					sx={{display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 400}}
+				>
 					{renderInputFields(
 						inputFields,
 						onChange,
