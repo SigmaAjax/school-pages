@@ -5,6 +5,8 @@ import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
 import useCap from '../../Hooks/useCap';
 import useSlugify from '../../Hooks/useSlugify';
 
+import styles from './../../pages/admin.module.css';
+
 export default function AdminPostDetail() {
 	const {setIsOpenModal, setPost, setButtonName} = useAdminUpdate();
 	const {post} = useAdmin();
@@ -79,7 +81,7 @@ export default function AdminPostDetail() {
 
 	return (
 		<>
-			<form className="item one" onSubmit={handleSubmit}>
+			<form className={`${styles.item} ${styles.one}`} onSubmit={handleSubmit}>
 				{' '}
 				{Object.values(post).length > 0 ? (
 					<>
