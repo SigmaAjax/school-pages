@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import AlbumCard from './AlbumDetail/AlbumCard';
 
 import styles from './../../../pages/admin.module.css';
+import {Grid} from '@mui/material';
 
 export default function AlbumList() {
 	const [albums, setAlbums] = useState([]);
@@ -45,13 +46,14 @@ export default function AlbumList() {
 	}, []);
 
 	return (
-		<>
+		<div className={`${styles.item} ${styles.albumListContainer}`}>
 			<h1>Jednotlivá Alba</h1>
-			<div className={`${styles.item} ${styles.two}`}>
+
+			<Grid container backgroundColor={'blue'}>
 				{albums.map((album) => (
 					<AlbumCard key={album.album_title} content={album} />
 				))}
-			</div>
-		</>
+			</Grid>
+		</div>
 	);
 }

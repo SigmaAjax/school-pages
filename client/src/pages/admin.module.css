@@ -376,6 +376,8 @@ form {
 }
 .three {
 	flex: 3 1 250px;
+	min-width: 300px; /* set your desired min-width */
+	max-width: 900px; /* set your desired max-width */
 }
 
 /* Employeee form */
@@ -434,16 +436,22 @@ form {
 
 .SidebarList {
 	height: 100%;
+	padding-left: 40px;
+	padding-right: 40px;
+	border-top-width: 20px;
+	padding-top: 20px;
 }
 
 .SidebarItem {
+	height: 50px;
+	border: 1px solid black;
+	list-style-type: none;
 	display: flex;
-	flex-direction: column;
+	direction: column;
 	align-items: center;
 	justify-content: center;
-	padding: 10px; /* Adjust this to control the space around the icon and the title */
-
-	list-style-type: none;
+	padding: 10px;
+	margin: 5px;
 }
 
 .SidebarList .SidebarItem:hover {
@@ -453,6 +461,28 @@ form {
 
 .SidebarList #active {
 	background-color: #293846;
+}
+
+/*--------- Album ----------*/
+
+.albumListContainer {
+	flex: 3 2 250px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-width: 300px; /* set your desired min-width */
+	max-width: 900px; /* set your desired max-width */
+	margin: 0 auto; /* this will center your container */
+	padding-top: 20px;
+	margin-top: 10 px;
+	background-color: #f2f2f2; /* light gray */
+}
+
+@media (max-width: 600px) {
+	.albumListContainer {
+		min-width: 100%; /* adjust accordingly for mobile view */
+	}
 }
 
 /* create post */
