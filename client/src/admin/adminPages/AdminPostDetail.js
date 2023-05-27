@@ -6,6 +6,29 @@ import useCap from '../../Hooks/useCap';
 import useSlugify from '../../Hooks/useSlugify';
 
 import styles from './../../pages/admin.module.css';
+import {Box, Button, Grid} from '@mui/material';
+
+const customStyles = {
+	customLabel: {
+		color: '#444',
+		fontSize: '1.2em',
+	},
+	customInput: {
+		marginBottom: '1em',
+		padding: '0.5em',
+		border: '1px solid #444',
+		borderRadius: '5px',
+		width: '100%',
+	},
+	customTextArea: {
+		marginBottom: '1em',
+		padding: '0.5em',
+		border: '1px solid #444',
+		borderRadius: '5px',
+		width: '100%',
+		resize: 'none',
+	},
+};
 
 export default function AdminPostDetail() {
 	const {setIsOpenModal, setPost, setButtonName} = useAdminUpdate();
@@ -74,19 +97,25 @@ export default function AdminPostDetail() {
 		});
 	}
 
-	// console.log(title === post.title ? "It's same" : "It's different");
-	// console.log(
-	// 	post_text.current.value === post.post_text ? "It's same" : "It's different"
-	// );
-
 	return (
-		<>
+		<Box
+			display="flex"
+			flexDirection="column"
+			alignItems="center"
+			justifyContent="center"
+			m={1}
+			p={1}
+			style={{minWidth: '300px', maxWidth: '900px', margin: '0 auto'}}
+		>
 			<form className={`${styles.item} ${styles.one}`} onSubmit={handleSubmit}>
 				{' '}
 				{Object.values(post).length > 0 ? (
 					<>
-						<label htmlFor="post-title">Nadpis</label>
+						<label style={customStyles.customLabel} htmlFor="post-title">
+							Nadpis
+						</label>
 						<input
+							style={customStyles.customInput}
 							id="post-title"
 							ref={title}
 							type="text"
@@ -99,6 +128,7 @@ export default function AdminPostDetail() {
 						/>
 						<label htmlFor="post-text">Text příspěvku</label>
 						<textarea
+							style={customStyles.customTextArea}
 							id="post-text"
 							rows="20"
 							cols={'60'}
@@ -120,42 +150,75 @@ export default function AdminPostDetail() {
 						</p>
 					</>
 				)}
-				<button
-					name="post-delete"
-					type="button"
-					onClick={(e) => {
-						setButtonName((prev) => {
-							console.log('event from post detatil...', e.target.name);
-							prev = e.target.name;
-							return prev;
-						});
-						setIsOpenModal((prev) => {
-							return !prev;
-						});
-					}}
+				<Grid
+					container
+					justifyContent="center"
+					alignItems="center"
+					spacing={1}
+					paddingBottom={3}
 				>
-					Vymazat
-				</button>
-				<button
-					name="post-update"
-					type="submit"
-					disabled={enableUpdate}
-					onClick={(e) => {
-						setIsOpenModal((prev) => {
-							return !prev;
-						});
-						setButtonName((prev) => {
-							console.log(prev);
-							console.log('event from post detatil...', e.target.name);
-							prev = e.target.name;
-							return prev;
-						});
+					<Grid item>
+						<Button
+							color="error"
+							variant="contained"
+							name="post-delete"
+							type="button"
+							onClick={(e) => {
+								setButtonName((prev) => {
+									console.log('event from post detatil...', e.target.name);
+									prev = e.target.name;
+									return prev;
+								});
+								setIsOpenModal((prev) => {
+									return !prev;
+								});
+							}}
+							sx={{
+								'&:hover': {
+									backgroundColor: 'darkred',
+								},
+							}}
+						>
+							Vymazat
+						</Button>
+					</Grid>
+					<Grid item>
+						<Button
+							color="primary"
+							variant="contained"
+							name="post-update"
+							type="submit"
+							disabled={enableUpdate}
+							onClick={(e) => {
+								setIsOpenModal((prev) => {
+									return !prev;
+								});
+								setButtonName((prev) => {
+									console.log(prev);
+									console.log('event from post detatil...', e.target.name);
+									prev = e.target.name;
+									return prev;
+								});
+							}}
+							sx={{
+								'&:hover': {
+									backgroundColor: 'darkblue',
+								},
+							}}
+						>
+							Upravit
+						</Button>
+					</Grid>
+				</Grid>
+				<RouterLink
+					style={{
+						color: 'green',
 					}}
+					to="/admin/newPost/admin-posts"
 				>
-					Upravit
-				</button>
-				<RouterLink to="/admin/newPost/admin-posts">Go back</RouterLink>
+					Zpět na seznamu příspěvků
+				</RouterLink>
 			</form>
-		</>
+		</Box>
 	);
 }

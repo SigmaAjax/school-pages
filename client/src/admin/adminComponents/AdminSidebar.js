@@ -3,6 +3,7 @@ import {NavLink} from 'react-router-dom';
 import {SidebarData} from '../SidebarData.js';
 
 import styles from '../../pages/admin.module.css';
+import {Box} from '@mui/material';
 
 export default function AdminSidebar() {
 	return (
@@ -17,8 +18,15 @@ export default function AdminSidebar() {
 								}}
 								to={`/admin${value.link}`}
 							>
-								<div>{value.icon}</div>
-								<div>{value.title}</div>
+								<Box
+									display="flex"
+									flexDirection="column"
+									alignItems="center"
+									justifyContent="center"
+								>
+									<div>{value.icon}</div>
+									<div>{value.title}</div>
+								</Box>
 							</NavLink>
 						</li>
 					);

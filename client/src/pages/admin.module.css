@@ -437,9 +437,12 @@ form {
 }
 
 .SidebarItem {
-	height: 50px;
-	width: 100%;
-	border: 1px solid black;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 10px; /* Adjust this to control the space around the icon and the title */
+
 	list-style-type: none;
 }
 
