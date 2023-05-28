@@ -9,6 +9,21 @@ import AlbumHeader from './AlbumHeader';
 import ImageCardsList from './ImageCardsList';
 import SubmitAlbumButton from './SubmitAlbumButton';
 
+const CREATE_ALBUM_STYLE = {
+	form: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#f2f2f2',
+		padding: '20px',
+		borderRadius: '10px',
+	},
+	div: {
+		margin: '20px 0',
+	},
+};
+
 export default function CreateAlbum() {
 	const navigate = useNavigate();
 	/// kontext for modal
@@ -195,8 +210,8 @@ export default function CreateAlbum() {
 	};
 
 	return (
-		<div>
-			<form onSubmit={submitAlbum}>
+		<div style={CREATE_ALBUM_STYLE.div}>
+			<form style={CREATE_ALBUM_STYLE.form} onSubmit={submitAlbum}>
 				<AlbumHeader title={setTitle} description={setDescription} />
 				<AddPhotosDropzone
 					isDragActive={isDragActive}

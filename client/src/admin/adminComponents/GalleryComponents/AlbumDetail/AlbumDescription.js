@@ -1,6 +1,8 @@
 import useCap from '../../../../Hooks/useCap';
 import {Loader} from '../../../../Loader';
 
+import gallery from '../gallery.module.css';
+
 export default function AlbumDescription({album, heading}) {
 	const {title, description} = heading;
 	const {capitalize} = useCap();
@@ -20,6 +22,7 @@ export default function AlbumDescription({album, heading}) {
 				<div>
 					{album?.album_title ? (
 						<input
+							className={gallery.input}
 							required={true}
 							ref={title}
 							type="text"
@@ -38,12 +41,14 @@ export default function AlbumDescription({album, heading}) {
 					)}
 					{descriptionLength > 0 ? (
 						<textarea
+							className={gallery.textarea}
 							ref={description}
 							rows={5}
 							defaultValue={album.description}
 						/>
 					) : (
 						<textarea
+							className={gallery.textarea}
 							ref={description}
 							rows={5}
 							placeholder="Popisek zatím nebyl přidán"

@@ -1,10 +1,15 @@
+import styles from './gallery.module.css';
+
 export default function AlbumHeader({title, description}) {
 	return (
 		<>
 			{' '}
-			<label htmlFor="albumName">Název Alba</label>
-			<em>Maximální počet znaků je 60</em>
+			<label className={styles.label} htmlFor="albumName">
+				Název Alba
+			</label>
+			<em className={styles.em}>Maximální počet znaků je 60</em>
 			<input
+				className={styles.input}
 				maxLength={60}
 				name="albumName"
 				required
@@ -16,9 +21,12 @@ export default function AlbumHeader({title, description}) {
 					});
 				}}
 			></input>
-			<label htmlFor="albumDescription">Popisek Alba</label>
-			<em>Maximální počet znaků je 250</em>
+			<label className={styles.label} htmlFor="albumDescription">
+				Popisek Alba
+			</label>
+			<em className={styles.em}>Maximální počet znaků je 250</em>
 			<textarea
+				className={styles.textarea}
 				maxLength={250}
 				onChange={(e) => {
 					description(() => {

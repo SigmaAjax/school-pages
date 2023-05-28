@@ -2,6 +2,7 @@ import React from 'react';
 import ErrorMsg from './ErrorMsg';
 
 import styles from '../../../pages/admin.module.css';
+import gallery from './gallery.module.css';
 
 export default function AddPhotosDropzone({
 	isDragActive,
@@ -12,7 +13,7 @@ export default function AddPhotosDropzone({
 }) {
 	return (
 		<div>
-			<label htmlFor="dropzone">
+			<label className={gallery.label} htmlFor="dropzone">
 				<p>
 					Sem můžete přetáhnou fotografie nebo vybrat fotografie kliknutím sem
 					&#128071;

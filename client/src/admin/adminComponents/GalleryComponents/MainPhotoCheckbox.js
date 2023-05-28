@@ -17,7 +17,6 @@ export default function MainPhotoCheckbox({
 						if (item.name + '-checkbox' === e.target.name) {
 							return {...item, introductionary: !item.introductionary};
 						}
-
 						return item;
 					});
 					return checkedItem;

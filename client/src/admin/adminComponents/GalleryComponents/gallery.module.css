@@ -1,0 +1,84 @@
+.label {
+	display: block;
+	margin-bottom: 10px;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.em {
+	font-size: 16px;
+	color: gray;
+}
+
+.input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	max-width: 300px;
+	min-width: 100px;
+	&::placeholder {
+		color: #d9cfd3;
+	}
+}
+
+.textarea {
+	width: 100%;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	max-width: 500px;
+	min-width: 100px;
+	&::placeholder {
+		color: #d9cfd3;
+	}
+}
+
+/* .image-card-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.label-small {
+	font-size: 0.8em;
+	margin-left: 5px;
+} */
+
+.image-card-container {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center; /* Align items to the center */
+	justify-content: space-between;
+	background-color: #f5f5f5; /* Light grey background */
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Box shadow */
+	padding: 10px;
+	margin: 10px;
+	width: 150px; /* Adjust according to your need */
+	height: 150px; /* Adjust according to your need */
+	border-radius: 5px; /* Rounded corners */
+}
+
+.delete-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: red; /* Adjust according to your need */
+	color: white; /* Adjust according to your need */
+	border: none; /* Removes button default styles */
+	cursor: pointer; /* Changes the cursor when you hover over the button */
+}
+
+.checkbox-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between; /* Spreads the checkbox and the label across the full width */
+	width: 100%; /* Makes the container take up the full width of the parent */
+}
+
+.label-small {
+	font-size: 0.8em;
+	margin-left: 5px;
+}

@@ -12,6 +12,7 @@ export default function SubmitAlbumButton({images}) {
 			variant="contained"
 			type="submit"
 			disabled={!oneCheck}
+			sx={{maxWidth: '200px'}}
 		>
 			Vytvořit Album
 		</Button>
