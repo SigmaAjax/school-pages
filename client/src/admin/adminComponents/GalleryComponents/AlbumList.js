@@ -49,7 +49,7 @@ export default function AlbumList() {
 		<div className={`${styles.item} ${styles.albumListContainer}`}>
 			<h1>Jednotlivá Alba</h1>
 
-			<Grid container backgroundColor={'blue'}>
+			<Grid container backgroundColor={'#2196f3'}>
 				{albums.map((album) => (
 					<AlbumCard key={album.album_title} content={album} />
 				))}

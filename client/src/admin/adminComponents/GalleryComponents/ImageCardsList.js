@@ -1,18 +1,21 @@
 import ImageCard from './ImageCard';
 
-import styles from '../../../pages/admin.module.css';
+const parentStyle = {
+	display: 'flex',
+	flexWrap: 'wrap',
+	justifyContent: 'space-between', // If you want to have some space between the images
+};
 
 export default function ImageCardsList({imagesList, setImages, checkedBox}) {
-	//const {checkedBox} = rest;
-	//console.log(imagesList);
 	return (
 		<>
 			{imagesList.length > 0 ? (
-				<div>
+				<div style={parentStyle}>
 					{checkedBox
 						? imagesList.map((image) => {
 								return (
 									<ImageCard
+										key={image.name}
 										image={image}
 										setImages={setImages}
 										intro={!image.introductionary}

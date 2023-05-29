@@ -38,6 +38,16 @@ export default function CreateAlbum() {
 	//// set album object into state
 	const [album, setAlbum] = useState({});
 
+	const slugifyFileName = (filename) => {
+		const splitName = filename.split('.');
+		const nameWithoutExtension = splitName
+			.slice(0, splitName.length - 1)
+			.join('.');
+		const extension = splitName[splitName.length - 1];
+
+		return `${slugify(nameWithoutExtension)}.${extension}`;
+	};
+
 	//// Callback creating images and checking for duplicates
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
 		let uniqueImages = [];
@@ -65,7 +75,7 @@ export default function CreateAlbum() {
 
 			reader.onload = () => {
 				const imageUrlAsObj = {
-					name: slugify(image?.name),
+					name: slugifyFileName(image?.name),
 					lastModified: image?.lastModified,
 					lastModifiedDate: image?.lastModifiedDate,
 					size: image?.size,

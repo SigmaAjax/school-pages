@@ -33,10 +33,11 @@ export default function DisplayDoc({doc, deleteFile, showDeleteButton}) {
 		doc.url && doc.url.includes('files/')
 			? `${doc.url}`
 			: URL.createObjectURL(doc); // and here
-	console.log({doc: doc, url: fileURL});
 
 	return (
-		<Card sx={{minWidth: 275, marginBottom: 2, position: 'relative'}}>
+		<Card
+			sx={{minWidth: 450, maxWidth: 500, marginBottom: 2, position: 'relative'}}
+		>
 			<CardContent>
 				<Grid container justifyContent="center" alignItems="center">
 					<Grid item xs={12}>

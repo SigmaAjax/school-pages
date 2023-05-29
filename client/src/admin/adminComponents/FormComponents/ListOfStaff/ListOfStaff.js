@@ -80,14 +80,18 @@ export default function ListOfStaff() {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>Jméno</TableCell>
-							<TableCell>Příjmení</TableCell>
-							<TableCell>Akademický Titul</TableCell>
-							<TableCell>Email</TableCell>
-							<TableCell>Telefon</TableCell>
-							<TableCell>Pracovní pozice</TableCell>
-							<TableCell>Upravit zaměstnance</TableCell>
-							<TableCell>Smazat zaměstnance</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>Jméno</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>Příjmení</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>Akademický Titul</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>Email</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>Telefon</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>Pracovní pozice</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>
+								Upravit zaměstnance
+							</TableCell>
+							<TableCell sx={{fontWeight: 'bold'}}>
+								Smazat zaměstnance
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>

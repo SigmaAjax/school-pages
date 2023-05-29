@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import DisplayDoc from './DisplayDoc';
 
-const localhost = 'http://localhost:3200';
+import styles from './../../../pages/admin.module.css';
 
 export default function ListOfAllDocuments() {
 	const [documents, setDocuments] = useState([]);
@@ -36,18 +36,41 @@ export default function ListOfAllDocuments() {
 	}, []);
 
 	return (
-		<div>
-			<h1>Uploaded Documents</h1>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+				paddingTop: 10,
+				backgroundColor: '#f2ecee',
+			}}
+		>
+			<h1>Nahrané Dokumenty</h1>
 
-			{documents.length > 0 &&
-				documents.map((doc) => (
-					<DisplayDoc
-						key={doc.name}
-						doc={doc}
-						deleteFile={deleteFile}
-						showDeleteButton
-					/>
-				))}
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'strech',
+				}}
+			>
+				{documents.length > 0 &&
+					documents.map((doc) => (
+						<div
+							style={{
+								minWidth: '350px', // Change this to whatever minimum width you want
+							}}
+						>
+							<DisplayDoc
+								key={doc.name}
+								doc={doc}
+								deleteFile={deleteFile}
+								showDeleteButton
+							/>
+						</div>
+					))}
+			</div>
 		</div>
 	);
 }
