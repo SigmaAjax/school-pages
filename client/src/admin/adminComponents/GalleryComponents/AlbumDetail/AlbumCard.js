@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import {Link as RouterLink} from 'react-router-dom';
 
-export default function AlbumCard({content}) {
+export default function AlbumCard({content, onDelete}) {
 	const renderPicture = (picture) =>
 		picture.intro && (
 			<CardMedia
@@ -76,7 +76,12 @@ export default function AlbumCard({content}) {
 						padding: 2,
 					}}
 				>
-					<Button variant="contained" color="error">
+					<Button
+						variant="contained"
+						color="error"
+						name="delete-album"
+						onClick={(event) => onDelete(event, content)}
+					>
 						Vymazat album
 					</Button>
 				</Box>

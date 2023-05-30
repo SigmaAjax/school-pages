@@ -19,6 +19,7 @@ export function AdminProvider({children}) {
 	const [postList, setPostList] = useState([]);
 	const [post, setPost] = useState({}); // For one particular post
 	const [album, setAlbum] = useState({});
+	const [albumList, setAlbumList] = useState([]);
 	// Gallery states photo states
 	const [employee, setEmployee] = useState({});
 	const [staff, setStaff] = useState([]);
@@ -31,6 +32,7 @@ export function AdminProvider({children}) {
 		album,
 		employee,
 		staff,
+		albumList,
 	};
 
 	const valueSetStates = {
@@ -41,6 +43,7 @@ export function AdminProvider({children}) {
 		setAlbum,
 		setEmployee,
 		setStaff,
+		setAlbumList,
 	};
 
 	return (

@@ -12,6 +12,7 @@ import AlbumDescription from './AlbumDescription';
 import CloudinaryImageCardsList from './CloudinaryImageCardsList';
 
 import styles from '../../../../pages/admin.module.css';
+import {Loader} from '../../../../Loader';
 
 export default function AlbumDetail() {
 	const {album} = useAdmin();
@@ -21,6 +22,8 @@ export default function AlbumDetail() {
 	/// Photos state
 	const [addNewPhotos, setAddNewPhotos] = useState(false);
 	const [photos, setPhotos] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
 	const {id, albumSlug} = useParams();
 	//ref for admin form
 	const title = useRef();
@@ -112,6 +115,7 @@ export default function AlbumDetail() {
 	useEffect(() => {
 		const fetchOneAlbum = async () => {
 			try {
+				setLoading((prev) => !prev); //true
 				// adding delay of 1 second
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				const response = await axios.get(
@@ -153,15 +157,17 @@ export default function AlbumDetail() {
 				console.table({...rawAlbum, arrayOfPictures: updatePictures});
 				setPhotos(updatePictures);
 				setAlbum({...rawAlbum, arrayOfPictures: updatePictures});
+				setLoading((prev) => !prev); //false
 			} catch (error) {
 				console.log(error);
+				setLoading((prev) => !prev); //false
+				setError(error);
 			} finally {
 				console.log('fetch done...', photos);
 			}
 		};
 		fetchOneAlbum();
 	}, []);
-	//console.log('one check is ...', oneCheck);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -225,6 +231,22 @@ export default function AlbumDetail() {
 
 		setIsOpenModal((prev) => !prev);
 	};
+
+	if (loading) {
+		return <Loader />;
+	}
+
+	if (error) {
+		return (
+			<div>
+				<p>Nepodařilo se načíst Album</p>
+				<p>
+					Error code: {error.code} - {error.message}
+				</p>
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<form className={`${styles.item} ${styles.one}`} onSubmit={handleSubmit}>

@@ -4,14 +4,29 @@ import AlbumCard from './AlbumDetail/AlbumCard';
 
 import styles from './../../../pages/admin.module.css';
 import {Grid} from '@mui/material';
+import {Loader} from '../../../Loader';
+import {useAdmin, useAdminUpdate} from '../../../context/AdminContext';
 
 export default function AlbumList() {
+	const {album, albumList} = useAdmin();
+	const {setAlbum, setButtonName, setIsOpenModal, setAlbumList} =
+		useAdminUpdate();
 	const [albums, setAlbums] = useState([]);
-	//const [photos, setPhotos] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
+
+	const handleDelete = (event, content) => {
+		setButtonName(() => event.target.name);
+		setAlbum(() => {
+			return {...content, page: 'list-page'};
+		});
+		setIsOpenModal((prev) => !prev);
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				setLoading((prev) => !prev);
 				// adding delay
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				const response = await axios.get('/api/get/albums');
@@ -31,9 +46,12 @@ export default function AlbumList() {
 					);
 					return updatedAlbum;
 				});
-				setAlbums(updatedAlbums);
+				setAlbumList(updatedAlbums);
+				setLoading((prev) => !prev);
 			} catch (error) {
 				console.log(error);
+				setError(error);
+				setLoading((prev) => !prev);
 			} finally {
 				console.log('data fetched');
 				//console.log(albums);
@@ -45,13 +63,32 @@ export default function AlbumList() {
 		};
 	}, []);
 
+	if (loading) {
+		return <Loader />;
+	}
+
+	if (error) {
+		return (
+			<div>
+				<p>Nepodařilo se načíst žádné album</p>
+				<p>
+					Error code: {error.code} - {error.message}
+				</p>
+			</div>
+		);
+	}
+
 	return (
 		<div className={`${styles.item} ${styles.albumListContainer}`}>
 			<h1>Jednotlivá Alba</h1>
 
 			<Grid container backgroundColor={'#2196f3'}>
-				{albums.map((album) => (
-					<AlbumCard key={album.album_title} content={album} />
+				{albumList.map((album) => (
+					<AlbumCard
+						key={album.album_title}
+						content={album}
+						onDelete={handleDelete}
+					/>
 				))}
 			</Grid>
 		</div>

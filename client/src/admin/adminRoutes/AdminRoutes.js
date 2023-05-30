@@ -21,7 +21,9 @@ import styles from '../../pages/admin.module.css';
 export default function AdminRoutes() {
 	return (
 		<div className={styles.container}>
-			<Modal>Fancy Modal</Modal>
+			<Modal>
+				<h3>Opravdu chcete provést akci?</h3>
+			</Modal>
 			<div className={`${styles.item} ${styles.one}`}>
 				<AdminSidebar />
 			</div>

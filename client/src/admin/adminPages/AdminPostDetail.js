@@ -7,6 +7,7 @@ import useSlugify from '../../Hooks/useSlugify';
 
 import styles from './../../pages/admin.module.css';
 import {Box, Button, Grid} from '@mui/material';
+import {Loader} from '../../Loader';
 
 const customStyles = {
 	customLabel: {
@@ -43,12 +44,14 @@ export default function AdminPostDetail() {
 	// Enable update button logic hook
 	const [enableUpdate, setEnableUpdate] = useState(true);
 	// loading hook
+	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
 
 	useEffect(() => {
 		const controller = new AbortController();
 		const fetchData = async () => {
 			try {
+				setLoading((prev) => !prev); // false
 				const response = await axios.get(`/api/get/${id}/${titleSlug}`, {
 					signal: controller.signal,
 				});
@@ -57,6 +60,7 @@ export default function AdminPostDetail() {
 					setPost(() => {
 						return response.data[0];
 					});
+					setLoading((prev) => !prev); // false
 				} else {
 					setErrorMessage(`Error: ${response.status} - ${response.statusText}`);
 				}
@@ -69,6 +73,7 @@ export default function AdminPostDetail() {
 				} else {
 					setErrorMessage('Error: Failed to fetch data.');
 				}
+				setLoading((prev) => !prev); //false
 			}
 		};
 
@@ -95,6 +100,19 @@ export default function AdminPostDetail() {
 				post_updated: date,
 			};
 		});
+	}
+
+	if (loading) {
+		return <Loader />;
+	}
+
+	if (errorMessage) {
+		return (
+			<div>
+				<p>Nepodařilo se načíst Album</p>
+				<p>Error: {errorMessage}</p>
+			</div>
+		);
 	}
 
 	return (

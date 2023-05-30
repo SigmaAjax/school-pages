@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import DisplayDoc from './DisplayDoc';
-
-import styles from './../../../pages/admin.module.css';
+import {Loader} from '../../../Loader';
 
 export default function ListOfAllDocuments() {
 	const [documents, setDocuments] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
 
 	async function deleteFile(filename) {
 		console.log('delete file ' + encodeURIComponent(filename));
@@ -20,20 +21,39 @@ export default function ListOfAllDocuments() {
 
 	const fetchFiles = async () => {
 		try {
+			setLoading((prev) => !prev); //true
 			const response = await axios.get(`/api/documents`);
 
 			const files = await response.data;
 			console.log({files: files});
 
 			setDocuments(files);
+			setLoading(false);
 		} catch (error) {
 			console.error('Error when fetching files', error);
+			setError(error);
+			setLoading((prev) => !prev); //false
 		}
 	};
 
 	useEffect(() => {
 		fetchFiles();
 	}, []);
+
+	if (loading) {
+		return <Loader />;
+	}
+
+	if (error) {
+		return (
+			<div>
+				<p>Nepodařilo se načíst Dokumenty</p>
+				<p>
+					Error code: {error.code} - {error.message}
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div

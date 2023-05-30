@@ -6,9 +6,15 @@ export default function useDeleteUpdate(buttonName) {
 	const navigate = useNavigate();
 	var arrOfButtonName = buttonName.split('-');
 	//context states for updating state after deleting
-	const {postList, post, album, employee} = useAdmin();
-	const {setPostList, setAlbum, setEmployee, setStaff, setButtonName} =
-		useAdminUpdate();
+	const {postList, post, album, employee, albumList} = useAdmin();
+	const {
+		setPostList,
+		setAlbum,
+		setEmployee,
+		setStaff,
+		setButtonName,
+		setAlbumList,
+	} = useAdminUpdate();
 
 	const deleteAlbum = async (album) => {
 		try {
@@ -19,14 +25,31 @@ export default function useDeleteUpdate(buttonName) {
 			const response = await axios.delete(
 				`/api/deleteAlbum/${album.album_id}/${album.originalSlug}`
 			);
-			setAlbum(() => {
-				return {};
-			});
+
+			if (response.status === 200) {
+				setAlbum(() => {
+					return {};
+				});
+				setButtonName(() => {
+					return '';
+				});
+				setAlbumList((prev) =>
+					prev.filter((item) => item.album_id !== album.album_id)
+				);
+			}
+
 			console.log(response.status);
 			console.log(response.data);
 			navigate('/admin/galerie');
 		} catch (error) {
 			console.error(error);
+			setButtonName(() => {
+				return '';
+			});
+		} finally {
+			setButtonName(() => {
+				return '';
+			});
 		}
 	};
 

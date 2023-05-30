@@ -12,6 +12,12 @@ const MODAL_STYLES = {
 	backgroundColor: '#FFF',
 	padding: '50px',
 	zIndex: 1000,
+	width: '450px',
+	height: '250px',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'space-between',
+	alignItems: 'center',
 };
 
 const OVERLAY_STYLES = {
@@ -32,54 +38,65 @@ export default function Modal({children}) {
 
 	if (!isOpenModal) return null;
 
-	// function updateOrDelete(nameOfButton) {
-	// 	nameOfButton === 'delete'
-	// 		? console.log('delete with button....', nameOfButton) // deletePost function
-	// 		: console.log('Updating post with button', nameOfButton); //updatePost funtion
-	// }
-
 	return ReactDom.createPortal(
 		<div style={OVERLAY_STYLES}>
 			<div style={MODAL_STYLES}>
-				<h5>{isOpenModal}</h5>
-				<button
-					onClick={() => {
-						setIsOpenModal((prev) => {
-							console.log('You are closing modal from X button');
-							return !prev;
-						});
-						setButtonName((prev) => {
-							return (prev = '');
-						});
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						width: '100%',
+						height: '28px',
 					}}
 				>
-					X
-				</button>
+					<h5>{isOpenModal}</h5>
+					<button
+						onClick={() => {
+							setIsOpenModal((prev) => {
+								console.log('You are closing modal from X button');
+								return !prev;
+							});
+							setButtonName((prev) => {
+								return (prev = '');
+							});
+						}}
+					>
+						X
+					</button>
+				</div>
 				{children}
-				<button
-					onClick={() => {
-						setIsOpenModal((prev) => {
-							console.log('You are closing modal from ZRUŠIT button');
-							return !prev;
-						});
-						setButtonName((prev) => {
-							return (prev = '');
-						});
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						width: '100%',
 					}}
 				>
-					Zrušit
-				</button>
-				<button
-					onClick={() => {
-						updateOrDelete(buttonName);
-						setIsOpenModal((prev) => {
-							return !prev;
-						});
-						//updatePost(post.id);
-					}}
-				>
-					Pokračovat v akci
-				</button>
+					<button
+						onClick={() => {
+							setIsOpenModal((prev) => {
+								console.log('You are closing modal from ZRUŠIT button');
+								return !prev;
+							});
+							setButtonName((prev) => {
+								return (prev = '');
+							});
+						}}
+					>
+						Zrušit
+					</button>
+					<button
+						onClick={() => {
+							updateOrDelete(buttonName);
+							setIsOpenModal((prev) => {
+								return !prev;
+							});
+							//updatePost(post.id);
+						}}
+					>
+						Pokračovat v akci
+					</button>
+				</div>
 			</div>
 		</div>,
 		document.getElementById('portal')
