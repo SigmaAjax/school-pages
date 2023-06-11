@@ -52,6 +52,8 @@ export default function AdminPostDetail() {
 			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
 			: '/api/get';
 
+	console.log(`${url}/${id}/${titleSlug}`);
+
 	useEffect(() => {
 		const controller = new AbortController();
 		const fetchData = async () => {

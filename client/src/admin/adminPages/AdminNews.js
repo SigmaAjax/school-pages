@@ -17,6 +17,7 @@ export default function AdminNews() {
 	// Filtered Searched posts
 	const [searchPhrase, setSearchPhrase] = useState('');
 	// Sorting state
+	const [error, setError] = useState(null);
 
 	const url =
 		process.env.NODE_ENV === 'production'
@@ -38,16 +39,21 @@ export default function AdminNews() {
 		const controller = new AbortController();
 
 		async function fetchData() {
-			const response = await axios.get(url, {signal: controller.signal});
-			setPost(() => {
-				return {};
-			});
-			console.log(post);
-			const posts = await response.data;
-			console.log('Loading posts...');
-			setPostList(() => {
-				return [...posts];
-			});
+			try {
+				const response = await axios.get(url, {signal: controller.signal});
+				setPost(() => {
+					return {};
+				});
+				console.log(post);
+				const posts = await response.data;
+				console.log('Loading posts...');
+				setPostList(() => {
+					return [...posts];
+				});
+			} catch (error) {
+				console.error(error);
+				setError(error);
+			}
 		}
 
 		fetchData();
@@ -57,6 +63,17 @@ export default function AdminNews() {
 			controller.abort();
 		};
 	}, []);
+
+	if (error) {
+		return (
+			<div>
+				<p>Nepodařilo se načíst příspěvky</p>
+				<p>
+					Error code: {error.code} - {error.message}
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className={`${styles.item} ${styles.two}`}>

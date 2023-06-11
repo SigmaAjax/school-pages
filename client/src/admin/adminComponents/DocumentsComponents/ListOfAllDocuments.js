@@ -10,13 +10,13 @@ export default function ListOfAllDocuments() {
 
 	const url =
 		process.env.NODE_ENV === 'production'
-			? `${process.env.REACT_APP_BACKEND_URL}/api/file/`
-			: '/api/file/';
+			? `${process.env.REACT_APP_BACKEND_URL}`
+			: '';
 
 	async function deleteFile(filename) {
 		console.log('delete file ' + encodeURIComponent(filename));
 		try {
-			await axios.delete(`${url}${encodeURIComponent(filename)}`);
+			await axios.delete(`${url}/api/file/${encodeURIComponent(filename)}`);
 			// Refresh the list of files after successful deletion
 			fetchFiles();
 		} catch (error) {
@@ -27,7 +27,7 @@ export default function ListOfAllDocuments() {
 	const fetchFiles = async () => {
 		try {
 			setLoading((prev) => !prev); //true
-			const response = await axios.get(`/api/documents`);
+			const response = await axios.get(`${url}/api/documents`);
 
 			const files = await response.data;
 			console.log({files: files});
