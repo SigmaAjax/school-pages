@@ -38,6 +38,11 @@ export default function StaffDetail() {
 	const {id} = useParams();
 	const navigate = useNavigate(); /// change for useLocation to avoid needless useEffect re-renders
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/employee/get/`
+			: '/api/employee/get/';
+
 	const handleAddInputField = () => {
 		if (inputFields < 4) {
 			setInputFields((prev) => prev + 1);
@@ -102,7 +107,7 @@ export default function StaffDetail() {
 	const fetchEmployeeDetail = async () => {
 		setLoading((prev) => !prev);
 		try {
-			const response = await axios.get(`/api/employee/get/${id}`);
+			const response = await axios.get(`${url}${id}`);
 			console.log(response.status);
 			console.log(response.data.employee);
 

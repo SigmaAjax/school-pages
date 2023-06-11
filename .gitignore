@@ -12,6 +12,7 @@ node_modules
 
 # production
 /build
+.netlify
 
 # misc
 .DS_Store
@@ -30,7 +31,7 @@ yarn-error.log*
 
 #client git
 
-/client/.gitignore
+.gitignore
 
 # misc
 .DS_Store

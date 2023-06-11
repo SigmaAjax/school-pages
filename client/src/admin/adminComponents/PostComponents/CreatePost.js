@@ -1,6 +1,6 @@
-import {useRef, useState} from 'react';
+import {useRef} from 'react';
 import axios from 'axios';
-import useSlugify from 'client/src/Hooks/useSlugify.js';
+import useSlugify from './../../../Hooks/useSlugify.js';
 import {useNavigate} from 'react-router-dom';
 import SubNavigation from '../../Subnavigation';
 
@@ -8,14 +8,11 @@ import {
 	Button,
 	TextField,
 	Typography,
-	Box,
 	Grid,
 	Card,
 	CardContent,
 	CardActions,
 } from '@mui/material';
-
-import styles from '../../../pages/admin.module.css';
 
 export default function CreatePost() {
 	const title = useRef();
@@ -23,6 +20,11 @@ export default function CreatePost() {
 	const userPass = useRef();
 	const {slugify} = useSlugify();
 	const navigate = useNavigate();
+
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/create`
+			: '/api/create';
 
 	const submitPost = async () => {
 		const datePosted = new Date().toISOString().substring(0, 19);
@@ -43,7 +45,7 @@ export default function CreatePost() {
 		try {
 			alert('Příspěvek bude odeslán na server...');
 
-			const response = await axios.post('/api/create', {
+			const response = await axios.post(url, {
 				userPass: userPassValue,
 				title: titleValue,
 				text: text.current.value || '',

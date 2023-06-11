@@ -16,14 +16,18 @@ export default function PostDetail({admin}) {
 	const title = useRef();
 	const post_text = useRef();
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
+			: 'api/get';
+
 	useEffect(() => {
-		let isMounted = true;
 		//const source = axios.CancelToken.source();
 		const controller = new AbortController();
 
 		const fetchData = async () => {
 			try {
-				const response = await axios.get(`/api/get/${id}/${titleSlug}`, {
+				const response = await axios.get(`${url}/${id}/${titleSlug}`, {
 					signal: controller.signal,
 				});
 				setPost(() => {
@@ -36,7 +40,6 @@ export default function PostDetail({admin}) {
 
 		fetchData();
 		return () => {
-			isMounted = false;
 			setPost(() => {
 				return {};
 			});

@@ -29,6 +29,11 @@ export default function EmployeeFormNew() {
 	const [phoneError, setPhoneError] = useState(false);
 	const [inputFields, setInputFields] = useState(1);
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/add/employee`
+			: '/api/add/employee';
+
 	const handleAddInputField = () => {
 		if (inputFields < 4) {
 			setInputFields((prev) => prev + 1);
@@ -78,7 +83,7 @@ export default function EmployeeFormNew() {
 
 		if (isEmailValid && isPhoneValid) {
 			try {
-				const response = await axios.post('/api/add/employee', processedValues);
+				const response = await axios.post(url, processedValues);
 				console.log(response.data);
 				alert(response.status, response.message);
 			} catch (error) {

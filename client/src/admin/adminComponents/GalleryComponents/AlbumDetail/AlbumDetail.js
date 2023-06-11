@@ -3,7 +3,7 @@ import {useDropzone} from 'react-dropzone';
 import {useEffect, useState, useRef, useCallback} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {useAdmin, useAdminUpdate} from '../../../../context/AdminContext';
-import useSlugify from 'client/src/Hooks/useSlugify.js';
+import useSlugify from '../../../../Hooks/useSlugify.js';
 
 import AddPhotosDropzone from '../AddPhotosDropzone';
 import DeleteAlbumButton from '../AlbumDetail/DeleteAlbumButton.js';
@@ -30,6 +30,11 @@ export default function AlbumDetail() {
 	const description = useRef();
 	/// custum hooks
 	const {slugify} = useSlugify();
+
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get/album/`
+			: '/api/get/album/';
 
 	const date = new Date().toISOString().substring(0, 19); // substring for MySql server;
 
@@ -119,9 +124,7 @@ export default function AlbumDetail() {
 				// adding delay of 1 second
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				const response = await axios.get(
-					`/api/get/album/${encodeURIComponent(id)}/${encodeURIComponent(
-						albumSlug
-					)}`
+					`${url}${encodeURIComponent(id)}/${encodeURIComponent(albumSlug)}`
 				);
 
 				const {arrayOfPictures, ...rawAlbum} = response.data[0];

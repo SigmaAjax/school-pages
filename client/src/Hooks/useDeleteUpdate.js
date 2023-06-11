@@ -16,6 +16,11 @@ export default function useDeleteUpdate(buttonName) {
 		setAlbumList,
 	} = useAdminUpdate();
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}`
+			: '';
+
 	const deleteAlbum = async (album) => {
 		try {
 			console.log('Deleting with button', buttonName);
@@ -23,7 +28,7 @@ export default function useDeleteUpdate(buttonName) {
 			console.table(album);
 			console.log('this is the album');
 			const response = await axios.delete(
-				`/api/deleteAlbum/${album.album_id}/${album.originalSlug}`
+				`${url}/api/deleteAlbum/${album.album_id}/${album.originalSlug}`
 			);
 
 			if (response.status === 200) {
@@ -58,7 +63,7 @@ export default function useDeleteUpdate(buttonName) {
 			console.log('Updating with button', buttonName);
 			console.log('Updating item with id: ' + album.album_id);
 			console.table(album);
-			const response = await axios.put(`/api/updateAlbum`, album);
+			const response = await axios.put(`${url}/api/updateAlbum`, album);
 			setAlbum(() => {
 				return {};
 			});
@@ -78,7 +83,9 @@ export default function useDeleteUpdate(buttonName) {
 		try {
 			console.log(post.id);
 			const idDeletion = await post.id;
-			const response = await axios.delete(`/api/deletePost/${idDeletion}`);
+			const response = await axios.delete(
+				`${url}/api/deletePost/${idDeletion}`
+			);
 			if (response.status === 200) {
 				setPostList((prev) => {
 					return prev.filter((post) => {
@@ -100,7 +107,7 @@ export default function useDeleteUpdate(buttonName) {
 			console.log('Updating post with button', buttonName);
 			console.log('Updating item with id: ' + post.id);
 			// console.table(post);
-			const response = await axios.put('/api/updatePost', {
+			const response = await axios.put(`${url}/api/updatePost`, {
 				id: post.id,
 				userPass: post.user_name,
 				title: post.title,
@@ -134,7 +141,9 @@ export default function useDeleteUpdate(buttonName) {
 		});
 		try {
 			const idDelete = await employee.employee_id;
-			const response = await axios.delete(`/api/delete/employee/${idDelete}`);
+			const response = await axios.delete(
+				`${url}/api/delete/employee/${idDelete}`
+			);
 			if (response.status === 200) {
 				setStaff((prev) => {
 					return prev.filter((employee) => {
@@ -161,7 +170,7 @@ export default function useDeleteUpdate(buttonName) {
 		try {
 			const idUpdate = await employee.employee_id;
 			const response = await axios.patch(
-				`/api/update/employee/${idUpdate}`,
+				`${url}/api/update/employee/${idUpdate}`,
 				employee
 			);
 			if (response.status === 200) {

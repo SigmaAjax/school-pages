@@ -47,12 +47,17 @@ export default function AdminPostDetail() {
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
+			: '/api/get';
+
 	useEffect(() => {
 		const controller = new AbortController();
 		const fetchData = async () => {
 			try {
 				setLoading((prev) => !prev); // false
-				const response = await axios.get(`/api/get/${id}/${titleSlug}`, {
+				const response = await axios.get(`${url}/${id}/${titleSlug}`, {
 					signal: controller.signal,
 				});
 

@@ -6,7 +6,7 @@ import AdminPostList from '../adminComponents/PostComponents/AdminPostList';
 import SearchInput from '../adminComponents/PostComponents/SearchInput';
 import SelectInput from '../adminComponents/PostComponents/SelectInput';
 import SelectYearMonth from '../adminComponents/PostComponents/SelectYearMonth';
-import {Loader} from 'client/src/Loader.js';
+import {Loader} from '../../Loader.js';
 import SubNavigation from '../Subnavigation';
 
 import styles from '../../pages/admin.module.css';
@@ -18,11 +18,17 @@ export default function AdminNews() {
 	const [searchPhrase, setSearchPhrase] = useState('');
 	// Sorting state
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
+			: '/api/get';
+
 	const filterredPosts = postList.filter((post) => {
 		return post.title.toLowerCase().includes(searchPhrase);
 	});
 
-	//console.table(process.env);
+	console.log(url);
+	console.log(process.env.REACT_APP_BACKEND_URL);
 
 	useEffect(() => {
 		setButtonName(() => {
@@ -32,7 +38,7 @@ export default function AdminNews() {
 		const controller = new AbortController();
 
 		async function fetchData() {
-			const response = await axios.get('/api/get', {signal: controller.signal});
+			const response = await axios.get(url, {signal: controller.signal});
 			setPost(() => {
 				return {};
 			});
@@ -78,7 +84,7 @@ export default function AdminNews() {
 				orderedListOfPosts={postList}
 			/>
 			<SelectYearMonth orderedListFromToFunc={setPostList} />
-			{postList.length < 0 ? (
+			{postList?.length === 0 ? (
 				<Loader />
 			) : (
 				<AdminPostList listOfPosts={filterredPosts} />

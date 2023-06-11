@@ -38,6 +38,11 @@ export default function CreateAlbum() {
 	//// set album object into state
 	const [album, setAlbum] = useState({});
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/upload/album`
+			: '/api/upload/album';
+
 	const slugifyFileName = (filename) => {
 		const splitName = filename.split('.');
 		const nameWithoutExtension = splitName
@@ -156,7 +161,7 @@ export default function CreateAlbum() {
 
 		try {
 			alert('Album bude odesláno na server...');
-			const firstResponse = await axios.post('/api/upload/album', {
+			const firstResponse = await axios.post(url, {
 				title: album.slug,
 				images: imagesCloudinary,
 			});
@@ -192,7 +197,7 @@ export default function CreateAlbum() {
 
 			console.log(mergeImagesArray());
 
-			const secondResponse = await axios.post('/api/upload/album/database', {
+			const secondResponse = await axios.post(`${url}/database`, {
 				album: albumCredentials,
 				photos: mergedImages,
 			});

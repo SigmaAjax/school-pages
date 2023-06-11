@@ -25,6 +25,11 @@ export default function ListOfStaff() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/all/employees`
+			: '/api/all/employees';
+
 	const handleModal = (e) => {
 		setIsOpenModal((prev) => !prev);
 		setButtonName(e.currentTarget.name);
@@ -41,7 +46,7 @@ export default function ListOfStaff() {
 	const fetchEmployees = async () => {
 		try {
 			setLoading((prev) => !prev);
-			const response = await axios.get('/api/all/employees');
+			const response = await axios.get(url);
 			const data = await response.data;
 
 			setTimeout(() => {

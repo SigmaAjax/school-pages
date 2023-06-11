@@ -9,6 +9,11 @@ export default function NewDoc() {
 	const [docs, setDocs] = useState([]);
 	const navigate = useNavigate();
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/upload/files`
+			: '/api/upload/files';
+
 	//// Callback creating images and checking for duplicates
 
 	const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
@@ -77,7 +82,7 @@ export default function NewDoc() {
 		});
 
 		try {
-			const response = await axios.post('/api/upload/files', formData, {
+			const response = await axios.post(url, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},

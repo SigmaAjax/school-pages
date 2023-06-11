@@ -15,6 +15,11 @@ export default function AlbumList() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get/albums`
+			: '/api/get/albums';
+
 	const handleDelete = (event, content) => {
 		setButtonName(() => event.target.name);
 		setAlbum(() => {
@@ -29,7 +34,7 @@ export default function AlbumList() {
 				setLoading((prev) => !prev);
 				// adding delay
 				await new Promise((resolve) => setTimeout(resolve, 1000));
-				const response = await axios.get('/api/get/albums');
+				const response = await axios.get(url);
 				console.log({response: response});
 				const rawAlbums = response.data;
 

@@ -7,9 +7,14 @@ export default function News() {
 	// const {postList, buttonName} = useAdmin();
 	// const {setPostList, setButtonName} = useAdminUpdate();
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
+			: '/api/get';
+
 	useEffect(() => {
 		const controller = new AbortController();
-		axios.get('/api/get', {signal: controller.signal}).then((response) => {
+		axios.get(url, {signal: controller.signal}).then((response) => {
 			setPostList((prev) => {
 				return [...response.data];
 			});
