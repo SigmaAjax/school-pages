@@ -27,6 +27,13 @@ export default function AdminPost({content}) {
 		timeStyle: 'short',
 	});
 
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
+			: '/api/get';
+
+	console.log(`${url}/${content.id}/${content.slug}`);
+
 	return (
 		<Card
 			sx={{
@@ -114,24 +121,22 @@ export default function AdminPost({content}) {
 						</Button>
 					</Grid>
 					<Grid item>
-						<a
-							href={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
-							rel="noreferrer"
+						<Button
+							component={Link}
+							to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
+							color="primary"
+							variant="contained"
+							rel="noopener noreferrer"
+							onClick={(e) => {
+								alert('Příspěvek bude upraven', e.target.name);
+								setButtonName((prev) => {
+									prev = e.target.name;
+									return prev;
+								});
+							}}
 						>
-							<Button
-								color="primary"
-								variant="contained"
-								onClick={(e) => {
-									alert('Příspěvek bude upraven', e.target.name);
-									setButtonName((prev) => {
-										prev = e.target.name;
-										return prev;
-									});
-								}}
-							>
-								Upravit příspěvek
-							</Button>
-						</a>
+							Upravit příspěvek
+						</Button>
 					</Grid>
 				</Grid>
 			</CardActions>

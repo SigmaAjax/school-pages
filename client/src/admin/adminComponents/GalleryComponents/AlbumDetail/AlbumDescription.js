@@ -19,32 +19,37 @@ export default function AlbumDescription({album, heading}) {
 	return (
 		<>
 			{album ? (
-				<div>
-					{album?.album_title ? (
-						<input
-							className={gallery.input}
-							required={true}
-							ref={title}
-							type="text"
-							defaultValue={capitalize(album?.album_title)}
-						/>
-					) : (
-						<p>Název chybí nebo se nepodařil načíst</p>
-					)}
+				<div className={gallery.inputContainer}>
+					<label htmlFor="title" className={gallery.label}>
+						Název alba
+					</label>
+					<input
+						name="title"
+						id="title"
+						className={gallery.input}
+						required={true}
+						ref={title}
+						type="text"
+						defaultValue={capitalize(album?.album_title)}
+					/>
 					{album?.date_created ? (
-						<p>
+						<p className={gallery.dateSmall}>
 							Vytvořeno v:{' '}
 							<strong>{formatDateCzech.format(datumCreated)}</strong>
 						</p>
 					) : (
 						<strong>Chybí Datum v databázi</strong>
 					)}
+					<label htmlFor="description" className={gallery.label}>
+						Popis alba
+					</label>
 					{descriptionLength > 0 ? (
 						<textarea
 							className={gallery.textarea}
 							ref={description}
 							rows={5}
 							defaultValue={album.description}
+							id="description"
 						/>
 					) : (
 						<textarea
@@ -52,6 +57,7 @@ export default function AlbumDescription({album, heading}) {
 							ref={description}
 							rows={5}
 							placeholder="Popisek zatím nebyl přidán"
+							id="description"
 						/>
 					)}
 				</div>

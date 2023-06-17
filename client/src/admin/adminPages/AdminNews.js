@@ -21,8 +21,8 @@ export default function AdminNews() {
 
 	const url =
 		process.env.NODE_ENV === 'production'
-			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
-			: '/api/get';
+			? `${process.env.REACT_APP_BACKEND_URL}`
+			: '';
 
 	const filterredPosts = postList.filter((post) => {
 		return post.title.toLowerCase().includes(searchPhrase);
@@ -40,7 +40,9 @@ export default function AdminNews() {
 
 		async function fetchData() {
 			try {
-				const response = await axios.get(url, {signal: controller.signal});
+				const response = await axios.get(`${url}/api/get`, {
+					signal: controller.signal,
+				});
 				setPost(() => {
 					return {};
 				});
