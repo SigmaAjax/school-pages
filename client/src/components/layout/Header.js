@@ -17,7 +17,7 @@ export default function Header() {
 			<Grid container>
 				<Grid item xs={12} sm={6}>
 					<Typography variant="h6" gutterBottom>
-						<strong>Základní škola a Mateřská škola Libo</strong>
+						<strong>Základní škola a Mateřská škola Libotenice</strong>
 					</Typography>
 				</Grid>
 				<Grid item xs={12} sm={6} style={{textAlign: 'right'}}>
@@ -29,7 +29,7 @@ export default function Header() {
 						>
 							<PhoneIcon />
 						</IconButton>
-						<Link href="tel:+420777777777" color="primary">
+						<Link href="tel:+420777777777" color="primary" underline="hover">
 							<Typography display="inline">+420 777 777 777</Typography>
 						</Link>
 					</Box>
@@ -41,7 +41,11 @@ export default function Header() {
 						>
 							<EmailIcon />
 						</IconButton>
-						<Link href="mailto:reditel@motlova.cz" color="primary">
+						<Link
+							href="mailto:reditel@motlova.cz"
+							color="primary"
+							underline="hover"
+						>
 							<Typography display="inline">reditel@motlova.cz</Typography>
 						</Link>
 					</Box>
@@ -50,6 +54,7 @@ export default function Header() {
 						target="_blank"
 						rel="noopener noreferrer"
 						color="primary"
+						underline="hover"
 					>
 						<FacebookIcon />
 					</IconButton>
