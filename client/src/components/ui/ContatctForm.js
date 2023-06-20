@@ -26,9 +26,9 @@ export default function ContactForm() {
 				<Box
 					display={'flex'}
 					justifyContent={'space-around'}
-					flex-direction={'column'}
 					alignItems={'center'}
 					style={{width: '100%'}}
+					flexDirection={'column'}
 				>
 					<Grid marginBottom={3}>
 						<Typography variant="h4" gutterBottom>
