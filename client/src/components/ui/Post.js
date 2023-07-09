@@ -1,69 +1,101 @@
-import {Link as RouterLink} from 'react-router-dom';
-import {useAdmin, useAdminUpdate} from '../../context/AdminContext';
-import useDeleteUpdate from '../../Hooks/useDeleteUpdate';
-import {Box, Typography, Button} from '@mui/material';
+import {Box, Typography, Button, Grid} from '@mui/material';
+import ArrowForward from '@mui/icons-material/ArrowForward';
+import {useState} from 'react';
 
-export default function Post({content, admin}) {
-	const {buttonName, post} = useAdmin();
-	const {setIsOpenModal, setButtonName, setPost} = useAdminUpdate();
-	// I can only delete from this page
-	const {updateOrDelete} = useDeleteUpdate(buttonName, content);
+export default function Post(props) {
+	const {
+		title,
+		post_text: description,
+		date_updated: date_created,
+		user_name: author,
+	} = props;
+
+	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {
+		dateStyle: 'long',
+	});
+
+	if (date_created && !isNaN(Date.parse(date_created))) {
+		console.log(formatDateCzech.format(new Date(date_created)));
+	}
+
+	const [readMore, setReadMore] = useState(false);
+
+	const handleClick = () => {
+		setReadMore((prev) => !prev);
+	};
 
 	return (
-		<Box>
-			<Box key={content.id} className="postContainer item two">
-				{admin ? (
-					<RouterLink
-						to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
-					>
-						<Typography variant="h5">{content.title}</Typography>
-					</RouterLink>
-				) : (
-					<RouterLink to={`/aktuality/${content.id}/${content.slug}`}>
-						<Typography variant="h5">{content.title}</Typography>
-					</RouterLink>
-				)}
-
-				<Typography>
-					{content.post_text.length > 200
-						? content.post_text.substring(0, 200) + '...'
-						: content.post_text}
+		<Grid item xs={12} sm={6} md={6}>
+			<Box
+				sx={{
+					p: 6,
+					border: 1,
+					borderColor: 'grey.200',
+					borderRadius: 1,
+					boxShadow: 1,
+				}}
+			>
+				<Typography
+					variant="h4"
+					component="h2"
+					mb={2}
+					sx={{fontWeight: 'bold'}}
+				>
+					{title}
 				</Typography>
-				<Typography variant="subtitle1" component="strong">
-					{content.user_name}
+				<Typography
+					variant="body2"
+					color="text.secondary"
+					mb={5}
+					sx={{
+						position: 'relative',
+						maxHeight: readMore ? '100%' : '100px',
+						overflow: 'hidden',
+						transition: '1s',
+						'&:after': {
+							content: '""',
+							textAlign: 'right',
+							position: 'absolute',
+							bottom: 0,
+							right: 0,
+							width: '50%',
+							height: '50%',
+							backgroundImage: readMore
+								? 'none'
+								: 'linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 100%)',
+							pointerEvents: 'none',
+						},
+					}}
+				>
+					{description}
 				</Typography>
-				{admin && (
-					<>
+				<Typography variant="body2" component="p" fontWeight="bold" mb={5}>
+					{formatDateCzech.format(new Date(date_created))}
+				</Typography>
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'center',
+					}}
+				>
+					<Box sx={{display: 'flex', alignItems: 'center'}}>
+						<Typography variant="subtitle1">{author}</Typography>
+					</Box>
+					{description.length > 100 ? (
 						<Button
-							name="post-delete"
-							onClick={() => {
-								setIsOpenModal((prev) => {
-									return !prev;
-								});
-								setPost(content);
-								updateOrDelete(post);
-							}}
+							endIcon={<ArrowForward />}
+							color="primary"
+							size="small"
+							onClick={handleClick}
 						>
-							Vymazat příspěvek
+							{readMore ? 'Méně ...' : 'Více ...'}
 						</Button>
-						<RouterLink
-							to={`/admin/newPost/admin-posts/${content.id}/${content.slug}`}
-						>
-							<Button
-								onClick={(e) => {
-									alert('Příspěvek bude upraven');
-									setButtonName((prev) => {
-										prev = e.target.name;
-										return prev;
-									});
-								}}
-							>
-								Upravit příspěvek
-							</Button>
-						</RouterLink>
-					</>
-				)}
+					) : (
+						<></>
+					)}
+				</Box>
 			</Box>
-		</Box>
+		</Grid>
 	);
 }

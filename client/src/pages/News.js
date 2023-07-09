@@ -1,56 +1,58 @@
 import axios from 'axios';
-import {useEffect, useState} from 'react';
+import {useState, useEffect} from 'react';
 import Post from '../components/ui/Post';
+import {Grid} from '@mui/material';
+import {Loader} from '../Loader';
 
 export default function News() {
 	const [postList, setPostList] = useState([]);
-	// const {postList, buttonName} = useAdmin();
-	// const {setPostList, setButtonName} = useAdminUpdate();
+	const [isLoading, setIsLoading] = useState(true);
+	const [errorMsg, setErrorMsg] = useState(null);
 
-	const url =
-		process.env.NODE_ENV === 'production'
-			? `${process.env.REACT_APP_BACKEND_URL}/api/get`
-			: '/api/get';
+	const fetchPosts = async () => {
+		try {
+			const url =
+				process.env.NODE_ENV === 'production'
+					? `${process.env.REACT_APP_BACKEND_URL}/api/get`
+					: '/api/get';
+			const response = await axios.get(url);
+
+			if (response.status === 200) {
+				setPostList(response.data);
+			} else {
+				// This will run if the status is not 200, e.g. 404 or 500
+				throw new Error(`Error ${response.status}: ${response.statusText}`);
+			}
+
+			setIsLoading(false);
+		} catch (error) {
+			console.error('Error:', error);
+			setErrorMsg(`${error.message} \n ${error.stack} \n ${error.status}`);
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		const controller = new AbortController();
-		axios.get(url, {signal: controller.signal}).then((response) => {
-			setPostList((prev) => {
-				return [...response.data];
-			});
-		});
-		return () => {
-			controller.abort();
-		};
+		fetchPosts();
 	}, []);
 
-	return (
-		<div className="item two">
-			{/* {admin ? (
-				<>
-					<h1>Aktuality</h1>
-					<SubNavigation
-						navItems={[
-							{
-								exact: true,
-								to: '/admin/newPost',
-								label: 'Vytvoř aktualitu nebo příspěvek',
-							},
-							{
-								exact: false,
-								to: '/admin/newPost/admin-posts',
-								label: 'Uprav aktualitu nebo příspěvek',
-							},
-						]}
-					/>{' '}
-				</>
-			) : (
-				<h1>Co nového? aka Aktuality</h1>
-			)} */}
+	if (isLoading) {
+		return <Loader />;
+	}
 
-			{/* {postList.map((val) => {
-				return <Post key={val.id} content={val} admin={admin} />;
-			})} */}
-		</div>
+	if (errorMsg) {
+		return <h1>{errorMsg}</h1>; // You can format this error message as you see fit
+	}
+
+	if (postList?.length === 0) {
+		return <h1>No posts available</h1>;
+	}
+
+	return (
+		<Grid container spacing={8} margin={1}>
+			{postList.map((post) => (
+				<Post key={post.id} {...post} />
+			))}
+		</Grid>
 	);
 }
