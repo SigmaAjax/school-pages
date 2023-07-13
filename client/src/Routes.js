@@ -8,6 +8,7 @@ import News from './pages/News';
 import PostDetail from './pages/PostDetail';
 import Preschool from './pages/Preschool';
 import AdminPage from './pages/AdminPage';
+import AlbumPage from './pages/AlbumsPage';
 
 export function Routes() {
 	return (
@@ -19,6 +20,7 @@ export function Routes() {
 			<Route path="/jidelna" element={<Cantine />} />
 			<Route path="/zakladka" element={<Elementary />} />
 			<Route path="/kontakty" element={<ContactPage />} />
+			<Route path="/fotogalerie" element={<AlbumPage />} />
 			<Route exact path="/admin/*" element={<AdminPage />} />
 		</RouterRoutes>
 	);

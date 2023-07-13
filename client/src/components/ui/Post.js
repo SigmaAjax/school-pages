@@ -14,10 +14,6 @@ export default function Post(props) {
 		dateStyle: 'long',
 	});
 
-	if (date_created && !isNaN(Date.parse(date_created))) {
-		console.log(formatDateCzech.format(new Date(date_created)));
-	}
-
 	const [readMore, setReadMore] = useState(false);
 
 	const handleClick = () => {

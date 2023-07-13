@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
 import Post from '../components/ui/Post';
-import {Grid} from '@mui/material';
+import {Grid, Typography} from '@mui/material';
 import {Loader} from '../Loader';
 
 export default function News() {
@@ -49,10 +49,15 @@ export default function News() {
 	}
 
 	return (
-		<Grid container spacing={8} margin={1}>
-			{postList.map((post) => (
-				<Post key={post.id} {...post} />
-			))}
+		<Grid container marginTop={60}>
+			<Typography variant="h1" sx={{marginLeft: '20px'}}>
+				Aktuality
+			</Typography>
+			<Grid container spacing={8} margin={1}>
+				{postList.map((post) => (
+					<Post key={post.id} {...post} />
+				))}
+			</Grid>
 		</Grid>
 	);
 }

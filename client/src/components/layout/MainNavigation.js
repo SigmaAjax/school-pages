@@ -1,16 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {
-	AppBar,
-	Toolbar,
-	Typography,
-	Box,
-	Button,
-	Popper,
-	Paper,
-	MenuItem,
-	Avatar,
-} from '@mui/material';
+import {AppBar, Toolbar, Typography, Box, Button, Avatar} from '@mui/material';
 
 const navItems = [
 	{name: 'Aktuality', link: '/aktuality'},
@@ -18,6 +8,7 @@ const navItems = [
 	{name: 'Jídelna', link: '/jidelna'},
 	{name: 'Základka', link: '/zakladka'},
 	{name: 'Kontakty', link: '/kontakty'},
+	{name: 'Fotogalerie', link: '/fotogalerie'},
 	{name: 'Admin Page', link: '/admin'},
 ];
 
