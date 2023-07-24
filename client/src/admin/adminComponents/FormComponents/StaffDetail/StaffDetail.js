@@ -6,6 +6,7 @@ import StaffPositionEasy from '../StaffPositionEasy';
 import {Box, Button} from '@mui/material';
 import {Loader} from '../../../../Loader';
 import {useAdminUpdate} from '../../../../context/AdminContext';
+import StaffCheckboxTree from '../StaffCheckboxes';
 
 const processFormValues = (formValues, inputFields) => {
 	return Object.entries(formValues).reduce((processedValues, [key, value]) => {
@@ -182,7 +183,7 @@ export default function StaffDetail() {
 					phoneError={phoneError}
 				/>
 			</Box>
-			<Box mb={2}>
+			{/* <Box mb={2}>
 				<StaffPositionEasy
 					onChange={handleChange}
 					inputFields={inputFields}
@@ -190,6 +191,9 @@ export default function StaffDetail() {
 					handleRemoveInputField={handleRemoveInputField}
 					initialValues={detailEmployee}
 				/>
+			</Box> */}
+			<Box mb={2}>
+				<h1>Something</h1>
 			</Box>
 			<Box
 				sx={{
