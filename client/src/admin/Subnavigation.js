@@ -20,9 +20,9 @@ export default function SubNavigation({navItems}) {
 					justifyContent: 'space-around',
 				}}
 			>
-				{navItems.map((item, index) => (
+				{navItems.map((item) => (
 					<ListItem
-						key={index}
+						key={item.name}
 						sx={{
 							borderRadius: 1,
 							minWidth: 'auto',

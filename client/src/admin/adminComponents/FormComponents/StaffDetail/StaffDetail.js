@@ -2,7 +2,7 @@ import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import ContactInfoForm from '../ContactInfoForm';
-import StaffPositionEasy from '../StaffPositionEasy';
+//import StaffPositionEasy from '../StaffPositionEasy';
 import {Box, Button} from '@mui/material';
 import {Loader} from '../../../../Loader';
 import {useAdminUpdate} from '../../../../context/AdminContext';
@@ -170,7 +170,7 @@ export default function StaffDetail() {
 					onChange={handleChange}
 				/>
 			</Box>
-			<Box mb={2}>
+			{/* <Box mb={2}>
 				<ContactInfoForm
 					title="Kontaktní údaje"
 					fields={[
@@ -182,7 +182,7 @@ export default function StaffDetail() {
 					emailError={emailError}
 					phoneError={phoneError}
 				/>
-			</Box>
+			</Box> */}
 			{/* <Box mb={2}>
 				<StaffPositionEasy
 					onChange={handleChange}

@@ -46,6 +46,7 @@ export default function Navigation() {
 					</Button>
 					{navItems.map((item) => (
 						<Button
+							key={item.name}
 							color="inherit"
 							onMouseEnter={handlePopoverOpen}
 							onMouseLeave={handlePopoverClose}
