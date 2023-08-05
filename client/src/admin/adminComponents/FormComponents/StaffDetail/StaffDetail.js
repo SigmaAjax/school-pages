@@ -1,12 +1,13 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import ContactInfoForm from '../ContactInfoForm';
-//import StaffPositionEasy from '../StaffPositionEasy';
+//import ContactInfoForm from '../ContactInfoForm';
+import StaffPositionEasy from '../StaffPositionEasy';
 import {Box, Button} from '@mui/material';
 import {Loader} from '../../../../Loader';
 import {useAdminUpdate} from '../../../../context/AdminContext';
 import StaffCheckboxTree from '../StaffCheckboxes';
+import ContactInfoForm from '../ContactInfoForm';
 
 const processFormValues = (formValues, inputFields) => {
 	return Object.entries(formValues).reduce((processedValues, [key, value]) => {
@@ -170,7 +171,7 @@ export default function StaffDetail() {
 					onChange={handleChange}
 				/>
 			</Box>
-			{/* <Box mb={2}>
+			<Box mb={2}>
 				<ContactInfoForm
 					title="Kontaktní údaje"
 					fields={[
@@ -182,8 +183,8 @@ export default function StaffDetail() {
 					emailError={emailError}
 					phoneError={phoneError}
 				/>
-			</Box> */}
-			{/* <Box mb={2}>
+			</Box>
+			<Box mb={2}>
 				<StaffPositionEasy
 					onChange={handleChange}
 					inputFields={inputFields}
@@ -191,10 +192,8 @@ export default function StaffDetail() {
 					handleRemoveInputField={handleRemoveInputField}
 					initialValues={detailEmployee}
 				/>
-			</Box> */}
-			<Box mb={2}>
-				<h1>Something</h1>
 			</Box>
+
 			<Box
 				sx={{
 					marginTop: 2,

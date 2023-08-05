@@ -21,7 +21,7 @@ export default function ContactForm() {
 	};
 
 	return (
-		<Container maxWidth="xl">
+		<Container>
 			<form noValidate autoComplete="off" onSubmit={handleSubmit}>
 				<Box
 					display={'flex'}
@@ -55,7 +55,7 @@ export default function ContactForm() {
 								onChange={handleChange}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={6} md={6}>
+						{/* <Grid item xs={12} sm={6} md={6}>
 							<TextField
 								fullWidth
 								name="street"
@@ -63,8 +63,8 @@ export default function ContactForm() {
 								variant="outlined"
 								onChange={handleChange}
 							/>
-						</Grid>
-						<Grid item xs={12} sm={6} md={6}>
+						</Grid> */}
+						{/* <Grid item xs={12} sm={6} md={6}>
 							<TextField
 								fullWidth
 								name="municipality"
@@ -72,8 +72,8 @@ export default function ContactForm() {
 								variant="outlined"
 								onChange={handleChange}
 							/>
-						</Grid>
-						<Grid item xs={12} sm={6} md={6}>
+						</Grid> */}
+						{/* <Grid item xs={12} sm={6} md={6}>
 							<TextField
 								fullWidth
 								type="text"
@@ -85,7 +85,7 @@ export default function ContactForm() {
 									maxLength: 5, // limits the length to the 5 digits typical of Czech postal codes
 								}}
 							/>
-						</Grid>
+						</Grid> */}
 
 						<Grid item xs={12} sm={6} md={6}>
 							<TextField

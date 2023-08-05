@@ -3,6 +3,7 @@ import {Button, Box} from '@mui/material';
 import ContactInfoForm from './adminComponents/FormComponents/ContactInfoForm';
 import StaffPositionEasy from './adminComponents/FormComponents/StaffPositionEasy';
 import axios from 'axios';
+import StaffCheckboxes from './adminComponents/FormComponents/StaffCheckboxes';
 
 const processFormValues = (formValues, inputFields) => {
 	return Object.entries(formValues).reduce((processedValues, [key, value]) => {
@@ -10,7 +11,7 @@ const processFormValues = (formValues, inputFields) => {
 		const poziceMatch = key.match(/^pozice(\d+)/);
 		if (poziceMatch && parseInt(poziceMatch[1], 10) > inputFields) {
 			return processedValues; // Skip adding this key to the processedValues
-		}
+		} /// probably this code is not needed anymore
 
 		if (key === 'phone') {
 			if (value.startsWith('+')) {
@@ -28,11 +29,7 @@ export default function EmployeeFormNew() {
 	const [emailError, setEmailError] = useState(false);
 	const [phoneError, setPhoneError] = useState(false);
 	const [inputFields, setInputFields] = useState(1);
-
-	const url =
-		process.env.NODE_ENV === 'production'
-			? `${process.env.REACT_APP_BACKEND_URL}/api/add/employee`
-			: '/api/add/employee';
+	//const [checkboxes, setCheckboxes] = useState({}); /// for checkboxes
 
 	const handleAddInputField = () => {
 		if (inputFields < 4) {
@@ -45,6 +42,18 @@ export default function EmployeeFormNew() {
 			setInputFields((prev) => prev - 1);
 		}
 	};
+
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `${process.env.REACT_APP_BACKEND_URL}/api/add/employee`
+			: '/api/add/employee';
+
+	// const handleCheckboxes = (parentLabel, childLabel, checked) => {
+	// 	setCheckboxes((prev) => ({
+	// 		...prev,
+	// 		[childLabel]: parentLabel,
+	// 	}));
+	// };
 
 	function isValidEmail(email) {
 		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -93,6 +102,31 @@ export default function EmployeeFormNew() {
 		}
 	};
 
+	// const handleSubmit = async (event) => {
+	// 	event.preventDefault();
+
+	// 	console.log(formValues);
+	// 	const isEmailValid = isValidEmail(formValues.email);
+	// 	const isPhoneValid = isValidPhoneNumber(formValues.phone);
+
+	// 	setEmailError(!isEmailValid);
+	// 	setPhoneError(!isPhoneValid);
+
+	// 	const processedValues = processFormValues(formValues, inputFields);
+
+	// 	if (isEmailValid && isPhoneValid) {
+	// 		try {
+	// 			const mergedValues = {...processedValues, ...checkboxes}; // merge formValues and checkboxes
+	// 			const response = await axios.post(url, mergedValues); // post the mergedValues
+	// 			console.log(response.data);
+	// 			alert(response.status, response.message);
+	// 		} catch (error) {
+	// 			console.error(error);
+	// 			alert(`${error.message}\n${error.response.data.message}`);
+	// 		}
+	// 	}
+	// };
+
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
@@ -121,7 +155,7 @@ export default function EmployeeFormNew() {
 						phoneError={phoneError}
 					/>
 				</Box>
-				<Box mb={2}>
+				<Box mv={2}>
 					<StaffPositionEasy
 						onChange={handleChange}
 						inputFields={inputFields}
@@ -129,8 +163,38 @@ export default function EmployeeFormNew() {
 						handleRemoveInputField={handleRemoveInputField}
 					/>
 				</Box>
-				{/* Additional form steps will go here */}
+				{/* Checkboxes */}
+				{/* <Box mv={2}>
+					<StaffCheckboxes
+						parentLabel="vedení"
+						childLabels={['ředitel', 'zástupce_ředitele', 'gdpr']}
+						checkboxValues={checkboxes['vedení'] || {}}
+						onChange={handleCheckboxes}
+					/>
 
+					<StaffCheckboxes
+						parentLabel="sbor"
+						childLabels={['učitel', 'třídní_učitel', 'asistent']}
+						checkboxValues={checkboxes['sbor'] || {}}
+						onChange={handleCheckboxes}
+					/>
+					<StaffCheckboxes
+						parentLabel="provozní_zaměstanci"
+						childLabels={['školník', 'účetní']}
+						checkboxValues={checkboxes['provozní_zaměstanci'] || {}}
+						onChange={handleCheckboxes}
+					/>
+					<StaffCheckboxes
+						parentLabel="školní_poradenské_pracoviště"
+						childLabels={[
+							'školní_logoped',
+							'specialní_výchovný_poradce',
+							'metodik_prevence',
+						]}
+						checkboxValues={checkboxes['školní_poradenské_pracoviště'] || {}}
+						onChange={handleCheckboxes}
+					/>
+				</Box> */}
 				<Box sx={{marginTop: 2}}>
 					<Button type="submit" variant="contained">
 						Submit

@@ -1,45 +1,66 @@
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import {useState} from 'react';
 
-export default function IndeterminateCheckbox() {
-	const [checked, setChecked] = useState([true, false]);
+function IndeterminateCheckbox({parentLabel, childLabels}) {
+	const childCheckStates = Object.fromEntries(
+		childLabels.map((label) => [label, false])
+	);
 
-	const handleChange1 = (event) => {
-		setChecked([event.target.checked, event.target.checked]);
-	};
+	const [checked, setChecked] = useState({
+		parent: false,
+		children: childCheckStates,
+	});
 
-	const handleChange2 = (event) => {
-		setChecked([event.target.checked, checked[1]]);
-	};
-
-	const handleChange3 = (event) => {
-		setChecked([checked[0], event.target.checked]);
+	const handleChange = (event) => {
+		if (event.target.name === parentLabel) {
+			setChecked({
+				parent: event.target.checked,
+				children: childCheckStates,
+			});
+		} else {
+			setChecked((prevState) => ({
+				parent: prevState.parent,
+				children: {
+					...childCheckStates,
+					[event.target.name]: event.target.checked,
+				},
+			}));
+		}
 	};
 
 	const children = (
 		<Box sx={{display: 'flex', flexDirection: 'column', ml: 3}}>
-			<FormControlLabel
-				label="Child 1"
-				control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-			/>
-			<FormControlLabel
-				label="Child 2"
-				control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-			/>
+			{childLabels.map((label) => (
+				<FormControlLabel
+					key={label}
+					label={label}
+					control={
+						<Checkbox
+							checked={checked.children[label]}
+							onChange={handleChange}
+							name={label}
+							disabled={!checked.parent}
+						/>
+					}
+				/>
+			))}
 		</Box>
 	);
 
 	return (
 		<div>
 			<FormControlLabel
-				label="Parent"
+				label={parentLabel}
 				control={
 					<Checkbox
-						checked={checked[0] && checked[1]}
-						indeterminate={checked[0] !== checked[1]}
-						onChange={handleChange1}
+						checked={checked.parent}
+						onChange={handleChange}
+						name={parentLabel}
 					/>
 				}
 			/>
@@ -47,3 +68,19 @@ export default function IndeterminateCheckbox() {
 		</div>
 	);
 }
+
+function StaffCheckboxes({parentLabel, childLabels}) {
+	return (
+		<Card sx={{maxWidth: 400, mt: 2}}>
+			<CardContent>
+				<Typography variant="h6">{'Pracovní zařezení'}</Typography>
+				<IndeterminateCheckbox
+					parentLabel={parentLabel}
+					childLabels={childLabels}
+				/>
+			</CardContent>
+		</Card>
+	);
+}
+
+export default StaffCheckboxes;
