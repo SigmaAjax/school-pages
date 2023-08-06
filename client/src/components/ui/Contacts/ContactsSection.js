@@ -6,7 +6,7 @@ export default function ContactsSection({categoryValues}) {
 	const {capitalize} = useCap();
 	const {name, employees} = categoryValues;
 	return (
-		<Grid container spacing={2} paddingTop={10}>
+		<Grid container spacing={2} paddingTop={10} marginLeft={0}>
 			<Grid item xs={12}>
 				{' '}
 				{/* This ensures the name takes up the full width */}
@@ -22,6 +22,7 @@ export default function ContactsSection({categoryValues}) {
 						academic_title={emp.academic_title}
 						email={emp.email}
 						phone={emp.phone}
+						prac_pozice={emp.prac_pozice}
 					/>
 				</Grid>
 			))}

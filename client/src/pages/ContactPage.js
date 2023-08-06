@@ -1,6 +1,5 @@
 import {Container} from '@mui/material';
 import ContactForm from '../components/ui/Contacts/ContatctForm';
-import ContactCard from '../components/ui/Contacts/ContactCard';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import ContactsSection from '../components/ui/Contacts/ContactsSection';
@@ -8,7 +7,7 @@ import ContactsSection from '../components/ui/Contacts/ContactsSection';
 const possibleEmployees = {
 	vedení: ['ředitel', 'zástupce_ředitele', 'gdpr'],
 	sbor: ['učitel', 'třídní_učitel', 'asistent'],
-	provozní_zaměstanci: ['školník', 'účetní'],
+	provozní_zaměstnanci: ['školník', 'účetní'],
 
 	školní_poradenské_pracoviště: [
 		'školní_logoped',
@@ -91,7 +90,42 @@ export default function ContactPage() {
 					}
 				}
 
-				setCategorizedEmployees(newCategorizedEmployees);
+				const filteredJobOccupations = newCategorizedEmployees.map(
+					(category) => {
+						if (possibleEmployees[category.name]) {
+							const possiblePositions = possibleEmployees[category.name];
+
+							// Get the modified list of employees for the category
+							const modifiedEmployees = category.employees.map((employee) => {
+								let matchedPositions = [];
+
+								for (let i = 1; i <= 4; i++) {
+									const role = employee[`funkce${i}`];
+
+									// if role matches any string from possiblePositions
+									if (role && possiblePositions.includes(role)) {
+										matchedPositions.push(role);
+									}
+								}
+
+								// Return the modified employee object
+								if (matchedPositions.length) {
+									return {...employee, prac_pozice: matchedPositions};
+								} else {
+									return employee; // Return the original employee if no matches
+								}
+							});
+
+							return {name: category.name, employees: modifiedEmployees};
+						} else {
+							return category; // Return the original category if it doesn't match with possibleEmployees
+						}
+					}
+				);
+
+				console.table(filteredJobOccupations);
+
+				setCategorizedEmployees(filteredJobOccupations);
 			} catch (error) {
 				console.error('Error fetching employees:', error);
 			}
@@ -114,7 +148,6 @@ export default function ContactPage() {
 		>
 			{categorizedEmployees.length > 0 &&
 				categorizedEmployees.map((category) => {
-					console.log(category);
 					return <ContactsSection categoryValues={category} />;
 				})}
 
