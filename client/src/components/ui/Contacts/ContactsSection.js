@@ -6,7 +6,7 @@ export default function ContactsSection({categoryValues}) {
 	const {capitalize} = useCap();
 	const {name, employees} = categoryValues;
 	return (
-		<Grid container spacing={2} paddingTop={10} marginLeft={0}>
+		<Grid container spacing={2} paddingTop={10} marginLeft={0} marginRight={50}>
 			<Grid item xs={12}>
 				{' '}
 				{/* This ensures the name takes up the full width */}
@@ -15,7 +15,7 @@ export default function ContactsSection({categoryValues}) {
 				</Typography>
 			</Grid>
 			{employees.map((emp) => (
-				<Grid item key={emp.surname} xs={12} sm={6} md={4} lg={4}>
+				<Grid item key={emp.surname} xs={12} sm={6} md={4} lg={3}>
 					<ContactCard
 						name={emp.name}
 						lastName={emp.surname}

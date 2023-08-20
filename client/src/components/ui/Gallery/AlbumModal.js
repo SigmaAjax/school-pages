@@ -54,21 +54,31 @@ export default function AlbumModal({open, onClose, album}) {
 				>
 					<Button
 						variant="contained" // a button with a background color
-						color="primary" // theme's primary color
+						color="error"
 						onClick={handleClose}
 						sx={{
 							position: 'absolute',
-							top: 8,
-							right: 8,
+							top: 20,
+							right: 20,
 							textTransform: 'none', // remove uppercase transform
 						}}
 					>
 						Zavřít
 					</Button>
-					<Typography variant="h4" align="center">
+					<Typography
+						variant="h4"
+						align="center"
+						paddingBottom={20}
+						paddingTop={10}
+					>
 						{album.album_title}
 					</Typography>
-					<ImageList variant="masonry" cols={3} gap={8}>
+					<ImageList
+						variant="woven"
+						sx={{width: '100%', height: 450}}
+						cols={3}
+						gap={15}
+					>
 						{album.arrayOfPictures.map((photo) => (
 							<ImageListItem
 								key={photo.secure_url}

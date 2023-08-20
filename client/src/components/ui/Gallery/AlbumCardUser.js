@@ -31,6 +31,14 @@ export default function AlbumCardUser(album) {
 		setModalOpen((prev) => !prev);
 	};
 
+	const datum = new Date(album.date_created);
+
+	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {
+		dateStyle: 'long',
+	});
+
+	console.log(formatDateCzech.format(datum));
+
 	return (
 		<>
 			<Link
@@ -40,7 +48,11 @@ export default function AlbumCardUser(album) {
 			>
 				<ImageListItem>
 					{renderAlbum(album)}
-					<ImageListItemBar title={album.album_title} position="bottom" />
+					<ImageListItemBar
+						title={album.album_title}
+						subtitle={formatDateCzech.format(datum)}
+						position="bottom"
+					/>
 				</ImageListItem>
 				<AlbumModal open={modalOpen} onClose={handleOpen} album={album} />
 			</Link>

@@ -33,18 +33,24 @@ export default function Post(props) {
 				}}
 			>
 				<Typography
-					variant="h4"
+					variant="h3"
 					component="h2"
 					mb={2}
 					sx={{fontWeight: 'bold'}}
+					marginLeft={2}
+					paddingBottom={10}
 				>
 					{title}
 				</Typography>
 				<Typography
-					variant="body2"
-					color="text.secondary"
+					marginLeft={1}
+					paddingBottom={10}
+					variant="h6"
 					mb={5}
+					paragraph={true}
 					sx={{
+						wordWrap: 'break-word',
+						lineHeight: '36px',
 						position: 'relative',
 						maxHeight: readMore ? '100%' : '100px',
 						overflow: 'hidden',
@@ -70,9 +76,20 @@ export default function Post(props) {
 								description.length > 150 ? '...' : ''
 						  }`}
 				</Typography>
-				<Typography variant="body2" component="p" fontWeight="bold" mb={5}>
-					{formatDateCzech.format(new Date(date_created))}
-				</Typography>
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'center',
+						marginBottom: 5, // if you want to maintain the same margin as before
+					}}
+				>
+					<Typography variant="body2" component="p" fontWeight="bold">
+						Vytvořeno: {formatDateCzech.format(new Date(date_created))}
+					</Typography>
+					<Typography variant="subtitle1">Autor: {author}</Typography>
+				</Box>
+
 				<Box
 					sx={{
 						display: 'flex',
@@ -80,9 +97,6 @@ export default function Post(props) {
 						alignItems: 'center',
 					}}
 				>
-					<Box sx={{display: 'flex', alignItems: 'center'}}>
-						<Typography variant="subtitle1">{author}</Typography>
-					</Box>
 					{description.length > 150 ? (
 						<Button
 							endIcon={<ArrowForward />}

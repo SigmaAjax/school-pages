@@ -1,5 +1,4 @@
 import {Container} from '@mui/material';
-import ContactForm from '../components/ui/Contacts/ContatctForm';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import ContactsSection from '../components/ui/Contacts/ContactsSection';
@@ -139,6 +138,7 @@ export default function ContactPage() {
 			maxWidth="xl"
 			sx={{
 				marginTop: '100px',
+				marginLeft: '50px',
 				displayFlex: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
@@ -150,8 +150,6 @@ export default function ContactPage() {
 				categorizedEmployees.map((category) => {
 					return <ContactsSection categoryValues={category} />;
 				})}
-
-			<ContactForm />
 		</Container>
 	);
 }

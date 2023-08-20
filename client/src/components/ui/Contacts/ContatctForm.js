@@ -21,7 +21,13 @@ export default function ContactForm() {
 	};
 
 	return (
-		<Container>
+		<Container
+			maxWidth="xl"
+			sx={{
+				backgroundColor: 'white',
+				marginTop: 10,
+			}}
+		>
 			<form noValidate autoComplete="off" onSubmit={handleSubmit}>
 				<Box
 					display={'flex'}
@@ -29,6 +35,7 @@ export default function ContactForm() {
 					alignItems={'center'}
 					style={{width: '100%'}}
 					flexDirection={'column'}
+					sx={{marginTop: 10, paddingLeft: 0, paddingRight: 0}}
 				>
 					<Grid marginBottom={3}>
 						<Typography variant="h4" gutterBottom>

@@ -1,6 +1,6 @@
 //import AlbumList from '../components/ui/Gallery/AlbumList';
 
-import {ImageList, ImageListItem, Stack} from '@mui/material';
+import {Container, ImageList, ImageListItem, Stack} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {Loader} from '../Loader';
 import axios from 'axios';
@@ -73,18 +73,28 @@ export default function AlbumPage() {
 	}
 
 	return (
-		<Stack spacing={4} sx={{margin: 2}}>
-			<ImageList
-				sx={{width: 700, height: 450}}
-				cols={3}
-				rowHeight={164}
-				gap={25}
-				variant="masonry"
-			>
-				{albums.map((album) => {
-					return <AlbumCardUser key={album.id} {...album} />;
-				})}
-			</ImageList>
-		</Stack>
+		<Container
+			maxWidth="xl"
+			sx={{
+				display: 'flex',
+				height: '100vh',
+				justifyContent: 'center',
+			}}
+		>
+			{' '}
+			<Stack spacing={4} sx={{margin: 2}}>
+				<ImageList
+					sx={{width: 700, minHeight: 450}}
+					cols={3}
+					rowHeight={328}
+					gap={25}
+					variant="masonry"
+				>
+					{albums.map((album) => {
+						return <AlbumCardUser key={album.id} {...album} />;
+					})}
+				</ImageList>
+			</Stack>
+		</Container>
 	);
 }
