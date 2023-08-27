@@ -41,9 +41,10 @@ export default function ContactCard(props) {
 			variant="elevation"
 			elevation={4}
 			style={{
-				minWidth: '200px',
+				minWidth: '250px',
 				maxWidth: '300px',
 				maxHeight: '300px',
+				height: '250px',
 				margin: '20px',
 			}}
 		>

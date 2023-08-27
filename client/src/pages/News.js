@@ -1,15 +1,23 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
-import Post from '../components/ui/Post';
-import {Grid, Typography, Button} from '@mui/material';
+import {Grid, Typography, Button, TextField, Box} from '@mui/material';
 import {Loader} from '../Loader';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PostList from '../components/ui/Posts/PostList';
 
 export default function News() {
 	const [postList, setPostList] = useState([]);
-	const [numDisplayedPosts, setNumDisplayedPosts] = useState(2); // start with 2 posts
 	const [isLoading, setIsLoading] = useState(true);
 	const [errorMsg, setErrorMsg] = useState(null);
+	const [searchPhrase, setSearchPhrase] = useState('');
+	const [tempSearchPhrase, setTempSearchPhrase] = useState(''); // New state variable
+
+	const filteredPosts = postList.filter((post) => {
+		return post.title.toLowerCase().includes(searchPhrase.toLowerCase());
+	});
+
+	const handleSearchButtonClick = () => {
+		setSearchPhrase(tempSearchPhrase); // Update from tempSearchPhrase
+	};
 
 	const fetchPosts = async () => {
 		try {
@@ -37,12 +45,6 @@ export default function News() {
 		fetchPosts();
 	}, []);
 
-	const loadMorePosts = () => {
-		setNumDisplayedPosts((prev) => prev + 2); // add 2 more posts with every click
-	};
-
-	const displayedPosts = postList.slice(0, numDisplayedPosts);
-
 	if (isLoading) {
 		return <Loader />;
 	}
@@ -56,30 +58,66 @@ export default function News() {
 	}
 
 	return (
-		<Grid container marginTop={60} marginBottom={20}>
-			<Typography variant="h1" sx={{marginLeft: '64px'}}>
-				Aktuality
-			</Typography>
-			<Grid container spacing={8} margin={1} justifyContent={'center'}>
-				{displayedPosts.map((post) => (
-					<Post key={post.id} {...post} />
-				))}
-			</Grid>
-			{numDisplayedPosts < postList.length && (
-				<Grid
-					container
-					justifyContent="center"
-					sx={{marginTop: 2, marginBottom: 2}}
+		<Grid
+			container
+			sx={{marginBottom: 10, marginTop: 10}}
+			justifyContent="center"
+		>
+			<Grid
+				item
+				xs={12}
+				sm={6}
+				md={6}
+				lg={6}
+				display="flex"
+				justifyContent={'center'}
+				alignItems={'flex-end'}
+			>
+				<Typography
+					variant="h1"
+					style={{textShadow: '2px 2px 4px #000', color: 'white'}}
 				>
+					Aktuality
+				</Typography>
+			</Grid>
+			<Grid item xs={12} sm={6} md={6} lg={6}>
+				<Box
+					display={'flex'}
+					flexDirection={'row'}
+					justifyContent="space-evenly"
+					alignItems={'flex-end'}
+					marginBottom={2}
+				>
+					<TextField
+						sx={{
+							marginTop: 10,
+							backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white
+							boxShadow: '0 3px 5px 2px rgba(0, 0, 0, 0.2)', // Soft box shadow
+							borderRadius: '8px',
+						}}
+						placeholder="např. Prázdniny"
+						label="Vyhledat podle názvu"
+						autoComplete="off"
+						variant="filled"
+						value={tempSearchPhrase} // Use tempSearchPhrase
+						onChange={(e) => setTempSearchPhrase(e.target.value)} // Update tempSearchPhrase
+						size="small"
+					/>
 					<Button
 						variant="contained"
-						onClick={loadMorePosts}
-						endIcon={<ExpandMoreIcon />}
-						size="medium"
+						sx={{
+							boxShadow: '0 3px 5px 2px rgba(0, 0, 0, 0.2)',
+						}}
+						onClick={handleSearchButtonClick}
 					>
-						Další
+						Vyhledat
 					</Button>
-				</Grid>
+				</Box>
+			</Grid>
+			{postList?.length === 0 ? (
+				<Loader />
+			) : (
+				<PostList listOfPosts={filteredPosts} />
 			)}
 		</Grid>
 	);

@@ -22,10 +22,11 @@ export default function ContactForm() {
 
 	return (
 		<Container
-			maxWidth="xl"
+			maxWidth="lg"
 			sx={{
 				backgroundColor: 'white',
-				marginTop: 10,
+				marginTop: 5,
+				borderRadius: '12px',
 			}}
 		>
 			<form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -35,7 +36,12 @@ export default function ContactForm() {
 					alignItems={'center'}
 					style={{width: '100%'}}
 					flexDirection={'column'}
-					sx={{marginTop: 10, paddingLeft: 0, paddingRight: 0}}
+					sx={{
+						marginTop: 10,
+						paddingLeft: 0,
+						paddingRight: 0,
+						paddingBottom: 10,
+					}}
 				>
 					<Grid marginBottom={3}>
 						<Typography variant="h4" gutterBottom>
@@ -62,37 +68,6 @@ export default function ContactForm() {
 								onChange={handleChange}
 							/>
 						</Grid>
-						{/* <Grid item xs={12} sm={6} md={6}>
-							<TextField
-								fullWidth
-								name="street"
-								label="Ulice"
-								variant="outlined"
-								onChange={handleChange}
-							/>
-						</Grid> */}
-						{/* <Grid item xs={12} sm={6} md={6}>
-							<TextField
-								fullWidth
-								name="municipality"
-								label="Obec/Město"
-								variant="outlined"
-								onChange={handleChange}
-							/>
-						</Grid> */}
-						{/* <Grid item xs={12} sm={6} md={6}>
-							<TextField
-								fullWidth
-								type="text"
-								name="postal"
-								label="PSČ"
-								variant="outlined"
-								onChange={handleChange}
-								inputProps={{
-									maxLength: 5, // limits the length to the 5 digits typical of Czech postal codes
-								}}
-							/>
-						</Grid> */}
 
 						<Grid item xs={12} sm={6} md={6}>
 							<TextField
