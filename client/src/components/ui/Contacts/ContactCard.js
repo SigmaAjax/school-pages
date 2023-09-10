@@ -73,7 +73,19 @@ export default function ContactCard(props) {
 						{prac_pozice.map(formatPosition).join(', ')}
 					</Typography>
 					<Box display="flex" alignItems="center" my={1} marginTop={4}>
-						<Box display="inline" pr={2} mb={1}>
+						<Box
+							display="inline"
+							pr={2}
+							mb={1}
+							sx={{
+								'&:hover': {
+									opacity: 0.8,
+									transform: 'scale(1.2)',
+								},
+								transition:
+									'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
+							}}
+						>
 							<IconButton
 								size="small"
 								href={`mailto:${email}`}
@@ -94,7 +106,18 @@ export default function ContactCard(props) {
 						</Box>
 					</Box>
 					<Box display="flex" alignItems="center" my={1}>
-						<Box display="inline" pr={2}>
+						<Box
+							display="inline"
+							pr={2}
+							sx={{
+								'&:hover': {
+									opacity: 0.8,
+									transform: 'scale(1.2)',
+								},
+								transition:
+									'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
+							}}
+						>
 							<IconButton
 								size="small"
 								href={`tel:${phone}`}

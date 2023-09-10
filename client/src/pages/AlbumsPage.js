@@ -1,6 +1,14 @@
 //import AlbumList from '../components/ui/Gallery/AlbumList';
 
-import {Container, ImageList, ImageListItem, Stack} from '@mui/material';
+import {
+	Box,
+	Container,
+	Grid,
+	ImageList,
+	ImageListItem,
+	Stack,
+	Typography,
+} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {Loader} from '../Loader';
 import axios from 'axios';
@@ -73,28 +81,48 @@ export default function AlbumPage() {
 	}
 
 	return (
-		<Container
-			maxWidth="xl"
-			sx={{
-				display: 'flex',
-				height: '100vh',
-				justifyContent: 'center',
-			}}
-		>
-			{' '}
-			<Stack spacing={4} sx={{margin: 2}}>
-				<ImageList
-					sx={{width: 700, minHeight: 450}}
-					cols={3}
-					rowHeight={328}
-					gap={25}
-					variant="masonry"
-				>
+		<>
+			<Box
+				sx={{
+					marginTop: 10,
+					bgcolor: 'background.paper',
+					pt: 8,
+					pb: 6,
+					borderRadius: '16px',
+				}}
+			>
+				<Container maxWidth="lg">
+					<Typography
+						component="h1"
+						variant="h2"
+						align="center"
+						color="text.primary"
+						gutterBottom
+					>
+						Alba
+					</Typography>
+					<Typography
+						variant="h5"
+						align="center"
+						color="text.secondary"
+						paragraph
+					>
+						Něco krátkého a stručného o níže uvedené kolekci—jejím obsahu atd.
+						Buďte struční, ale ne tak struční, aby to lidé úplně přeskočili.
+					</Typography>
+				</Container>
+			</Box>
+			<Container sx={{py: 8}} maxWidth="lg">
+				<Grid container spacing={4}>
 					{albums.map((album) => {
-						return <AlbumCardUser key={album.id} {...album} />;
+						return (
+							<Grid item key={album.id} xs={12} sm={6} md={4}>
+								<AlbumCardUser {...album} />
+							</Grid>
+						);
 					})}
-				</ImageList>
-			</Stack>
-		</Container>
+				</Grid>
+			</Container>
+		</>
 	);
 }

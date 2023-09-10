@@ -23,7 +23,7 @@ export function Routes() {
 			<Route path="/kontakty" element={<ContactPage />} />
 			<Route path="/kontakty/formular" element={<ContactForm />} />
 			<Route path="/fotogalerie" element={<AlbumPage />} />
-			<Route exact path="/admin/*" element={<AdminPage />} />
+			{/* <Route exact path="/admin/*" element={<AdminPage />} /> */}
 		</RouterRoutes>
 	);
 }

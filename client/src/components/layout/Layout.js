@@ -90,8 +90,8 @@ export default function Layout({children}) {
 				sx={{
 					position: 'absolute',
 					width: '100%',
-					height: '100vh',
-					backgroundImage: `url(${school_img}), url(${school_img})`,
+					// height: '100vh',
+					// backgroundImage: `url(${school_img}), url(${school_img})`,
 					backgroundPosition: 'center',
 					backgroundSize: 'cover',
 					backgroundRepeat: 'repeat repeat',

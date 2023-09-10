@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import SentimentVerySatisfiedSharpIcon from '@mui/icons-material/SentimentVerySatisfiedSharp';
 import {yellow} from '@mui/material/colors';
 
+import school_img from '../../../images/DJI_0214.JPG';
+
 export default function MainFeaturedPost() {
 	return (
 		<Paper
@@ -13,7 +15,7 @@ export default function MainFeaturedPost() {
 				display: 'flex',
 				flexDirection: 'column',
 				position: 'relative',
-				backgroundColor: 'rgba(0, 0, 0, 0.4)',
+				backgroundColor: 'rgba(0, 0, 0, 0.5)',
 				color: '#fff',
 				mb: 4,
 				backgroundSize: 'cover',
@@ -22,6 +24,8 @@ export default function MainFeaturedPost() {
 				padding: '17px 20px 22px 20px',
 				borderRadius: '12px',
 				marginTop: '15px',
+				backgroundImage: `url(${school_img})`,
+				backgroundBlendMode: 'overlay', // This is how you blend it
 			}}
 		>
 			<Box

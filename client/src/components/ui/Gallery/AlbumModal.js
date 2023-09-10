@@ -1,34 +1,59 @@
+import React, {useState} from 'react';
 import {
 	Modal,
 	Box,
-	ImageList,
-	ImageListItem,
 	Button,
 	Typography,
 	IconButton,
+	Fade,
+	ImageList,
+	ImageListItem,
+	Slide,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {useState} from 'react';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 export default function AlbumModal({open, onClose, album}) {
-	const [zoomView, setZoomView] = useState({open: false, imageUrl: ''});
+	const [zoomView, setZoomView] = useState({open: false, index: 0});
+	const [transition, setTransition] = useState(false);
+
 	const handleClose = () => {
 		onClose();
 	};
 
-	const handleImageClick = (newImageUrl) => {
-		setZoomView((prev) => {
-			const open = !prev.open;
-			return {open: open, imageUrl: newImageUrl};
-		});
+	const handleImageClick = (index) => {
+		setZoomView({open: true, index});
 	};
 
 	const handleZoomClose = () => {
+		setZoomView({open: false, index: 0});
+	};
+
+	const nextImage = () => {
+		setTransition(true);
+		setTimeout(() => setTransition(false), 400);
 		setZoomView((prev) => {
-			const open = !prev.open;
-			return {open: open, imageUrl: ''};
+			const nextIndex = (prev.index + 1) % album.arrayOfPictures.length;
+			return {open: true, index: nextIndex};
 		});
 	};
+
+	const prevImage = () => {
+		setTransition(true);
+		setTimeout(() => setTransition(false), 400);
+		setZoomView((prev) => {
+			const prevIndex =
+				(prev.index - 1 + album.arrayOfPictures.length) %
+				album.arrayOfPictures.length;
+			return {open: true, index: prevIndex};
+		});
+	};
+
+	const currentImageUrl = album.arrayOfPictures[zoomView.index]?.secure_url;
+
+	console.log({currentImage: currentImageUrl});
 
 	return (
 		<>
@@ -82,7 +107,9 @@ export default function AlbumModal({open, onClose, album}) {
 						{album.arrayOfPictures.map((photo) => (
 							<ImageListItem
 								key={photo.secure_url}
-								onClick={() => handleImageClick(photo.secure_url)}
+								onClick={() =>
+									handleImageClick(album.arrayOfPictures.indexOf(photo))
+								}
 								sx={{cursor: 'pointer'}}
 							>
 								<img
@@ -131,11 +158,31 @@ export default function AlbumModal({open, onClose, album}) {
 						<CloseIcon />
 					</IconButton>
 
-					<img
-						src={zoomView.imageUrl}
-						alt="Zoom view"
-						style={{width: '100%', paddingTop: '10px'}}
-					/>
+					<IconButton
+						onClick={prevImage}
+						sx={{position: 'absolute', left: 8, top: '50%'}}
+					>
+						<ArrowBackIcon />
+					</IconButton>
+
+					<TransitionGroup>
+						<CSSTransition key={zoomView.index} timeout={500} classNames="fade">
+							<Slide direction="left" in={zoomView}>
+								<img
+									src={currentImageUrl}
+									alt="Zoom view"
+									style={{width: '100%'}}
+								/>
+							</Slide>
+						</CSSTransition>
+					</TransitionGroup>
+
+					<IconButton
+						onClick={nextImage}
+						sx={{position: 'absolute', right: 8, top: '50%'}}
+					>
+						<ArrowForwardIcon />
+					</IconButton>
 				</Box>
 			</Modal>
 		</>

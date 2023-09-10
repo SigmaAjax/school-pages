@@ -135,15 +135,15 @@ export default function ContactPage() {
 
 	return (
 		<Container
-			maxWidth="xl"
+			maxWidth="lg"
 			sx={{
 				marginTop: '100px',
-				marginLeft: '50px',
+				// marginLeft: '50px',
 				displayFlex: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
 				backgroundColor: 'white',
-				marginLeft: 0,
+				borderRadius: '20px',
 			}}
 		>
 			{categorizedEmployees.length > 0 &&

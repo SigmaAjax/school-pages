@@ -1,9 +1,11 @@
 import {
-	ImageList,
-	ImageListItem,
-	ImageListItemBar,
-	Stack,
-	Link,
+	Card,
+	CardMedia,
+	CardContent,
+	Typography,
+	CardActions,
+	Button,
+	Box,
 } from '@mui/material';
 import AlbumModal from './AlbumModal';
 import {useState} from 'react';
@@ -11,51 +13,47 @@ import {useState} from 'react';
 export default function AlbumCardUser(album) {
 	const [modalOpen, setModalOpen] = useState(false);
 
-	const renderPicture = (picture) =>
-		picture.intro && (
-			<img
-				src={`${picture.secure_url}?w=164&h=164&fit=crop&auto=format&dpr=2`}
-				srcSet={`${picture.secure_url}?w=161&fit=crop&auto=format&dpr=2 2x`}
-				alt={picture.name}
-				loading="lazy"
-			/>
-		);
-
-	const renderAlbum = (album) => {
-		const introPicture = album.arrayOfPictures.find((picture) => picture.intro);
-		return introPicture && renderPicture(introPicture);
-	};
-
-	const handleOpen = (event) => {
-		event.preventDefault(); // to prevent the browser from navigating to the new page
+	const handleModal = () => {
 		setModalOpen((prev) => !prev);
 	};
 
+	const introPicture = album.arrayOfPictures.find((picture) => picture.intro);
+	const imageUrl = introPicture
+		? introPicture.secure_url
+		: 'https://via.placeholder.com/150';
+
 	const datum = new Date(album.date_created);
-
-	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {
-		dateStyle: 'long',
-	});
-
-	console.log(formatDateCzech.format(datum));
+	const formatDateCzech = new Intl.DateTimeFormat('cs-cz', {dateStyle: 'long'});
 
 	return (
-		<>
-			<Link
-				underline="none"
-				sx={{'&:hover': {opacity: 0.8}, cursor: 'pointer'}} // hover effect
-				onClick={handleOpen}
-			>
-				<ImageListItem>
-					{renderAlbum(album)}
-					<ImageListItemBar
-						title={album.album_title}
-						subtitle={formatDateCzech.format(datum)}
-						position="bottom"
-					/>
-				</ImageListItem>
-				<AlbumModal open={modalOpen} onClose={handleOpen} album={album} />
-			</Link>
-		</>
+		<Card sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+			<CardMedia
+				component="div"
+				sx={{height: 0, paddingTop: '56.25%'}} // 16:9 ratio
+				image={imageUrl}
+				alt={album.album_title}
+			/>
+			<CardContent sx={{flexGrow: 1}}>
+				<Typography gutterBottom variant="h5" component="h2">
+					{album.album_title}
+				</Typography>
+				{album.description ? (
+					<Typography>{album.description}</Typography>
+				) : (
+					<Typography>Bez popisku</Typography>
+				)}
+			</CardContent>
+			<CardActions sx={{justifyContent: 'space-between'}}>
+				<Button size="small" onClick={handleModal}>
+					Náhled
+				</Button>
+				<Box>
+					<Typography variant="caption" color="text.secondary">
+						{formatDateCzech.format(datum)}
+					</Typography>
+				</Box>
+			</CardActions>
+			<AlbumModal open={modalOpen} onClose={handleModal} album={album} />
+		</Card>
 	);
 }

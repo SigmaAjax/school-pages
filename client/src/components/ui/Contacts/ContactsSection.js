@@ -15,7 +15,7 @@ export default function ContactsSection({categoryValues}) {
 				</Typography>
 			</Grid>
 			{employees.map((emp) => (
-				<Grid item key={emp.surname} xs={12} sm={6} md={4} lg={3}>
+				<Grid item key={emp.surname} xs={12} sm={6} md={4} lg={4}>
 					<ContactCard
 						name={emp.name}
 						lastName={emp.surname}

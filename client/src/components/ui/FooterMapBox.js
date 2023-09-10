@@ -40,6 +40,7 @@ const FooterMapBox = () => {
 					>
 						<Typography
 							sx={{
+								paddingLeft: '1.333rem',
 								transition: 'font-weight 0.25s linear',
 								fontFamily: '"Arial", sans-serif', // Change this to your preferred font
 								fontWeight: 'Bold',

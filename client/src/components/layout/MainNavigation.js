@@ -14,16 +14,21 @@ import {
 	MenuItem,
 } from '@mui/material';
 
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 import * as muiColors from '@mui/material/colors';
 
+import logo from '../../images/logo.png';
+
 const navItems = [
+	{name: 'O škole', link: '/'},
 	{name: 'Aktuality', link: '/aktuality'},
 	{name: 'Školka', link: '/skolka'},
 	{name: 'Jídelna', link: '/jidelna'},
 	{name: 'Základka', link: '/zakladka'},
 	{name: 'Kontakty', link: '/kontakty'},
 	{name: 'Fotogalerie', link: '/fotogalerie'},
-	{name: 'Admin Page', link: '/admin'},
+	// {name: 'Admin Page', link: '/admin'},
 ];
 
 export default function Navigation() {
@@ -89,7 +94,10 @@ export default function Navigation() {
 		<>
 			<AppBar
 				position="sticky"
-				sx={{backgroundColor: muiColors[selectedColor][selectedShade]}}
+				sx={{
+					backgroundColor: muiColors[selectedColor][selectedShade],
+					borderRadius: '20px 20px 20px 20px',
+				}}
 			>
 				<Toolbar
 					component={'nav'}
@@ -97,87 +105,73 @@ export default function Navigation() {
 					sx={{justifyContent: 'space-between', overflowX: 'hidden'}}
 				>
 					{/* Logo */}
-					<Typography variant="h6" sx={{flexGrow: 1, marginLeft: 10}}>
+					<Typography
+						variant="h6"
+						sx={{flexGrow: 1, marginLeft: 10, paddingTop: 1, paddingBottom: 1}}
+					>
 						<Avatar
-							src="https://via.placeholder.com/50"
+							src={logo}
 							alt="Logo"
-							sx={{marginRight: 2}}
+							sx={{marginRight: 2, minWidth: 60, minHeight: 60}}
 						/>
 					</Typography>
 
 					{/* Navigation */}
 					<Box display="flex" sx={{marginRight: 10}}>
-						<Button color="inherit" sx={{marginRight: 1}}>
-							<Link
-								to="/"
-								sx={{
-									p: 1,
-									flexShrink: 0,
-									color: 'white',
-									textDecoration: 'none',
-								}}
-							>
-								O škole
-							</Link>
-						</Button>
-						{navItems.map((item) => (
-							<div key={item.name}>
-								<Button
-									color="inherit"
-									onClick={
-										item.name === 'Kontakty'
-											? (e) => handleMenuOpen(e, 'Kontakty')
-											: null
-									}
-									onMouseEnter={
-										/// Open menu on hover
-										item.name === 'Kontakty'
-											? (e) => handleMenuOpen(e, 'Kontakty')
-											: null
-									}
-									sx={{marginRight: 1}}
-								>
-									<Link
+						{navItems.map((item, index) => (
+							<React.Fragment key={index}>
+								{item.name !== 'Kontakty' ? (
+									<Button
+										color="inherit"
+										component={Link}
 										to={item.link}
-										sx={{
-											p: 1,
-											flexShrink: 0,
-											color: 'white',
-											textDecoration: 'none',
-										}}
+										sx={{marginRight: 1}}
 									>
 										{item.name}
-									</Link>
-								</Button>
-								{/* Dropdown for Kontakty */}
-								{item.name === 'Kontakty' && (
-									<Menu
-										anchorEl={anchorEl}
-										open={activeDropdown === 'Kontakty'}
-										onClose={handleMenuClose}
-										onMouseLeave={handleMenuClose}
-									>
-										<MenuItem
-											sx={{borderBottom: '1px solid #e0e0e0'}}
-											onClick={handleMenuClose}
+									</Button>
+								) : (
+									<Box sx={{marginRight: 1}}>
+										<Button
+											color="inherit"
+											onClick={(e) => handleMenuOpen(e, 'Kontakty')}
+											onMouseEnter={(e) => handleMenuOpen(e, 'Kontakty')}
 										>
-											Zaměstnanci
-										</MenuItem>
-										<Link
-											to="/kontakty/formular"
-											style={{textDecoration: 'none', color: 'inherit'}}
+											{item.name}
+											<ArrowDropDownIcon />
+										</Button>
+										<Menu
+											anchorEl={anchorEl}
+											open={activeDropdown === 'Kontakty'}
+											onClose={handleMenuClose}
+											onMouseLeave={handleMenuClose}
 										>
-											<MenuItem
-												sx={{borderBottom: '1px solid #e0e0e0'}}
-												onClick={handleMenuClose}
+											<Link
+												to="/kontakty"
+												style={{textDecoration: 'none', color: 'inherit'}}
 											>
-												Napište nám
-											</MenuItem>
-										</Link>
-										<MenuItem>Dokumenty</MenuItem>
-									</Menu>
+												<MenuItem
+													sx={{borderBottom: '1px solid #e0e0e0'}}
+													onClick={handleMenuClose}
+												>
+													Zaměstnanci
+												</MenuItem>
+											</Link>
+											<Link
+												to="/kontakty/formular"
+												style={{textDecoration: 'none', color: 'inherit'}}
+											>
+												<MenuItem
+													sx={{borderBottom: '1px solid #e0e0e0'}}
+													onClick={handleMenuClose}
+												>
+													Napište nám
+												</MenuItem>
+											</Link>
+											<MenuItem onClick={handleMenuClose}>Dokumenty</MenuItem>
+										</Menu>
+									</Box>
 								)}
-							</div>
+							</React.Fragment>
 						))}
 					</Box>
 				</Toolbar>
